@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "123456789012",
-    "project_id": "quizmind-dummy",
-    "storage_bucket": "quizmind-dummy.appspot.com"
+    "project_number": "622260331182",
+    "project_id": "quizmind-9d1c3",
+    "storage_bucket": "quizmind-9d1c3.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:123456789012:android:1234567890123456789012",
+        "mobilesdk_app_id": "1:622260331182:android:f4784968ba3d42c3a7833f",
         "android_client_info": {
           "package_name": "com.example.quizmind"
         }
@@ -15,18 +15,12 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDummyKeyForTestingOnly123456789"
+          "current_key": "AIzaSyDLWBzf310pnGBgWS2uWOfXQYm36Sej6VA"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": []
         }
       }
     }

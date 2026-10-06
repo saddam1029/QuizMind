@@ -2,6 +2,8 @@
     <string name="app_name">QuizMind</string>
     <string name="qm_brand_name">QuizMind</string>
     <string name="qm_tagline">Learn smarter. Quiz better.</string>
+    <string name="qm_badge_text">Adaptive Daily Mastery</string>
+    <string name="qm_powered_by">Powered by AI Intelligence</string>
     <string name="qm_onboarding_title_1">Create quizzes from anything</string>
     <string name="qm_onboarding_description_1">Turn topics, notes, PDFs, and scanned pages into quizzes.</string>
     <string name="qm_onboarding_title_2">Test your knowledge</string>
