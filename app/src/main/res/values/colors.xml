@@ -2,7 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="qm_primary">#2563EB</color>
+    <color name="app_color">#2563EB</color>
     <color name="qm_primary_light">#EFF6FF</color>
     <color name="qm_background">#F8FAFC</color>
     <color name="qm_white">#FFFFFF</color>

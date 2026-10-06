@@ -86,7 +86,7 @@
         android:layout_width="@dimen/_28sdp"
         android:layout_height="@dimen/_28sdp"
         android:indeterminate="true"
-        android:indeterminateTint="@color/qm_primary"
+        android:indeterminateTint="@color/app_color"
         style="?android:attr/progressBarStyleSmall"
         app:layout_constraintBottom_toTopOf="@id/footerLayout"
         app:layout_constraintStart_toStartOf="parent"

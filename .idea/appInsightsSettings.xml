@@ -9,9 +9,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.example.quizmind" />
-                  <option name="mobileSdkAppId" value="1:123456789012:android:1234567890123456789012" />
-                  <option name="projectId" value="quizmind-dummy" />
-                  <option name="projectNumber" value="123456789012" />
+                  <option name="mobileSdkAppId" value="1:622260331182:android:f4784968ba3d42c3a7833f" />
+                  <option name="projectId" value="quizmind-9d1c3" />
+                  <option name="projectNumber" value="622260331182" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

@@ -68,6 +68,9 @@ dependencies {
     // Splash screen
     implementation(libs.androidx.core.splashscreen)
 
+    // Pager Dots Indicator
+    implementation("com.tbuonomo:dotsindicator:5.1.0")
+
     // ViewModel and lifecycle-aware StateFlow collection
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
