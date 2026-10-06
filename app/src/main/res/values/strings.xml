@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">QuizMind</string>
+    <string name="qm_brand_name">QuizMind</string>
+    <string name="qm_tagline">Learn smarter. Quiz better.</string>
+    <string name="qm_onboarding_title_1">Create quizzes from anything</string>
+    <string name="qm_onboarding_description_1">Turn topics, notes, PDFs, and scanned pages into quizzes.</string>
+    <string name="qm_onboarding_title_2">Test your knowledge</string>
+    <string name="qm_onboarding_description_2">Take smart quizzes with difficulty levels, hints, and optional timers.</string>
+    <string name="qm_onboarding_title_3">Track your progress</string>
+    <string name="qm_onboarding_description_3">Review your results and see where you can improve.</string>
+    <string name="qm_next">Next</string>
+    <string name="qm_get_started">Get Started</string>
+    <string name="qm_skip">Skip</string>
+    <string name="qm_page_number">Page %1$d of %2$d</string>
 </resources>

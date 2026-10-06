@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="qm_primary">#2563EB</color>
+    <color name="qm_primary_light">#EFF6FF</color>
+    <color name="qm_background">#F8FAFC</color>
+    <color name="qm_white">#FFFFFF</color>
+    <color name="qm_text_primary">#0F172A</color>
+    <color name="qm_text_secondary">#64748B</color>
+    <color name="qm_border">#E2E8F0</color>
 </resources>
