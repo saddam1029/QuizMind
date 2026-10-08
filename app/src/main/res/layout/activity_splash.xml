@@ -28,7 +28,7 @@
         android:text="@string/qm_brand_name"
         android:textColor="@color/qm_text_primary"
         android:textSize="@dimen/_30sdp"
-        android:fontFamily="@font/Inter_bold"
+        android:fontFamily="@font/inter_bold"
         app:layout_constraintTop_toBottomOf="@id/ivLogo"
         app:layout_constraintBottom_toTopOf="@id/tvTagline"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
         android:text="@string/qm_tagline"
         android:textColor="@color/qm_text_secondary"
         android:textSize="@dimen/_12sdp"
-        android:fontFamily="@font/Inter_regular"
+        android:fontFamily="@font/inter_regular"
         android:layout_marginTop="@dimen/_2sdp"
         app:layout_constraintTop_toBottomOf="@id/tvAppName"
         app:layout_constraintBottom_toTopOf="@id/badgeLayout"
@@ -76,7 +76,7 @@
             android:text="@string/qm_badge_text"
             android:textColor="#006329"
             android:textSize="@dimen/_10sdp"
-            android:fontFamily="@font/Inter_semi_bold" />
+            android:fontFamily="@font/inter_semi_bold" />
 
     </LinearLayout>
 
@@ -115,7 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/qm_powered_by"
-            android:fontFamily="@font/Inter_regular"
+            android:fontFamily="@font/inter_regular"
             android:textColor="@color/qm_text_secondary"
             android:textSize="@dimen/_11sdp" />
 
