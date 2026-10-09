@@ -111,7 +111,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/Inter_regular"
+            android:fontFamily="@font/inter_regular"
             android:text="@string/qm_continue_with_google"
             android:textColor="@color/qm_text_primary"
             android:textSize="@dimen/_14sdp" />
@@ -126,7 +126,7 @@
         android:textColor="@color/qm_text_secondary"
         android:textSize="@dimen/_10sdp"
         android:gravity="center"
-        android:fontFamily="@font/Inter_medium"
+        android:fontFamily="@font/inter_medium"
         android:layout_marginBottom="@dimen/_24sdp"
         app:layout_constraintBottom_toTopOf="@+id/badgeLocalData"
         app:layout_constraintStart_toStartOf="parent"
@@ -158,7 +158,7 @@
             android:layout_height="wrap_content"
             android:text="@string/qm_local_data_note"
             android:textColor="#475569"
-            android:fontFamily="@font/Inter_medium"
+            android:fontFamily="@font/inter_medium"
             android:textSize="@dimen/_10sdp"
             android:textStyle="normal" />
 

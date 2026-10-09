@@ -15,10 +15,12 @@ import androidx.credentials.GetCredentialRequest
 import androidx.credentials.exceptions.GetCredentialCancellationException
 import androidx.credentials.exceptions.GetCredentialException
 import androidx.credentials.CustomCredential
+import com.example.quizmind.MainActivity
 import com.example.quizmind.databinding.ActivityLoginBinding
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.example.quizmind.R
 import com.google.firebase.auth.GoogleAuthProvider
 import kotlinx.coroutines.launch
 
