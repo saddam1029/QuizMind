@@ -10,7 +10,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.example.quizmind.MainActivity
 import com.example.quizmind.databinding.ActivityOnboardingBinding
 import com.example.quizmind.ui.fragments.OnboardingOneFragment
 import com.example.quizmind.ui.fragments.OnboardingThreeFragment
@@ -83,7 +82,7 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun finishOnboarding() {
         AppPreferences.setOnboardingCompleted(this, true)
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
     }

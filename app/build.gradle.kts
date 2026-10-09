@@ -62,7 +62,7 @@ dependencies {
     implementation(libs.androidx.recyclerview)
     implementation(libs.material)
 
-    // sdp
+    // sdp and ssp
     implementation("com.intuit.sdp:sdp-android:1.1.1")
 
     // Splash screen

@@ -14,6 +14,13 @@
     <string name="qm_get_started">Get Started</string>
     <string name="qm_skip">Skip</string>
     <string name="qm_page_number">Page %1$d of %2$d</string>
+    <string name="qm_secure_access">Secure Access</string>
+    <string name="qm_back">Back</string>
+    <string name="qm_welcome_title">Welcome to QuizMind</string>
+    <string name="qm_welcome_subtitle">Create smarter quizzes and track your\nlearning.</string>
+    <string name="qm_continue_with_google">Continue with Google</string>
+    <string name="qm_sign_in_note">Sign in to start creating quizzes.</string>
+    <string name="qm_local_data_note">Quiz data is stored locally on this device.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
