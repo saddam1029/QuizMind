@@ -6,11 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/qm_background"
-    android:paddingHorizontal="@dimen/_24sdp"
-    android:paddingTop="@dimen/_16sdp"
-    android:paddingBottom="@dimen/_24sdp"
     tools:context=".ui.activities.LoginActivity">
-
 
     <LinearLayout
         android:id="@+id/badgeSecureAccess"
@@ -18,6 +14,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center_vertical"
+        android:layout_marginEnd="@dimen/_10sdp"
+        android:layout_marginTop="@dimen/_20sdp"
         android:background="@drawable/bg_pill_gray"
         android:paddingHorizontal="@dimen/_12sdp"
         android:paddingVertical="@dimen/_8sdp"
@@ -47,6 +45,7 @@
         android:layout_width="@dimen/_140sdp"
         android:layout_height="@dimen/_140sdp"
         android:src="@drawable/splash_logo"
+        android:scaleType="centerCrop"
         android:contentDescription="@string/app_name"
         app:layout_constraintTop_toBottomOf="@id/badgeSecureAccess"
         app:layout_constraintBottom_toTopOf="@+id/tvWelcomeTitle"
@@ -64,7 +63,6 @@
         android:textSize="@dimen/_22sdp"
         android:textStyle="bold"
         android:fontFamily="sans-serif-medium"
-        android:layout_marginTop="@dimen/_24sdp"
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/ivLogo"
         app:layout_constraintBottom_toTopOf="@+id/tvWelcomeSubtitle"
@@ -80,7 +78,7 @@
         android:textSize="@dimen/_12sdp"
         android:gravity="center"
         android:lineSpacingExtra="@dimen/_4sdp"
-        android:layout_marginTop="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_8sdp"
         app:layout_constraintTop_toBottomOf="@id/tvWelcomeTitle"
         app:layout_constraintBottom_toTopOf="@+id/btnGoogleSignIn"
         app:layout_constraintStart_toStartOf="parent"
@@ -91,31 +89,32 @@
         android:id="@+id/btnGoogleSignIn"
         android:layout_width="0dp"
         android:layout_height="@dimen/_50sdp"
-        android:orientation="horizontal"
-        android:gravity="center"
+        android:layout_marginBottom="@dimen/_16sdp"
+        android:layout_marginHorizontal="@dimen/_20sdp"
         android:background="@drawable/bg_google_button"
         android:clickable="true"
         android:focusable="true"
-        android:paddingHorizontal="@dimen/_16sdp"
-        android:layout_marginBottom="@dimen/_16sdp"
+        android:gravity="center"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/tvSignInNote"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:layout_width="@dimen/_22sdp"
             android:layout_height="@dimen/_22sdp"
-            android:src="@drawable/ic_google"
             android:layout_marginEnd="@dimen/_12sdp"
-            android:contentDescription="@null" />
+            android:contentDescription="@null"
+            android:src="@drawable/ic_google" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/Inter_regular"
             android:text="@string/qm_continue_with_google"
             android:textColor="@color/qm_text_primary"
-            android:textSize="@dimen/_14sdp"
-            android:fontFamily="@font/inter_regular" />
+            android:textSize="@dimen/_14sdp" />
 
     </LinearLayout>
 
@@ -127,7 +126,7 @@
         android:textColor="@color/qm_text_secondary"
         android:textSize="@dimen/_10sdp"
         android:gravity="center"
-        android:fontFamily="@font/inter_medium"
+        android:fontFamily="@font/Inter_medium"
         android:layout_marginBottom="@dimen/_24sdp"
         app:layout_constraintBottom_toTopOf="@+id/badgeLocalData"
         app:layout_constraintStart_toStartOf="parent"
@@ -142,7 +141,7 @@
         android:background="@drawable/bg_pill_gray"
         android:paddingHorizontal="@dimen/_14sdp"
         android:paddingVertical="@dimen/_8sdp"
-        android:layout_marginBottom="@dimen/_12sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -159,7 +158,7 @@
             android:layout_height="wrap_content"
             android:text="@string/qm_local_data_note"
             android:textColor="#475569"
-            android:fontFamily="@font/inter_medium"
+            android:fontFamily="@font/Inter_medium"
             android:textSize="@dimen/_10sdp"
             android:textStyle="normal" />
 

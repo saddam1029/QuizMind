@@ -1,27 +1,25 @@
+
 package com.example.quizmind.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.credentials.CredentialManager
-import androidx.credentials.CustomCredential
-import androidx.credentials.GetCredentialRequest
-import androidx.credentials.GetCredentialResponse
-import androidx.credentials.exceptions.GetCredentialException
 import androidx.lifecycle.lifecycleScope
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential.Companion.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+import androidx.credentials.CredentialManager
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.exceptions.GetCredentialCancellationException
+import androidx.credentials.exceptions.GetCredentialException
+import androidx.credentials.CustomCredential
+import com.example.quizmind.databinding.ActivityLoginBinding
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.example.quizmind.MainActivity
-import com.example.quizmind.R
-import com.example.quizmind.databinding.ActivityLoginBinding
 import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
@@ -36,13 +34,24 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+        // Handle status bar and navigation bar insets
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { view, insets ->
+            val systemBars =
+                insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            view.setPadding(
+                systemBars.left,
+                systemBars.top,
+                systemBars.right,
+                systemBars.bottom
+            )
+
             insets
         }
 
@@ -56,20 +65,20 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        // Check if user is already signed in
+
         if (auth.currentUser != null) {
             navigateToMain()
         }
     }
 
     private fun startGoogleSignIn() {
-        // Replace with your Web Client ID from Firebase Console (Authentication -> Sign-in method -> Google)
-        val serverClientId = "622260331182-placeholder.apps.googleusercontent.com"
 
         val googleIdOption = GetGoogleIdOption.Builder()
+            .setServerClientId(
+                getString(R.string.default_web_client_id)
+            )
             .setFilterByAuthorizedAccounts(false)
-            .setServerClientId(serverClientId)
-            .setAutoSelectEnabled(true)
+            .setAutoSelectEnabled(false)
             .build()
 
         val request = GetCredentialRequest.Builder()
@@ -79,55 +88,89 @@ class LoginActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val result = credentialManager.getCredential(
-                    request = request,
-                    context = this@LoginActivity
+                    context = this@LoginActivity,
+                    request = request
                 )
+
                 handleSignIn(result)
+
+            } catch (e: GetCredentialCancellationException) {
+                Log.d(TAG, "Google sign-in cancelled")
+
             } catch (e: GetCredentialException) {
-                Log.e(TAG, "GetCredentialException: ${e.message}", e)
-                Toast.makeText(this@LoginActivity, "Sign in failed: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "Credential Manager error", e)
+                showMessage("Unable to sign in. Please try again.")
+
             } catch (e: Exception) {
-                Log.e(TAG, "Unexpected error during sign in: ${e.message}", e)
-                Toast.makeText(this@LoginActivity, "Sign in failed: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "Unexpected sign-in error", e)
+                showMessage("Something went wrong. Please try again.")
             }
         }
     }
 
-    private fun handleSignIn(result: GetCredentialResponse) {
+    private fun handleSignIn(
+        result: androidx.credentials.GetCredentialResponse
+    ) {
         val credential = result.credential
-        if (credential is CustomCredential && credential.type == TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+
+        if (
+            credential is CustomCredential &&
+            credential.type ==
+            GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+        ) {
             try {
-                val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
-                val googleIdToken = googleIdTokenCredential.idToken
-                firebaseAuthWithGoogle(googleIdToken)
+                val googleCredential =
+                    GoogleIdTokenCredential.createFrom(credential.data)
+
+                firebaseAuthWithGoogle(googleCredential.idToken)
+
             } catch (e: Exception) {
-                Log.e(TAG, "Failed to extract Google ID token: ${e.message}", e)
-                Toast.makeText(this, "Authentication failed.", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "Unable to read Google ID token", e)
+                showMessage("Unable to authenticate your Google account.")
             }
+
         } else {
-            Log.w(TAG, "Unexpected credential type")
-            Toast.makeText(this, "Unsupported credential type.", Toast.LENGTH_SHORT).show()
+            Log.w(TAG, "Unexpected credential type: ${credential.type}")
+            showMessage("Unsupported sign-in credential.")
         }
     }
 
     private fun firebaseAuthWithGoogle(idToken: String) {
-        val firebaseCredential = GoogleAuthProvider.getCredential(idToken, null)
+
+        val firebaseCredential =
+            GoogleAuthProvider.getCredential(idToken, null)
+
         auth.signInWithCredential(firebaseCredential)
             .addOnCompleteListener(this) { task ->
+
                 if (task.isSuccessful) {
-                    Log.d(TAG, "signInWithCredential:success")
-                    Toast.makeText(this, "Sign in successful!", Toast.LENGTH_SHORT).show()
+                    Log.d(TAG, "Firebase Google sign-in successful")
                     navigateToMain()
+
                 } else {
-                    Log.w(TAG, "signInWithCredential:failure", task.exception)
-                    Toast.makeText(this, "Authentication failed: ${task.exception?.localizedMessage}", Toast.LENGTH_SHORT).show()
+                    Log.e(
+                        TAG,
+                        "Firebase authentication failed",
+                        task.exception
+                    )
+
+                    showMessage("Sign-in failed. Please try again.")
                 }
             }
     }
 
     private fun navigateToMain() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
+        if (isFinishing || isDestroyed) return
+
+        startActivity(Intent(this, MainActivity::class.java))
         finish()
+    }
+
+    private fun showMessage(message: String) {
+        Toast.makeText(
+            this,
+            message,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }

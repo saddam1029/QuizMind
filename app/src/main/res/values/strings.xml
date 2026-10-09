@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">QuizMind</string>
+
+    <string name="default_web_client_id">622260331182-0jdog9puppdt9a9tqja9u41b23bnt447.apps.googleusercontent.com</string>
+
+
     <string name="qm_brand_name">QuizMind</string>
     <string name="qm_tagline">Learn smarter. Quiz better.</string>
     <string name="qm_badge_text">Adaptive Daily Mastery</string>
@@ -23,4 +27,5 @@
     <string name="qm_local_data_note">Quiz data is stored locally on this device.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
