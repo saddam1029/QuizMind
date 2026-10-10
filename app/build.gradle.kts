@@ -121,6 +121,9 @@ dependencies {
     implementation(libs.mlkit.text.recognition)
     implementation(libs.pdfbox.android)
 
+    // Image Loading
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+
     // Existing tests
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.espresso.core)

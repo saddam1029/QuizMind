@@ -41,8 +41,8 @@
 
         <ImageView
             android:id="@+id/ivProfile"
-            android:layout_width="@dimen/_32sdp"
-            android:layout_height="@dimen/_32sdp"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
             android:contentDescription="@null"
             android:src="@drawable/ic_profile"
             app:layout_constraintBottom_toBottomOf="@+id/ivAppLogo"
@@ -160,6 +160,7 @@
 
         <!-- 2x2 Grid of Action Cards -->
         <!-- Row 1: Topic & Text/Notes -->
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardTopic"
             android:layout_width="0dp"

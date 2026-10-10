@@ -9,8 +9,11 @@
     <style name="Theme.QuizMind"
         parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/qm_background</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
+        <!-- Black status bar icons -->
+        <item name="android:windowLightStatusBar">true</item>
 
     </style>
 </resources>
