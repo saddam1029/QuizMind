@@ -3,7 +3,6 @@
 
     <string name="default_web_client_id">622260331182-0jdog9puppdt9a9tqja9u41b23bnt447.apps.googleusercontent.com</string>
 
-
     <string name="qm_brand_name">QuizMind</string>
     <string name="qm_tagline">Learn smarter. Quiz better.</string>
     <string name="qm_badge_text">Adaptive Daily Mastery</string>
@@ -25,7 +24,27 @@
     <string name="qm_continue_with_google">Continue with Google</string>
     <string name="qm_sign_in_note">Sign in to start creating quizzes.</string>
     <string name="qm_local_data_note">Quiz data is stored locally on this device.</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
+    <!-- Home Screen -->
+    <string name="qm_home_title">Home</string>
+    <string name="qm_good_morning">Good morning,</string>
+    <string name="qm_user_saddam">Saddam</string>
+    <string name="qm_streak_5_days">5 Days</string>
+    <string name="qm_create_new_quiz">Create a New Quiz</string>
+    <string name="qm_ai_powered">AI-Powered </string>
+    <string name="qm_create_quiz_subtitle">Turn your study material into a smart quiz.</string>
+    <string name="qm_topic">Topic</string>
+    <string name="qm_topic_subtitle">Start with a subject</string>
+    <string name="qm_text_notes">Text / Notes</string>
+    <string name="qm_text_notes_subtitle">Paste your notes</string>
+    <string name="qm_pdf">PDF</string>
+    <string name="qm_pdf_subtitle">Upload document</string>
+    <string name="qm_scan_notes">Scan Notes</string>
+    <string name="qm_scan_notes_subtitle">Capture a page</string>
+    <string name="qm_recent_quizzes">Recent Quizzes</string>
+    <string name="qm_recent_quizzes_subtitle">Review progress &amp; repeat</string>
+    <string name="qm_view_all">View All ></string>
+    <string name="qm_latest_score">Latest score</string>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

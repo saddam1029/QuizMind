@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/_10sdp"
+    android:background="@drawable/bg_home_card"
+    android:paddingStart="@dimen/_14sdp"
+    android:paddingTop="@dimen/_12sdp"
+    android:paddingEnd="@dimen/_14sdp"
+    android:paddingBottom="@dimen/_12sdp">
+
+    <ImageView
+        android:id="@+id/ivQuizIcon"
+        android:layout_width="@dimen/_44sdp"
+        android:layout_height="@dimen/_44sdp"
+        android:background="@drawable/bg_icon_container"
+        android:contentDescription="@null"
+        android:padding="@dimen/_12sdp"
+        android:src="@drawable/ic_computer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvQuizTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:fontFamily="@font/inter_bold"
+        android:textColor="@color/qm_text_primary"
+        android:textSize="@dimen/_14sdp"
+        app:layout_constraintEnd_toStartOf="@+id/layoutScore"
+        app:layout_constraintStart_toEndOf="@+id/ivQuizIcon"
+        app:layout_constraintTop_toTopOf="@+id/ivQuizIcon"
+        tools:text="Biology Basics" />
+
+    <TextView
+        android:id="@+id/tvQuizSubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:fontFamily="@font/inter_regular"
+        android:textColor="@color/qm_text_secondary"
+        android:textSize="@dimen/_11sdp"
+        app:layout_constraintEnd_toStartOf="@+id/layoutScore"
+        app:layout_constraintStart_toStartOf="@+id/tvQuizTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvQuizTitle"
+        tools:text="10 questions · Mixed" />
+
+    <LinearLayout
+        android:id="@+id/layoutScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:gravity="end"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/ivMenuDots"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tvLatestScoreLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/qm_latest_score"
+            android:textColor="#94A3B8"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/tvQuizScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:fontFamily="@font/inter_bold"
+            android:textColor="@color/app_color"
+            android:textSize="@dimen/_15sdp"
+            tools:text="68/100" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivMenuDots"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:contentDescription="@null"
+        android:src="@drawable/ic_menu_dots"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

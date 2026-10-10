@@ -1,10 +1,408 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/qm_background"
+    android:fillViewport="true"
     tools:context=".ui.fragments.HomeFragment">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/_16sdp"
+        android:paddingTop="@dimen/_16sdp"
+        android:paddingEnd="@dimen/_16sdp"
+        android:paddingBottom="@dimen/_24sdp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- Header: App Logo, Home Title & Profile -->
+        <ImageView
+            android:id="@+id/ivAppLogo"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/splash_logo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvHomeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:fontFamily="@font/inter_bold"
+            android:text="@string/qm_home_title"
+            android:textColor="@color/qm_text_primary"
+            android:textSize="@dimen/_16sdp"
+            app:layout_constraintBottom_toBottomOf="@+id/ivAppLogo"
+            app:layout_constraintStart_toEndOf="@+id/ivAppLogo"
+            app:layout_constraintTop_toTopOf="@+id/ivAppLogo" />
+
+        <ImageView
+            android:id="@+id/ivProfile"
+            android:layout_width="@dimen/_32sdp"
+            android:layout_height="@dimen/_32sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_profile"
+            app:layout_constraintBottom_toBottomOf="@+id/ivAppLogo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivAppLogo" />
+
+        <!-- Greeting Section & Streak Badge -->
+        <TextView
+            android:id="@+id/tvGreeting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:fontFamily="@font/inter_bold"
+            android:text="@string/qm_good_morning"
+            android:textColor="@color/qm_text_primary"
+            android:textSize="@dimen/_16sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ivAppLogo" />
+
+        <TextView
+            android:id="@+id/tvUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_bold"
+            android:text="@string/qm_user_saddam"
+            android:textColor="@color/qm_text_primary"
+            android:textSize="@dimen/_20sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvGreeting" />
+
+        <LinearLayout
+            android:id="@+id/layoutStreak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_streak_pill"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingTop="@dimen/_5sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:paddingBottom="@dimen/_5sdp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvUserName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvGreeting">
+
+            <ImageView
+                android:id="@+id/ivStreakIcon"
+                android:layout_width="@dimen/_14sdp"
+                android:layout_height="@dimen/_14sdp"
+                android:layout_marginEnd="@dimen/_4sdp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_fire" />
+
+            <TextView
+                android:id="@+id/tvStreakCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_semi_bold"
+                android:text="@string/qm_streak_5_days"
+                android:textColor="#006329"
+                android:textSize="@dimen/_11sdp" />
+        </LinearLayout>
+
+        <!-- Section 1: Create a New Quiz -->
+        <TextView
+            android:id="@+id/tvCreateNewQuizTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:fontFamily="@font/inter_bold"
+            android:text="@string/qm_create_new_quiz"
+            android:textColor="@color/qm_text_primary"
+            android:textSize="@dimen/_15sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
+
+        <LinearLayout
+            android:id="@+id/layoutAiPowered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/tvCreateNewQuizTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvCreateNewQuizTitle">
+
+            <TextView
+                android:id="@+id/tvAiPoweredText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_semi_bold"
+                android:text="@string/qm_ai_powered"
+                android:textColor="@color/app_color"
+                android:textSize="@dimen/_11sdp" />
+
+            <ImageView
+                android:id="@+id/ivAiPoweredStars"
+                android:layout_width="@dimen/_12sdp"
+                android:layout_height="@dimen/_12sdp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_stars" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvCreateNewQuizSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/qm_create_quiz_subtitle"
+            android:textColor="@color/qm_text_secondary"
+            android:textSize="@dimen/_11sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCreateNewQuizTitle" />
+
+        <!-- 2x2 Grid of Action Cards -->
+        <!-- Row 1: Topic & Text/Notes -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardTopic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:background="@drawable/bg_home_card"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="@dimen/_12sdp"
+            app:layout_constraintEnd_toStartOf="@+id/cardTextNotes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvCreateNewQuizSubtitle">
+
+            <ImageView
+                android:id="@+id/ivTopicIcon"
+                android:layout_width="@dimen/_38sdp"
+                android:layout_height="@dimen/_38sdp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_topic"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTopicTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/inter_bold"
+                android:text="@string/qm_topic"
+                android:textColor="@color/qm_text_primary"
+                android:textSize="@dimen/_13sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivTopicIcon" />
+
+            <TextView
+                android:id="@+id/tvTopicSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/qm_topic_subtitle"
+                android:textColor="@color/qm_text_secondary"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTopicTitle" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardTextNotes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:background="@drawable/bg_home_card"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="@dimen/_12sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cardTopic"
+            app:layout_constraintTop_toBottomOf="@+id/tvCreateNewQuizSubtitle">
+
+            <ImageView
+                android:id="@+id/ivTextNotesIcon"
+                android:layout_width="@dimen/_38sdp"
+                android:layout_height="@dimen/_38sdp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvTextNotesTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/inter_bold"
+                android:text="@string/qm_text_notes"
+                android:textColor="@color/qm_text_primary"
+                android:textSize="@dimen/_13sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivTextNotesIcon" />
+
+            <TextView
+                android:id="@+id/tvTextNotesSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/qm_text_notes_subtitle"
+                android:textColor="@color/qm_text_secondary"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTextNotesTitle" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Row 2: PDF & Scan Notes -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardPdf"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_6sdp"
+            android:background="@drawable/bg_home_card"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="@dimen/_12sdp"
+            app:layout_constraintEnd_toStartOf="@+id/cardScanNotes"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardTopic">
+
+            <ImageView
+                android:id="@+id/ivPdfIcon"
+                android:layout_width="@dimen/_38sdp"
+                android:layout_height="@dimen/_38sdp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_pdf"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvPdfTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/inter_bold"
+                android:text="@string/qm_pdf"
+                android:textColor="@color/qm_text_primary"
+                android:textSize="@dimen/_13sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivPdfIcon" />
+
+            <TextView
+                android:id="@+id/tvPdfSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/qm_pdf_subtitle"
+                android:textColor="@color/qm_text_secondary"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvPdfTitle" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardScanNotes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_marginTop="@dimen/_10sdp"
+            android:background="@drawable/bg_home_card"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="@dimen/_12sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cardPdf"
+            app:layout_constraintTop_toBottomOf="@+id/cardTextNotes">
+
+            <ImageView
+                android:id="@+id/ivScanNotesIcon"
+                android:layout_width="@dimen/_38sdp"
+                android:layout_height="@dimen/_38sdp"
+                android:contentDescription="@null"
+                android:src="@drawable/ic_scan_notes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvScanNotesTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:fontFamily="@font/inter_bold"
+                android:text="@string/qm_scan_notes"
+                android:textColor="@color/qm_text_primary"
+                android:textSize="@dimen/_13sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ivScanNotesIcon" />
+
+            <TextView
+                android:id="@+id/tvScanNotesSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:fontFamily="@font/inter_regular"
+                android:text="@string/qm_scan_notes_subtitle"
+                android:textColor="@color/qm_text_secondary"
+                android:textSize="@dimen/_10sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvScanNotesTitle" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Section 2: Recent Quizzes Header -->
+        <TextView
+            android:id="@+id/tvRecentQuizzesTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_20sdp"
+            android:fontFamily="@font/inter_bold"
+            android:text="@string/qm_recent_quizzes"
+            android:textColor="@color/qm_text_primary"
+            android:textSize="@dimen/_15sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardPdf" />
+
+        <TextView
+            android:id="@+id/tvViewAll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_semi_bold"
+            android:text="@string/qm_view_all"
+            android:textColor="@color/app_color"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintBottom_toBottomOf="@+id/tvRecentQuizzesTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tvRecentQuizzesTitle" />
+
+        <TextView
+            android:id="@+id/tvRecentQuizzesSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:fontFamily="@font/inter_regular"
+            android:text="@string/qm_recent_quizzes_subtitle"
+            android:textColor="@color/qm_text_secondary"
+            android:textSize="@dimen/_11sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvRecentQuizzesTitle" />
+
+        <!-- Recent Quizzes RecyclerView -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvRecentQuizzes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvRecentQuizzesSubtitle"
+            tools:itemCount="3"
+            tools:listitem="@layout/item_recent_quiz" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
