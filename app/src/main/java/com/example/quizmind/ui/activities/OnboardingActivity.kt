@@ -71,17 +71,20 @@ class OnboardingActivity : AppCompatActivity() {
             if (currentItem < 2) {
                 binding.viewPager.currentItem = currentItem + 1
             } else {
-                finishOnboarding()
+                // Completed via "Get Started" on fragment three -> DO NOT show onboarding again
+                AppPreferences.setOnboardingCompleted(this, true)
+                navigateToLogin()
             }
         }
 
         binding.tvSkip.setOnClickListener {
-            finishOnboarding()
+            // Skipped via "Skip" button -> show onboarding again next time user opens app
+            AppPreferences.setOnboardingCompleted(this, false)
+            navigateToLogin()
         }
     }
 
-    private fun finishOnboarding() {
-        AppPreferences.setOnboardingCompleted(this, true)
+    private fun navigateToLogin() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()

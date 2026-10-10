@@ -11,8 +11,8 @@
     <!-- Center Content Group -->
     <ImageView
         android:id="@+id/ivLogo"
-        android:layout_width="@dimen/_170sdp"
-        android:layout_height="@dimen/_170sdp"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_70sdp"
         android:src="@drawable/splash_logo"
         android:contentDescription="@string/app_name"
         app:layout_constraintTop_toTopOf="parent"
