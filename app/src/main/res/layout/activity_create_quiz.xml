@@ -258,91 +258,88 @@
                 </LinearLayout>
 
                 <!-- Options Row -->
-                <HorizontalScrollView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
-                    android:fillViewport="false"
-                    android:scrollbars="none"
-                    android:overScrollMode="never">
+                    android:orientation="horizontal"
+                    android:weightSum="5">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/tvQ5"
+                        android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:orientation="horizontal">
+                        android:layout_weight="1"
+                        android:text="5"
+                        android:gravity="center"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:layout_marginEnd="@dimen/_4sdp"
+                        android:clickable="true"
+                        android:focusable="true" />
 
-                        <TextView
-                            android:id="@+id/tvQ5"
-                            android:layout_width="@dimen/_55sdp"
-                            android:layout_height="match_parent"
-                            android:layout_marginEnd="@dimen/_4sdp"
-                            android:background="@drawable/bg_pill_unselected"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:fontFamily="@font/inter_medium"
-                            android:gravity="center"
-                            android:text="5"
-                            android:textColor="@color/qm_text_primary"
-                            android:textSize="@dimen/_13sdp" />
+                    <TextView
+                        android:id="@+id/tvQ10"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="10"
+                        android:gravity="center"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:textColor="@color/white"
+                        android:background="@drawable/bg_pill_selected"
+                        android:layout_marginHorizontal="@dimen/_2sdp"
+                        android:clickable="true"
+                        android:focusable="true" />
 
-                        <TextView
-                            android:id="@+id/tvQ10"
-                            android:layout_width="@dimen/_55sdp"
-                            android:layout_height="match_parent"
-                            android:layout_marginHorizontal="@dimen/_2sdp"
-                            android:background="@drawable/bg_pill_selected"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:fontFamily="@font/inter_semi_bold"
-                            android:gravity="center"
-                            android:text="10"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/_13sdp" />
+                    <TextView
+                        android:id="@+id/tvQ15"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="15"
+                        android:gravity="center"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:layout_marginHorizontal="@dimen/_2sdp"
+                        android:clickable="true"
+                        android:focusable="true" />
 
-                        <TextView
-                            android:id="@+id/tvQ15"
-                            android:layout_width="@dimen/_55sdp"
-                            android:layout_height="match_parent"
-                            android:layout_marginHorizontal="@dimen/_2sdp"
-                            android:background="@drawable/bg_pill_unselected"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:fontFamily="@font/inter_medium"
-                            android:gravity="center"
-                            android:text="15"
-                            android:textColor="@color/qm_text_primary"
-                            android:textSize="@dimen/_13sdp" />
+                    <TextView
+                        android:id="@+id/tvQ20"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="20"
+                        android:gravity="center"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:layout_marginHorizontal="@dimen/_2sdp"
+                        android:clickable="true"
+                        android:focusable="true" />
 
-                        <TextView
-                            android:id="@+id/tvQ20"
-                            android:layout_width="@dimen/_55sdp"
-                            android:layout_height="match_parent"
-                            android:layout_marginHorizontal="@dimen/_2sdp"
-                            android:background="@drawable/bg_pill_unselected"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:fontFamily="@font/inter_medium"
-                            android:gravity="center"
-                            android:text="20"
-                            android:textColor="@color/qm_text_primary"
-                            android:textSize="@dimen/_13sdp" />
+                    <TextView
+                        android:id="@+id/tvQCustom"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.2"
+                        android:text="Custom"
+                        android:gravity="center"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:clickable="true"
+                        android:focusable="true" />
 
-                        <TextView
-                            android:id="@+id/tvQCustom"
-                            android:layout_width="@dimen/_75sdp"
-                            android:layout_height="match_parent"
-                            android:layout_marginStart="@dimen/_4sdp"
-                            android:background="@drawable/bg_pill_unselected"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:fontFamily="@font/inter_medium"
-                            android:gravity="center"
-                            android:text="Custom"
-                            android:textColor="@color/qm_text_primary"
-                            android:textSize="@dimen/_12sdp" />
-
-                    </LinearLayout>
-
-                </HorizontalScrollView>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -491,11 +488,12 @@
 
                 </LinearLayout>
 
-                <Switch
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switchTimer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+                    android:track="@drawable/bg_switch_track"
+                    android:thumb="@drawable/bg_switch_thumb" />
 
             </LinearLayout>
 
@@ -521,74 +519,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginBottom="@dimen/_8sdp">
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:baselineAligned="false">
 
-                    <!-- Computer (Unselected) -->
-
-                    <!-- History (Unselected) -->
+                    <!-- Subject 1 (1st Subject - dynamically updated from SubjectActivity) -->
                     <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/_44sdp"
-                        android:layout_marginEnd="@dimen/_4sdp"
-                        android:layout_weight="1"
-                        android:background="@drawable/bg_pill_unselected"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="@dimen/_12sdp">
-
-                        <ImageView
-                            android:layout_width="@dimen/_18sdp"
-                            android:layout_height="@dimen/_18sdp"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:contentDescription="@null"
-                            android:src="@drawable/ic_computer" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/inter_medium"
-                            android:text="Computer"
-                            android:textColor="@color/qm_text_primary"
-                            android:textSize="@dimen/_12sdp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/_44sdp"
-                        android:layout_weight="1"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:background="@drawable/bg_pill_unselected"
-                        android:paddingHorizontal="@dimen/_12sdp"
-                        android:layout_marginStart="@dimen/_4sdp">
-
-                        <ImageView
-                            android:layout_width="@dimen/_18sdp"
-                            android:layout_height="@dimen/_18sdp"
-                            android:src="@drawable/ic_histories"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:contentDescription="@null" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="History"
-                            android:textSize="@dimen/_12sdp"
-                            android:fontFamily="@font/inter_medium"
-                            android:textColor="@color/qm_text_primary" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <!-- Row 2: Science (Selected) & Art -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="@dimen/_8sdp">
-
-                    <!-- Science (Selected - Blue) -->
-                    <LinearLayout
+                        android:id="@+id/cardSubject1"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/_44sdp"
                         android:layout_weight="1"
@@ -596,16 +532,21 @@
                         android:gravity="center_vertical"
                         android:background="@drawable/bg_pill_selected"
                         android:paddingHorizontal="@dimen/_12sdp"
-                        android:layout_marginEnd="@dimen/_4sdp">
+                        android:layout_marginEnd="@dimen/_4sdp"
+                        android:clickable="true"
+                        android:focusable="true">
 
                         <ImageView
+                            android:id="@+id/ivSubject1"
                             android:layout_width="@dimen/_18sdp"
                             android:layout_height="@dimen/_18sdp"
                             android:src="@drawable/ic_science"
                             android:layout_marginEnd="@dimen/_8sdp"
+                            app:tint="@color/white"
                             android:contentDescription="@null" />
 
                         <TextView
+                            android:id="@+id/tvSubject1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -615,14 +556,18 @@
                             android:textColor="@color/white" />
 
                         <ImageView
+                            android:id="@+id/checkSubject1"
                             android:layout_width="@dimen/_16sdp"
                             android:layout_height="@dimen/_16sdp"
                             android:src="@drawable/ic_check"
+                            app:tint="@color/white"
+                            android:visibility="visible"
                             android:contentDescription="@null" />
                     </LinearLayout>
 
-                    <!-- Art (Unselected) -->
+                    <!-- Subject 2 -->
                     <LinearLayout
+                        android:id="@+id/cardSubject2"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/_44sdp"
                         android:layout_weight="1"
@@ -630,9 +575,152 @@
                         android:gravity="center_vertical"
                         android:background="@drawable/bg_pill_unselected"
                         android:paddingHorizontal="@dimen/_12sdp"
-                        android:layout_marginStart="@dimen/_4sdp">
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:clickable="true"
+                        android:focusable="true">
 
                         <ImageView
+                            android:id="@+id/ivSubject2"
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            android:src="@drawable/ic_splash_ai"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:id="@+id/tvSubject2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Computer"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/inter_medium"
+                            android:textColor="@color/qm_text_primary" />
+
+                        <ImageView
+                            android:id="@+id/checkSubject2"
+                            android:layout_width="@dimen/_16sdp"
+                            android:layout_height="@dimen/_16sdp"
+                            android:src="@drawable/ic_check"
+                            android:visibility="gone"
+                            android:contentDescription="@null" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Row 2: Subject 3 & Subject 4 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:baselineAligned="false">
+
+                    <LinearLayout
+                        android:id="@+id/cardSubject3"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_4sdp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:id="@+id/ivSubject3"
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            android:src="@drawable/ic_histories"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:id="@+id/tvSubject3"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="History"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/inter_medium"
+                            android:textColor="@color/qm_text_primary" />
+
+                        <ImageView
+                            android:id="@+id/checkSubject3"
+                            android:layout_width="@dimen/_16sdp"
+                            android:layout_height="@dimen/_16sdp"
+                            android:src="@drawable/ic_check"
+                            android:visibility="gone"
+                            android:contentDescription="@null" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/cardSubject4"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:id="@+id/ivSubject4"
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            android:src="@drawable/ic_physics"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:id="@+id/tvSubject4"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Physics"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/inter_medium"
+                            android:textColor="@color/qm_text_primary" />
+
+                        <ImageView
+                            android:id="@+id/checkSubject4"
+                            android:layout_width="@dimen/_16sdp"
+                            android:layout_height="@dimen/_16sdp"
+                            android:src="@drawable/ic_check"
+                            android:visibility="gone"
+                            android:contentDescription="@null" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Row 3: Subject 5 & Subject 6 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:baselineAligned="false">
+
+                    <LinearLayout
+                        android:id="@+id/cardSubject5"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_4sdp"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:id="@+id/ivSubject5"
                             android:layout_width="@dimen/_18sdp"
                             android:layout_height="@dimen/_18sdp"
                             android:src="@drawable/ic_art"
@@ -640,52 +728,26 @@
                             android:contentDescription="@null" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/tvSubject5"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:text="Art"
                             android:textSize="@dimen/_12sdp"
                             android:fontFamily="@font/inter_medium"
                             android:textColor="@color/qm_text_primary" />
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <!-- Row 3: Economics & Mathematics -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="@dimen/_8sdp">
-
-                    <!-- Economics (Unselected) -->
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="@dimen/_44sdp"
-                        android:layout_weight="1"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:background="@drawable/bg_pill_unselected"
-                        android:paddingHorizontal="@dimen/_12sdp"
-                        android:layout_marginEnd="@dimen/_4sdp">
 
                         <ImageView
-                            android:layout_width="@dimen/_18sdp"
-                            android:layout_height="@dimen/_18sdp"
-                            android:src="@drawable/ic_economics"
-                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:id="@+id/checkSubject5"
+                            android:layout_width="@dimen/_16sdp"
+                            android:layout_height="@dimen/_16sdp"
+                            android:src="@drawable/ic_check"
+                            android:visibility="gone"
                             android:contentDescription="@null" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Economics"
-                            android:textSize="@dimen/_12sdp"
-                            android:fontFamily="@font/inter_medium"
-                            android:textColor="@color/qm_text_primary" />
                     </LinearLayout>
 
-                    <!-- Mathematics (Unselected) -->
                     <LinearLayout
+                        android:id="@+id/cardSubject6"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/_44sdp"
                         android:layout_weight="1"
@@ -693,9 +755,12 @@
                         android:gravity="center_vertical"
                         android:background="@drawable/bg_pill_unselected"
                         android:paddingHorizontal="@dimen/_12sdp"
-                        android:layout_marginStart="@dimen/_4sdp">
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:clickable="true"
+                        android:focusable="true">
 
                         <ImageView
+                            android:id="@+id/ivSubject6"
                             android:layout_width="@dimen/_18sdp"
                             android:layout_height="@dimen/_18sdp"
                             android:src="@drawable/ic_mathematics"
@@ -703,24 +768,35 @@
                             android:contentDescription="@null" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/tvSubject6"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:text="Mathematics"
                             android:textSize="@dimen/_12sdp"
                             android:fontFamily="@font/inter_medium"
                             android:textColor="@color/qm_text_primary" />
+
+                        <ImageView
+                            android:id="@+id/checkSubject6"
+                            android:layout_width="@dimen/_16sdp"
+                            android:layout_height="@dimen/_16sdp"
+                            android:src="@drawable/ic_check"
+                            android:visibility="gone"
+                            android:contentDescription="@null" />
                     </LinearLayout>
 
                 </LinearLayout>
 
-                <!-- Row 4: Literature & Other -->
+                <!-- Row 4: Subject 7 & Other (Subject 8) -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
 
-                    <!-- Literature (Unselected) -->
                     <LinearLayout
+                        android:id="@+id/cardSubject7"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/_44sdp"
                         android:layout_weight="1"
@@ -728,9 +804,12 @@
                         android:gravity="center_vertical"
                         android:background="@drawable/bg_pill_unselected"
                         android:paddingHorizontal="@dimen/_12sdp"
-                        android:layout_marginEnd="@dimen/_4sdp">
+                        android:layout_marginEnd="@dimen/_4sdp"
+                        android:clickable="true"
+                        android:focusable="true">
 
                         <ImageView
+                            android:id="@+id/ivSubject7"
                             android:layout_width="@dimen/_18sdp"
                             android:layout_height="@dimen/_18sdp"
                             android:src="@drawable/ic_literature"
@@ -738,16 +817,27 @@
                             android:contentDescription="@null" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/tvSubject7"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:text="Literature"
                             android:textSize="@dimen/_12sdp"
                             android:fontFamily="@font/inter_medium"
                             android:textColor="@color/qm_text_primary" />
+
+                        <ImageView
+                            android:id="@+id/checkSubject7"
+                            android:layout_width="@dimen/_16sdp"
+                            android:layout_height="@dimen/_16sdp"
+                            android:src="@drawable/ic_check"
+                            android:visibility="gone"
+                            android:contentDescription="@null" />
                     </LinearLayout>
 
-                    <!-- Other (Unselected) -->
+                    <!-- Other (Subject 8 / opens SubjectActivity) -->
                     <LinearLayout
+
                         android:id="@+id/ll_other"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/_44sdp"
@@ -761,6 +851,7 @@
                         android:focusable="true">
 
                         <ImageView
+                            android:id="@+id/ivOther"
                             android:layout_width="@dimen/_18sdp"
                             android:layout_height="@dimen/_18sdp"
                             android:src="@drawable/ic_other"
@@ -768,12 +859,22 @@
                             android:contentDescription="@null" />
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/tvOther"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:text="Other"
+                            android:layout_weight="1"
+                            android:text="Other..."
                             android:textSize="@dimen/_12sdp"
                             android:fontFamily="@font/inter_medium"
                             android:textColor="@color/qm_text_primary" />
+
+                        <ImageView
+                            android:id="@+id/checkOther"
+                            android:layout_width="@dimen/_16sdp"
+                            android:layout_height="@dimen/_16sdp"
+                            android:src="@drawable/ic_check"
+                            android:visibility="gone"
+                            android:contentDescription="@null" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -784,7 +885,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGenerateQuiz"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_40sdp"
+                android:layout_height="@dimen/_50sdp"
                 android:layout_marginTop="@dimen/_24sdp"
                 android:background="@drawable/bg_splash_button"
                 android:fontFamily="@font/inter_semi_bold"

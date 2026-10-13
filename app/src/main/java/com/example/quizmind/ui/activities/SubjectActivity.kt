@@ -1,5 +1,6 @@
 package com.example.quizmind.ui.activities
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Typeface
@@ -25,10 +26,13 @@ class SubjectActivity : AppCompatActivity() {
         val container: LinearLayout,
         val icon: ImageView,
         val text: TextView,
-        val check: ImageView
+        val check: ImageView,
+        val subjectName: String,
+        val iconResId: Int
     )
 
     private lateinit var subjectItems: List<SubjectViewItem>
+    private var currentSelectedIndex = 6 // Default science
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +51,12 @@ class SubjectActivity : AppCompatActivity() {
         }
 
         binding.btnDone.setOnClickListener {
+            val selected = subjectItems[currentSelectedIndex]
+            val intent = Intent().apply {
+                putExtra("selected_subject_name", selected.subjectName)
+                putExtra("selected_subject_icon", selected.iconResId)
+            }
+            setResult(RESULT_OK, intent)
             finish()
         }
 
@@ -55,37 +65,37 @@ class SubjectActivity : AppCompatActivity() {
 
     private fun setupSubjectSelection() {
         subjectItems = listOf(
-            SubjectViewItem(binding.cardComputer, binding.ivComputer, binding.tvComputer, binding.checkComputer),
-            SubjectViewItem(binding.cardBiology, binding.ivBiology, binding.tvBiology, binding.checkBiology),
-            SubjectViewItem(binding.cardHistory, binding.ivHistory, binding.tvHistory, binding.checkHistory),
-            SubjectViewItem(binding.cardPhysics, binding.ivPhysics, binding.tvPhysics, binding.checkPhysics),
-            SubjectViewItem(binding.cardArt, binding.ivArt, binding.tvArt, binding.checkArt),
-            SubjectViewItem(binding.cardCimistory, binding.ivCimistory, binding.tvChemistry, binding.checkCimistory),
-            SubjectViewItem(binding.cardScience, binding.ivScience, binding.tvScience, binding.checkScience),
-            SubjectViewItem(binding.cardGeography, binding.ivGeography, binding.tvGeography, binding.checkGeography),
-            SubjectViewItem(binding.cardEngineering, binding.ivEngineering, binding.tvEngineering, binding.checkEngineering),
-            SubjectViewItem(binding.cardEnglish, binding.ivEnglish, binding.tvEnglish, binding.checkEnglish),
-            SubjectViewItem(binding.cardBusiness, binding.ivBusiness, binding.tvBusiness, binding.checkBusiness),
-            SubjectViewItem(binding.cardMath, binding.ivMath, binding.tvMath, binding.checkMath),
-            SubjectViewItem(binding.cardEconomics, binding.ivEconomics, binding.tvEconomics, binding.checkEconomics),
-            SubjectViewItem(binding.cardLiterature, binding.ivLiterature, binding.tvLiterature, binding.checkLiterature),
-            SubjectViewItem(binding.cardOther, binding.ivOther, binding.tvOther, binding.checkOther)
+            SubjectViewItem(binding.cardComputer, binding.ivComputer, binding.tvComputer, binding.checkComputer, "Computer", R.drawable.ic_splash_ai),
+            SubjectViewItem(binding.cardBiology, binding.ivBiology, binding.tvBiology, binding.checkBiology, "Biology", R.drawable.ic_biology),
+            SubjectViewItem(binding.cardHistory, binding.ivHistory, binding.tvHistory, binding.checkHistory, "History", R.drawable.ic_histories),
+            SubjectViewItem(binding.cardPhysics, binding.ivPhysics, binding.tvPhysics, binding.checkPhysics, "Physics", R.drawable.ic_physics),
+            SubjectViewItem(binding.cardArt, binding.ivArt, binding.tvArt, binding.checkArt, "Art", R.drawable.ic_art),
+            SubjectViewItem(binding.cardCimistory, binding.ivCimistory, binding.tvChemistry, binding.checkCimistory, "Chemistry", R.drawable.ic_chemistry),
+            SubjectViewItem(binding.cardScience, binding.ivScience, binding.tvScience, binding.checkScience, "Science", R.drawable.ic_science),
+            SubjectViewItem(binding.cardGeography, binding.ivGeography, binding.tvGeography, binding.checkGeography, "Gegraphy", R.drawable.ic_geography),
+            SubjectViewItem(binding.cardEngineering, binding.ivEngineering, binding.tvEngineering, binding.checkEngineering, "Engineering", R.drawable.ic_engineering),
+            SubjectViewItem(binding.cardEnglish, binding.ivEnglish, binding.tvEnglish, binding.checkEnglish, "English", R.drawable.ic_english),
+            SubjectViewItem(binding.cardBusiness, binding.ivBusiness, binding.tvBusiness, binding.checkBusiness, "Bussiness", R.drawable.ic_business),
+            SubjectViewItem(binding.cardMath, binding.ivMath, binding.tvMath, binding.checkMath, "Math", R.drawable.ic_mathematics),
+            SubjectViewItem(binding.cardEconomics, binding.ivEconomics, binding.tvEconomics, binding.checkEconomics, "Economics", R.drawable.ic_economics),
+            SubjectViewItem(binding.cardLiterature, binding.ivLiterature, binding.tvLiterature, binding.checkLiterature, "Literature", R.drawable.ic_literature),
+            SubjectViewItem(binding.cardOther, binding.ivOther, binding.tvOther, binding.checkOther, "Other", R.drawable.ic_other)
         )
 
-        // Default selected is Science (index 6)
-        selectSubject(6)
+        selectSubject(6) // Default Science
 
         subjectItems.forEachIndexed { index, item ->
             item.container.setOnClickListener {
+                currentSelectedIndex = index
                 selectSubject(index)
             }
         }
     }
 
     private fun selectSubject(selectedIndex: Int) {
+        currentSelectedIndex = selectedIndex
         subjectItems.forEachIndexed { index, item ->
             if (index == selectedIndex) {
-                // Selected state: blue background, white text, white icon tint, check visible
                 item.container.setBackgroundResource(R.drawable.bg_pill_selected)
                 item.text.setTextColor(Color.WHITE)
                 item.text.setTypeface(null, Typeface.BOLD)
@@ -93,7 +103,6 @@ class SubjectActivity : AppCompatActivity() {
                 item.check.visibility = View.VISIBLE
                 ImageViewCompat.setImageTintList(item.check, ColorStateList.valueOf(Color.WHITE))
             } else {
-                // Unselected state: white/gray background, primary text color, app_color icon tint, check gone
                 item.container.setBackgroundResource(R.drawable.bg_pill_unselected)
                 item.text.setTextColor(ContextCompat.getColor(this, R.color.qm_text_primary))
                 item.text.setTypeface(null, Typeface.NORMAL)
