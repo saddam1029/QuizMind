@@ -1,0 +1,769 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/qm_background"
+    tools:context=".ui.activities.CreateQuizActivity">
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingVertical="@dimen/_12sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:src="@drawable/ic_back"
+            android:background="@drawable/bg_pill_gray"
+            android:padding="@dimen/_8sdp"
+            android:contentDescription="@string/qm_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Quiz"
+            android:textSize="@dimen/_18sdp"
+            android:fontFamily="@font/inter_semi_bold"
+            android:textColor="@color/qm_text_primary"
+            android:layout_marginStart="@dimen/_16sdp" />
+
+    </LinearLayout>
+
+    <!-- Scrollable Form Content -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:paddingBottom="@dimen/_32sdp">
+
+            <!-- Card 1: Topic Section Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_white"
+                android:padding="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp">
+
+                <!-- Top row: Source Mode & AI Ready -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="@dimen/_12sdp">
+
+                    <!-- Source Mode Badge -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_pill_gray"
+                        android:paddingHorizontal="@dimen/_10sdp"
+                        android:paddingVertical="@dimen/_6sdp">
+
+                        <ImageView
+                            android:layout_width="@dimen/_14sdp"
+                            android:layout_height="@dimen/_14sdp"
+                            android:src="@drawable/ic_splash_ai"
+                            android:layout_marginEnd="@dimen/_6sdp"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="SOURCE MODE"
+                            android:textColor="@color/app_color"
+                            android:textSize="@dimen/_10sdp"
+                            android:fontFamily="@font/inter_semi_bold" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_weight="1" />
+
+                    <!-- AI Ready Indicator -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <View
+                            android:layout_width="@dimen/_8sdp"
+                            android:layout_height="@dimen/_8sdp"
+                            android:background="@drawable/bg_circle_button"
+                            android:backgroundTint="#007F36"
+                            android:layout_marginEnd="@dimen/_6sdp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="AI Ready"
+                            android:textColor="@color/qm_text_secondary"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/inter_medium" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Heading -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Topic"
+                    android:textSize="@dimen/_18sdp"
+                    android:fontFamily="@font/inter_semi_bold"
+                    android:textColor="@color/qm_text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="What do you want to learn?"
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="@font/inter_regular"
+                    android:textColor="@color/qm_text_secondary"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginBottom="@dimen/_12sdp" />
+
+                <!-- Enter a topic label & character counter -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="@dimen/_6sdp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Enter a topic"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_secondary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="14/60"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/inter_regular"
+                        android:textColor="@color/qm_text_secondary" />
+
+                </LinearLayout>
+
+                <!-- Search / Topic Input Box -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_46sdp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_search_input"
+                    android:paddingHorizontal="@dimen/_12sdp">
+
+                    <ImageView
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:src="@drawable/ic_search"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <EditText
+                        android:id="@+id/etTopic"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@null"
+                        android:hint="Enter topic..."
+                        android:textColorHint="@color/qm_text_secondary"
+                        android:textColor="@color/qm_text_primary"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_regular"
+                        android:inputType="text"
+                        android:autofillHints="name"
+                        android:maxLines="1" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:src="@drawable/ic_close"
+                        android:contentDescription="@null"
+                        android:clickable="true"
+                        android:focusable="true" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Number of Questions Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/_16sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Number of Questions"
+                        android:textSize="@dimen/_15sdp"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10 Qs selected"
+                        android:textSize="@dimen/_11sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/app_color"
+                        android:background="@drawable/bg_pill_gray"
+                        android:paddingHorizontal="@dimen/_8sdp"
+                        android:paddingVertical="@dimen/_4sdp" />
+
+                </LinearLayout>
+
+                <!-- Options Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:orientation="horizontal"
+                    android:weightSum="5">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="5"
+                        android:gravity="center"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:layout_marginEnd="@dimen/_4sdp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="10"
+                        android:gravity="center"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:textColor="@color/white"
+                        android:background="@drawable/bg_pill_selected"
+                        android:layout_marginHorizontal="@dimen/_2sdp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="15"
+                        android:gravity="center"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:layout_marginHorizontal="@dimen/_2sdp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="20"
+                        android:gravity="center"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:layout_marginHorizontal="@dimen/_2sdp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.2"
+                        android:text="Custom"
+                        android:gravity="center"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:layout_marginStart="@dimen/_4sdp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Difficulty Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/_16sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Difficulty"
+                        android:textSize="@dimen/_15sdp"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Adaptive"
+                        android:textSize="@dimen/_11sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_secondary" />
+
+                </LinearLayout>
+
+                <!-- Options Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Easy"
+                        android:gravity="center"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:layout_marginEnd="@dimen/_4sdp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Medium"
+                        android:gravity="center"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:layout_marginHorizontal="@dimen/_2sdp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Hard"
+                        android:gravity="center"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:layout_marginHorizontal="@dimen/_2sdp" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Mixed"
+                        android:gravity="center"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:textColor="@color/white"
+                        android:background="@drawable/bg_pill_selected"
+                        android:layout_marginStart="@dimen/_4sdp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Enable Timer Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_card_white"
+                android:padding="@dimen/_14sdp"
+                android:layout_marginTop="@dimen/_16sdp">
+
+                <ImageView
+                    android:layout_width="@dimen/_36sdp"
+                    android:layout_height="@dimen/_36sdp"
+                    android:src="@drawable/ic_enable_time"
+                    android:layout_marginEnd="@dimen/_12sdp"
+                    android:contentDescription="@null" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Enable Timer"
+                        android:textSize="@dimen/_14sdp"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Set a time limit for your quiz."
+                        android:textSize="@dimen/_11sdp"
+                        android:fontFamily="@font/inter_regular"
+                        android:textColor="@color/qm_text_secondary" />
+
+                </LinearLayout>
+
+                <Switch
+                    android:id="@+id/switchTimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+            </LinearLayout>
+
+            <!-- Subject Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="@dimen/_16sdp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subject"
+                    android:textSize="@dimen/_15sdp"
+                    android:fontFamily="@font/inter_semi_bold"
+                    android:textColor="@color/qm_text_primary"
+                    android:layout_marginBottom="@dimen/_10sdp" />
+
+                <!-- Subject Grid (Rows of 2 items) -->
+                <!-- Row 1: Computer & History -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/_8sdp">
+
+                    <!-- Computer (Unselected) -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_4sdp">
+
+                        <ImageView
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            android:src="@drawable/ic_splash_ai"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Computer"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/inter_medium"
+                            android:textColor="@color/qm_text_primary" />
+                    </LinearLayout>
+
+                    <!-- History (Unselected) -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:layout_marginStart="@dimen/_4sdp">
+
+                        <ImageView
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            android:src="@drawable/ic_splash_ai"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="History"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/inter_medium"
+                            android:textColor="@color/qm_text_primary" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Row 2: Science (Selected) & Art -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/_8sdp">
+
+                    <!-- Science (Selected - Blue) -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_pill_selected"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_4sdp">
+
+                        <ImageView
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            android:src="@drawable/ic_splash_ai"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Science"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/inter_semi_bold"
+                            android:textColor="@color/white" />
+
+                        <ImageView
+                            android:layout_width="@dimen/_16sdp"
+                            android:layout_height="@dimen/_16sdp"
+                            android:src="@drawable/ic_check"
+                            android:contentDescription="@null" />
+                    </LinearLayout>
+
+                    <!-- Art (Unselected) -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:layout_marginStart="@dimen/_4sdp">
+
+                        <ImageView
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            android:src="@drawable/ic_splash_ai"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Art"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/inter_medium"
+                            android:textColor="@color/qm_text_primary" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Row 3: Economics & Mathematics -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/_8sdp">
+
+                    <!-- Economics (Unselected) -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_4sdp">
+
+                        <ImageView
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            android:src="@drawable/ic_splash_ai"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Economics"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/inter_medium"
+                            android:textColor="@color/qm_text_primary" />
+                    </LinearLayout>
+
+                    <!-- Mathematics (Unselected) -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:layout_marginStart="@dimen/_4sdp">
+
+                        <ImageView
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            android:src="@drawable/ic_splash_ai"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mathematics"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/inter_medium"
+                            android:textColor="@color/qm_text_primary" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Row 4: Literature & Other -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Literature (Unselected) -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_4sdp">
+
+                        <ImageView
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            android:src="@drawable/ic_splash_ai"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Literature"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/inter_medium"
+                            android:textColor="@color/qm_text_primary" />
+                    </LinearLayout>
+
+                    <!-- Other (Unselected) -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:layout_weight="1"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/bg_pill_unselected"
+                        android:paddingHorizontal="@dimen/_12sdp"
+                        android:layout_marginStart="@dimen/_4sdp">
+
+                        <ImageView
+                            android:layout_width="@dimen/_18sdp"
+                            android:layout_height="@dimen/_18sdp"
+                            android:src="@drawable/ic_splash_ai"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Other"
+                            android:textSize="@dimen/_12sdp"
+                            android:fontFamily="@font/inter_medium"
+                            android:textColor="@color/qm_text_primary" />
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Generate Quiz Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGenerateQuiz"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_50sdp"
+                android:layout_marginTop="@dimen/_24sdp"
+                android:background="@drawable/bg_splash_button"
+                android:fontFamily="@font/inter_semi_bold"
+                android:text="Generate Quiz"
+                app:icon="@drawable/ic_stars"
+                app:iconSize="@dimen/_15sdp"
+                app:iconGravity="textStart"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_15sdp"
+                app:backgroundTint="@null" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
