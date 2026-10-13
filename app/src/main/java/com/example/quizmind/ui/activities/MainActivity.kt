@@ -1,4 +1,4 @@
-package com.example.quizmind
+package com.example.quizmind.ui.activities
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.example.quizmind.R
 import com.example.quizmind.databinding.ActivityMainBinding
 import com.example.quizmind.model.RecentQuiz
 import com.example.quizmind.ui.adapters.RecentQuizAdapter

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/qm_background"
     android:fillViewport="true"
-    tools:context=".MainActivity">
+    tools:context=".ui.activities.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
