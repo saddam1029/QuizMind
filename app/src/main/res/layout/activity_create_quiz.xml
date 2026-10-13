@@ -524,33 +524,34 @@
                     android:layout_marginBottom="@dimen/_8sdp">
 
                     <!-- Computer (Unselected) -->
+
+                    <!-- History (Unselected) -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="@dimen/_44sdp"
+                        android:layout_marginEnd="@dimen/_4sdp"
                         android:layout_weight="1"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
                         android:background="@drawable/bg_pill_unselected"
-                        android:paddingHorizontal="@dimen/_12sdp"
-                        android:layout_marginEnd="@dimen/_4sdp">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingHorizontal="@dimen/_12sdp">
 
                         <ImageView
                             android:layout_width="@dimen/_18sdp"
                             android:layout_height="@dimen/_18sdp"
-                            android:src="@drawable/ic_splash_ai"
                             android:layout_marginEnd="@dimen/_8sdp"
-                            android:contentDescription="@null" />
+                            android:contentDescription="@null"
+                            android:src="@drawable/ic_computer" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Computer"
-                            android:textSize="@dimen/_12sdp"
                             android:fontFamily="@font/inter_medium"
-                            android:textColor="@color/qm_text_primary" />
+                            android:text="Computer"
+                            android:textColor="@color/qm_text_primary"
+                            android:textSize="@dimen/_12sdp" />
                     </LinearLayout>
 
-                    <!-- History (Unselected) -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="@dimen/_44sdp"
@@ -564,7 +565,7 @@
                         <ImageView
                             android:layout_width="@dimen/_18sdp"
                             android:layout_height="@dimen/_18sdp"
-                            android:src="@drawable/ic_splash_ai"
+                            android:src="@drawable/ic_histories"
                             android:layout_marginEnd="@dimen/_8sdp"
                             android:contentDescription="@null" />
 
@@ -600,7 +601,7 @@
                         <ImageView
                             android:layout_width="@dimen/_18sdp"
                             android:layout_height="@dimen/_18sdp"
-                            android:src="@drawable/ic_splash_ai"
+                            android:src="@drawable/ic_science"
                             android:layout_marginEnd="@dimen/_8sdp"
                             android:contentDescription="@null" />
 
@@ -634,7 +635,7 @@
                         <ImageView
                             android:layout_width="@dimen/_18sdp"
                             android:layout_height="@dimen/_18sdp"
-                            android:src="@drawable/ic_splash_ai"
+                            android:src="@drawable/ic_art"
                             android:layout_marginEnd="@dimen/_8sdp"
                             android:contentDescription="@null" />
 
@@ -670,7 +671,7 @@
                         <ImageView
                             android:layout_width="@dimen/_18sdp"
                             android:layout_height="@dimen/_18sdp"
-                            android:src="@drawable/ic_splash_ai"
+                            android:src="@drawable/ic_economics"
                             android:layout_marginEnd="@dimen/_8sdp"
                             android:contentDescription="@null" />
 
@@ -697,7 +698,7 @@
                         <ImageView
                             android:layout_width="@dimen/_18sdp"
                             android:layout_height="@dimen/_18sdp"
-                            android:src="@drawable/ic_splash_ai"
+                            android:src="@drawable/ic_mathematics"
                             android:layout_marginEnd="@dimen/_8sdp"
                             android:contentDescription="@null" />
 
@@ -732,7 +733,7 @@
                         <ImageView
                             android:layout_width="@dimen/_18sdp"
                             android:layout_height="@dimen/_18sdp"
-                            android:src="@drawable/ic_splash_ai"
+                            android:src="@drawable/ic_literature"
                             android:layout_marginEnd="@dimen/_8sdp"
                             android:contentDescription="@null" />
 
@@ -762,7 +763,7 @@
                         <ImageView
                             android:layout_width="@dimen/_18sdp"
                             android:layout_height="@dimen/_18sdp"
-                            android:src="@drawable/ic_splash_ai"
+                            android:src="@drawable/ic_other"
                             android:layout_marginEnd="@dimen/_8sdp"
                             android:contentDescription="@null" />
 
@@ -783,7 +784,7 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGenerateQuiz"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/_50sdp"
+                android:layout_height="@dimen/_40sdp"
                 android:layout_marginTop="@dimen/_24sdp"
                 android:background="@drawable/bg_splash_button"
                 android:fontFamily="@font/inter_semi_bold"

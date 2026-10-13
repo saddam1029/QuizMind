@@ -60,7 +60,7 @@ class SubjectActivity : AppCompatActivity() {
             SubjectViewItem(binding.cardHistory, binding.ivHistory, binding.tvHistory, binding.checkHistory),
             SubjectViewItem(binding.cardPhysics, binding.ivPhysics, binding.tvPhysics, binding.checkPhysics),
             SubjectViewItem(binding.cardArt, binding.ivArt, binding.tvArt, binding.checkArt),
-            SubjectViewItem(binding.cardCimistory, binding.ivCimistory, binding.tvCimistory, binding.checkCimistory),
+            SubjectViewItem(binding.cardCimistory, binding.ivCimistory, binding.tvChemistry, binding.checkCimistory),
             SubjectViewItem(binding.cardScience, binding.ivScience, binding.tvScience, binding.checkScience),
             SubjectViewItem(binding.cardGeography, binding.ivGeography, binding.tvGeography, binding.checkGeography),
             SubjectViewItem(binding.cardEngineering, binding.ivEngineering, binding.tvEngineering, binding.checkEngineering),

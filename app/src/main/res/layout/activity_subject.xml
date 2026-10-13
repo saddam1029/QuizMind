@@ -57,40 +57,6 @@
             android:paddingHorizontal="@dimen/_16sdp"
             android:paddingBottom="@dimen/_24sdp">
 
-            <!-- Search Bar -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_46sdp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:background="@drawable/bg_search_input"
-                android:paddingHorizontal="@dimen/_12sdp"
-                android:layout_marginBottom="@dimen/_16sdp">
-
-                <ImageView
-                    android:layout_width="@dimen/_18sdp"
-                    android:layout_height="@dimen/_18sdp"
-                    android:src="@drawable/ic_search"
-                    android:layout_marginEnd="@dimen/_10sdp"
-                    android:contentDescription="@null" />
-
-                <EditText
-                    android:id="@+id/etSearchSubject"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:hint="Search Subjects"
-                    android:textColorHint="@color/qm_text_secondary"
-                    android:textColor="@color/qm_text_primary"
-                    android:textSize="@dimen/_13sdp"
-                    android:fontFamily="@font/inter_regular"
-                    android:inputType="text"
-                    android:autofillHints="name"
-                    android:maxLines="1" />
-
-            </LinearLayout>
-
-            <!-- Subject Grid Rows (2 columns each) -->
 
             <!-- Row 1: Computer & Biology -->
             <LinearLayout
@@ -115,10 +81,10 @@
 
                     <ImageView
                         android:id="@+id/ivComputer"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
-                        android:src="@drawable/ic_splash_ai"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/ic_computer"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
@@ -127,7 +93,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Computer"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -155,10 +121,10 @@
 
                     <ImageView
                         android:id="@+id/ivBiology"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_biology"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
@@ -167,7 +133,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Biology"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -204,10 +170,10 @@
 
                     <ImageView
                         android:id="@+id/ivHistory"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_histories"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
@@ -216,7 +182,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="History"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -244,10 +210,10 @@
 
                     <ImageView
                         android:id="@+id/ivPhysics"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_physics"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
@@ -256,7 +222,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Physics"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -293,10 +259,10 @@
 
                     <ImageView
                         android:id="@+id/ivArt"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_art"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
@@ -305,7 +271,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Art"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -333,19 +299,19 @@
 
                     <ImageView
                         android:id="@+id/ivCimistory"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_chemistry"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
-                        android:id="@+id/tvCimistory"
+                        android:id="@+id/tvChemistry"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Cimistory"
-                        android:textSize="@dimen/_13sdp"
+                        android:text="Chemistry"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -383,10 +349,10 @@
 
                     <ImageView
                         android:id="@+id/ivScience"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_science"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         app:tint="@color/white"
                         android:contentDescription="@null" />
 
@@ -396,7 +362,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Science"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_semi_bold"
                         android:textColor="@color/white" />
 
@@ -424,10 +390,10 @@
 
                     <ImageView
                         android:id="@+id/ivGeography"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_geography"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
@@ -436,7 +402,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Gegraphy"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -473,10 +439,10 @@
 
                     <ImageView
                         android:id="@+id/ivEngineering"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_engineering"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
@@ -485,7 +451,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Engineering"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -513,10 +479,10 @@
 
                     <ImageView
                         android:id="@+id/ivEnglish"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_english"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
@@ -525,7 +491,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="English"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -562,10 +528,10 @@
 
                     <ImageView
                         android:id="@+id/ivBusiness"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_business"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
@@ -574,7 +540,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Bussiness"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -602,10 +568,10 @@
 
                     <ImageView
                         android:id="@+id/ivMath"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_mathematics"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
@@ -614,7 +580,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Math"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -651,10 +617,10 @@
 
                     <ImageView
                         android:id="@+id/ivEconomics"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_economics"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
@@ -663,7 +629,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Economics"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -691,10 +657,10 @@
 
                     <ImageView
                         android:id="@+id/ivLiterature"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_literature"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
@@ -703,7 +669,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Literature"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -739,10 +705,10 @@
 
                     <ImageView
                         android:id="@+id/ivOther"
-                        android:layout_width="@dimen/_22sdp"
-                        android:layout_height="@dimen/_22sdp"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
                         android:src="@drawable/ic_other"
-                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
                         android:contentDescription="@null" />
 
                     <TextView
@@ -751,7 +717,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Other"
-                        android:textSize="@dimen/_13sdp"
+                        android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary" />
 
@@ -780,7 +746,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDone"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_50sdp"
+        android:layout_height="@dimen/_40sdp"
         android:layout_marginHorizontal="@dimen/_16sdp"
         android:layout_marginBottom="@dimen/_20sdp"
         android:background="@drawable/bg_splash_button"
