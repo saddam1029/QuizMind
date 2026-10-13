@@ -5,6 +5,793 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/qm_background"
     tools:context=".ui.activities.SubjectActivity">
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingVertical="@dimen/_12sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:src="@drawable/ic_back"
+            android:background="@drawable/bg_pill_gray"
+            android:padding="@dimen/_8sdp"
+            android:contentDescription="@string/qm_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selects Subject"
+            android:textSize="@dimen/_18sdp"
+            android:fontFamily="@font/inter_semi_bold"
+            android:textColor="@color/qm_text_primary"
+            android:layout_marginStart="@dimen/_16sdp" />
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toTopOf="@id/btnDone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:paddingBottom="@dimen/_24sdp">
+
+            <!-- Search Bar -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_46sdp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_search_input"
+                android:paddingHorizontal="@dimen/_12sdp"
+                android:layout_marginBottom="@dimen/_16sdp">
+
+                <ImageView
+                    android:layout_width="@dimen/_18sdp"
+                    android:layout_height="@dimen/_18sdp"
+                    android:src="@drawable/ic_search"
+                    android:layout_marginEnd="@dimen/_10sdp"
+                    android:contentDescription="@null" />
+
+                <EditText
+                    android:id="@+id/etSearchSubject"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:hint="Search Subjects"
+                    android:textColorHint="@color/qm_text_secondary"
+                    android:textColor="@color/qm_text_primary"
+                    android:textSize="@dimen/_13sdp"
+                    android:fontFamily="@font/inter_regular"
+                    android:inputType="text"
+                    android:autofillHints="name"
+                    android:maxLines="1" />
+
+            </LinearLayout>
+
+            <!-- Subject Grid Rows (2 columns each) -->
+
+            <!-- Row 1: Computer & Biology -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/cardComputer"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivComputer"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_splash_ai"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvComputer"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Computer"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkComputer"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardBiology"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivBiology"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_biology"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvBiology"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Biology"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkBiology"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 2: History & Physics -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/cardHistory"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivHistory"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_histories"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvHistory"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="History"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkHistory"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardPhysics"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivPhysics"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_physics"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvPhysics"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Physics"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkPhysics"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 3: Art & Cimistory -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/cardArt"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivArt"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_art"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvArt"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Art"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkArt"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardCimistory"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivCimistory"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_chemistry"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvCimistory"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Cimistory"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkCimistory"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 4: Science & Gegraphy -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:baselineAligned="false">
+
+                <!-- Science (Selected by default) -->
+                <LinearLayout
+                    android:id="@+id/cardScience"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_selected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivScience"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_science"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        app:tint="@color/white"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvScience"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Science"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:textColor="@color/white" />
+
+                    <ImageView
+                        android:id="@+id/checkScience"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="visible"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardGeography"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivGeography"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_geography"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvGeography"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Gegraphy"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkGeography"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 5: Engineering & English -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/cardEngineering"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivEngineering"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_engineering"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvEngineering"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Engineering"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkEngineering"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardEnglish"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivEnglish"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_english"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvEnglish"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="English"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkEnglish"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 6: Business & Math -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/cardBusiness"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivBusiness"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_business"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvBusiness"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Bussiness"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkBusiness"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardMath"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivMath"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_mathematics"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvMath"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Math"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkMath"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 7: Economics & Literature -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/cardEconomics"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivEconomics"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_economics"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvEconomics"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Economics"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkEconomics"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardLiterature"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginStart="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivLiterature"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_literature"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvLiterature"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Literature"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkLiterature"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Row 8: Other -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:id="@+id/cardOther"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/_48sdp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_pill_unselected"
+                    android:paddingHorizontal="@dimen/_12sdp"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivOther"
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_other"
+                        android:layout_marginEnd="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvOther"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Other"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/checkOther"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_check"
+                        android:visibility="gone"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/_6sdp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Done Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_50sdp"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_marginBottom="@dimen/_20sdp"
+        android:background="@drawable/bg_splash_button"
+        android:fontFamily="@font/inter_semi_bold"
+        android:text="Done"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_15sdp"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

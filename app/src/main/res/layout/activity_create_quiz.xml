@@ -63,6 +63,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:visibility="gone"
                 android:background="@drawable/bg_card_white"
                 android:padding="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_8sdp">
@@ -257,73 +258,91 @@
                 </LinearLayout>
 
                 <!-- Options Row -->
-                <LinearLayout
+                <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_40sdp"
-                    android:orientation="horizontal"
-                    android:weightSum="5">
+                    android:fillViewport="false"
+                    android:scrollbars="none"
+                    android:overScrollMode="never">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="5"
-                        android:gravity="center"
-                        android:textSize="@dimen/_13sdp"
-                        android:fontFamily="@font/inter_medium"
-                        android:textColor="@color/qm_text_primary"
-                        android:background="@drawable/bg_pill_unselected"
-                        android:layout_marginEnd="@dimen/_4sdp" />
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="10"
-                        android:gravity="center"
-                        android:textSize="@dimen/_13sdp"
-                        android:fontFamily="@font/inter_semi_bold"
-                        android:textColor="@color/white"
-                        android:background="@drawable/bg_pill_selected"
-                        android:layout_marginHorizontal="@dimen/_2sdp" />
+                        <TextView
+                            android:id="@+id/tvQ5"
+                            android:layout_width="@dimen/_55sdp"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="@dimen/_4sdp"
+                            android:background="@drawable/bg_pill_unselected"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:fontFamily="@font/inter_medium"
+                            android:gravity="center"
+                            android:text="5"
+                            android:textColor="@color/qm_text_primary"
+                            android:textSize="@dimen/_13sdp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="15"
-                        android:gravity="center"
-                        android:textSize="@dimen/_13sdp"
-                        android:fontFamily="@font/inter_medium"
-                        android:textColor="@color/qm_text_primary"
-                        android:background="@drawable/bg_pill_unselected"
-                        android:layout_marginHorizontal="@dimen/_2sdp" />
+                        <TextView
+                            android:id="@+id/tvQ10"
+                            android:layout_width="@dimen/_55sdp"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="@dimen/_2sdp"
+                            android:background="@drawable/bg_pill_selected"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:fontFamily="@font/inter_semi_bold"
+                            android:gravity="center"
+                            android:text="10"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/_13sdp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:text="20"
-                        android:gravity="center"
-                        android:textSize="@dimen/_13sdp"
-                        android:fontFamily="@font/inter_medium"
-                        android:textColor="@color/qm_text_primary"
-                        android:background="@drawable/bg_pill_unselected"
-                        android:layout_marginHorizontal="@dimen/_2sdp" />
+                        <TextView
+                            android:id="@+id/tvQ15"
+                            android:layout_width="@dimen/_55sdp"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="@dimen/_2sdp"
+                            android:background="@drawable/bg_pill_unselected"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:fontFamily="@font/inter_medium"
+                            android:gravity="center"
+                            android:text="15"
+                            android:textColor="@color/qm_text_primary"
+                            android:textSize="@dimen/_13sdp" />
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1.2"
-                        android:text="Custom"
-                        android:gravity="center"
-                        android:textSize="@dimen/_12sdp"
-                        android:fontFamily="@font/inter_medium"
-                        android:textColor="@color/qm_text_primary"
-                        android:background="@drawable/bg_pill_unselected"
-                        android:layout_marginStart="@dimen/_4sdp" />
+                        <TextView
+                            android:id="@+id/tvQ20"
+                            android:layout_width="@dimen/_55sdp"
+                            android:layout_height="match_parent"
+                            android:layout_marginHorizontal="@dimen/_2sdp"
+                            android:background="@drawable/bg_pill_unselected"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:fontFamily="@font/inter_medium"
+                            android:gravity="center"
+                            android:text="20"
+                            android:textColor="@color/qm_text_primary"
+                            android:textSize="@dimen/_13sdp" />
 
-                </LinearLayout>
+                        <TextView
+                            android:id="@+id/tvQCustom"
+                            android:layout_width="@dimen/_75sdp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="@dimen/_4sdp"
+                            android:background="@drawable/bg_pill_unselected"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:fontFamily="@font/inter_medium"
+                            android:gravity="center"
+                            android:text="Custom"
+                            android:textColor="@color/qm_text_primary"
+                            android:textSize="@dimen/_12sdp" />
+
+                    </LinearLayout>
+
+                </HorizontalScrollView>
 
             </LinearLayout>
 
@@ -368,6 +387,7 @@
                     android:weightSum="4">
 
                     <TextView
+                        android:id="@+id/tvEasy"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -377,9 +397,12 @@
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary"
                         android:background="@drawable/bg_pill_unselected"
-                        android:layout_marginEnd="@dimen/_4sdp" />
+                        android:layout_marginEnd="@dimen/_4sdp"
+                        android:clickable="true"
+                        android:focusable="true" />
 
                     <TextView
+                        android:id="@+id/tvMedium"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -389,9 +412,12 @@
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary"
                         android:background="@drawable/bg_pill_unselected"
-                        android:layout_marginHorizontal="@dimen/_2sdp" />
+                        android:layout_marginHorizontal="@dimen/_2sdp"
+                        android:clickable="true"
+                        android:focusable="true" />
 
                     <TextView
+                        android:id="@+id/tvHard"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -401,9 +427,12 @@
                         android:fontFamily="@font/inter_medium"
                         android:textColor="@color/qm_text_primary"
                         android:background="@drawable/bg_pill_unselected"
-                        android:layout_marginHorizontal="@dimen/_2sdp" />
+                        android:layout_marginHorizontal="@dimen/_2sdp"
+                        android:clickable="true"
+                        android:focusable="true" />
 
                     <TextView
+                        android:id="@+id/tvMixed"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -413,7 +442,9 @@
                         android:fontFamily="@font/inter_semi_bold"
                         android:textColor="@color/white"
                         android:background="@drawable/bg_pill_selected"
-                        android:layout_marginStart="@dimen/_4sdp" />
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:clickable="true"
+                        android:focusable="true" />
 
                 </LinearLayout>
 
@@ -716,6 +747,7 @@
 
                     <!-- Other (Unselected) -->
                     <LinearLayout
+                        android:id="@+id/ll_other"
                         android:layout_width="0dp"
                         android:layout_height="@dimen/_44sdp"
                         android:layout_weight="1"
@@ -723,7 +755,9 @@
                         android:gravity="center_vertical"
                         android:background="@drawable/bg_pill_unselected"
                         android:paddingHorizontal="@dimen/_12sdp"
-                        android:layout_marginStart="@dimen/_4sdp">
+                        android:layout_marginStart="@dimen/_4sdp"
+                        android:clickable="true"
+                        android:focusable="true">
 
                         <ImageView
                             android:layout_width="@dimen/_18sdp"

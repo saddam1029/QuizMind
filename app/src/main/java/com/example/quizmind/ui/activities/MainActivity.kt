@@ -1,5 +1,6 @@
 package com.example.quizmind.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -104,7 +105,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.cardTopic.setOnClickListener {
-            // Topic action
+            startActivity(Intent(this, CreateQuizActivity::class.java))
         }
         binding.cardTextNotes.setOnClickListener {
             // Text/Notes action
