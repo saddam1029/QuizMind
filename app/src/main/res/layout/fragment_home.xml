@@ -74,7 +74,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tvGreeting" />
 
         <LinearLayout
-            android:id="@+id/layoutStreak"
+            android:id="@+id/layoutCredits"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_streak_pill"
@@ -89,7 +89,7 @@
             app:layout_constraintTop_toTopOf="@+id/tvGreeting">
 
             <ImageView
-                android:id="@+id/ivStreakIcon"
+                android:id="@+id/ivCreditsIcon"
                 android:layout_width="@dimen/_14sdp"
                 android:layout_height="@dimen/_14sdp"
                 android:layout_marginEnd="@dimen/_4sdp"
@@ -97,11 +97,11 @@
                 android:src="@drawable/ic_fire" />
 
             <TextView
-                android:id="@+id/tvStreakCount"
+                android:id="@+id/tvCreditsCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/inter_semi_bold"
-                android:text="@string/qm_streak_5_days"
+                android:text="10000"
                 android:textColor="#006329"
                 android:textSize="@dimen/_11sdp" />
         </LinearLayout>
