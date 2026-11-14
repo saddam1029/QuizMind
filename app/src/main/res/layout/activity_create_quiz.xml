@@ -349,7 +349,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_9sdp"
                                 android:layout_height="@dimen/_9sdp"
-                                android:src="@drawable/ic_topic"
+                                android:src="@drawable/ic_replace"
                                 app:tint="@color/app_color"
                                 android:layout_marginEnd="@dimen/_6sdp"
                                 android:contentDescription="@null" />
@@ -379,7 +379,7 @@
                             <ImageView
                                 android:layout_width="@dimen/_9sdp"
                                 android:layout_height="@dimen/_9sdp"
-                                android:src="@drawable/ic_close"
+                                android:src="@drawable/ic_remove"
                                 app:tint="#DC2626"
                                 android:layout_marginEnd="@dimen/_6sdp"
                                 android:contentDescription="@null" />
