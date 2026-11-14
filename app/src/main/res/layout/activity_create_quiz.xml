@@ -244,7 +244,7 @@
                     <ImageView
                         android:layout_width="@dimen/_16sdp"
                         android:layout_height="@dimen/_16sdp"
-                        android:src="@drawable/ic_pdf"
+                        android:src="@drawable/ic_pdf_source"
                         android:layout_marginEnd="@dimen/_6sdp"
                         android:contentDescription="@null" />
 
@@ -270,7 +270,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Choose a PDF to create your quiz."
-                    android:textSize="@dimen/_12sdp"
+                    android:textSize="@dimen/_10sdp"
                     android:fontFamily="@font/inter_regular"
                     android:textColor="@color/qm_text_secondary"
                     android:layout_marginTop="@dimen/_2sdp"
@@ -295,9 +295,7 @@
                         <ImageView
                             android:layout_width="@dimen/_44sdp"
                             android:layout_height="@dimen/_44sdp"
-                            android:src="@drawable/ic_pdf"
-                            android:background="@drawable/bg_icon_container"
-                            android:padding="@dimen/_8sdp"
+                            android:src="@drawable/ic_pdf_select"
                             android:layout_marginEnd="@dimen/_12sdp"
                             android:contentDescription="@null" />
 
@@ -320,8 +318,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="12 pages · 2.4 MB"
-                                android:textSize="@dimen/_11sdp"
-                                android:fontFamily="@font/inter_regular"
+                                android:textSize="@dimen/_9sdp"
+                                android:fontFamily="@font/inter_semi_bold"
                                 android:textColor="@color/qm_text_secondary"
                                 android:layout_marginTop="@dimen/_2sdp" />
 
@@ -339,18 +337,18 @@
                         <!-- Replace Button -->
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_36sdp"
+                            android:layout_height="@dimen/_27sdp"
                             android:orientation="horizontal"
                             android:gravity="center"
                             android:background="@drawable/bg_pill_gray"
-                            android:paddingHorizontal="@dimen/_16sdp"
+                            android:paddingHorizontal="@dimen/_12sdp"
                             android:layout_marginEnd="@dimen/_8sdp"
                             android:clickable="true"
                             android:focusable="true">
 
                             <ImageView
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_14sdp"
+                                android:layout_width="@dimen/_9sdp"
+                                android:layout_height="@dimen/_9sdp"
                                 android:src="@drawable/ic_topic"
                                 app:tint="@color/app_color"
                                 android:layout_marginEnd="@dimen/_6sdp"
@@ -360,8 +358,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Replace"
-                                android:textSize="@dimen/_12sdp"
-                                android:fontFamily="@font/inter_medium"
+                                android:textSize="@dimen/_9sdp"
+                                android:fontFamily="@font/inter_bold"
                                 android:textColor="@color/app_color" />
 
                         </LinearLayout>
@@ -369,18 +367,18 @@
                         <!-- Remove Button -->
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_36sdp"
+                            android:layout_height="@dimen/_27sdp"
                             android:orientation="horizontal"
                             android:gravity="center"
                             android:background="@drawable/bg_pill_gray"
                             android:backgroundTint="#FEE2E2"
-                            android:paddingHorizontal="@dimen/_16sdp"
+                            android:paddingHorizontal="@dimen/_12sdp"
                             android:clickable="true"
                             android:focusable="true">
 
                             <ImageView
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_14sdp"
+                                android:layout_width="@dimen/_9sdp"
+                                android:layout_height="@dimen/_9sdp"
                                 android:src="@drawable/ic_close"
                                 app:tint="#DC2626"
                                 android:layout_marginEnd="@dimen/_6sdp"
@@ -390,8 +388,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Remove"
-                                android:textSize="@dimen/_12sdp"
-                                android:fontFamily="@font/inter_medium"
+                                android:textSize="@dimen/_9sdp"
+                                android:fontFamily="@font/inter_bold"
                                 android:textColor="#DC2626" />
 
                         </LinearLayout>
