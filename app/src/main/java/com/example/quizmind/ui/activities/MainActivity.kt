@@ -105,16 +105,28 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.cardTopic.setOnClickListener {
-            startActivity(Intent(this, CreateQuizActivity::class.java))
+            val intent = Intent(this, CreateQuizActivity::class.java).apply {
+                putExtra("source_type", "topic")
+            }
+            startActivity(intent)
         }
         binding.cardTextNotes.setOnClickListener {
-            // Text/Notes action
+            val intent = Intent(this, CreateQuizActivity::class.java).apply {
+                putExtra("source_type", "text")
+            }
+            startActivity(intent)
         }
         binding.cardPdf.setOnClickListener {
-            // PDF action
+            val intent = Intent(this, CreateQuizActivity::class.java).apply {
+                putExtra("source_type", "pdf")
+            }
+            startActivity(intent)
         }
         binding.cardScanNotes.setOnClickListener {
-            // Scan Notes action
+            val intent = Intent(this, CreateQuizActivity::class.java).apply {
+                putExtra("source_type", "image")
+            }
+            startActivity(intent)
         }
         binding.tvViewAll.setOnClickListener {
             // View All action

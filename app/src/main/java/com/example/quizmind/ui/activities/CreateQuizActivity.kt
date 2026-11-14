@@ -76,6 +76,34 @@ class CreateQuizActivity : AppCompatActivity() {
             finish()
         }
 
+        val sourceType = intent.getStringExtra("source_type") ?: "topic"
+        when (sourceType) {
+            "text" -> {
+                binding.clText.visibility = View.VISIBLE
+                binding.llTopic.visibility = View.GONE
+                binding.clPdf.visibility = View.GONE
+                binding.clImage.visibility = View.GONE
+            }
+            "pdf" -> {
+                binding.clPdf.visibility = View.VISIBLE
+                binding.llTopic.visibility = View.GONE
+                binding.clText.visibility = View.GONE
+                binding.clImage.visibility = View.GONE
+            }
+            "image" -> {
+                binding.clImage.visibility = View.VISIBLE
+                binding.llTopic.visibility = View.GONE
+                binding.clText.visibility = View.GONE
+                binding.clPdf.visibility = View.GONE
+            }
+            else -> {
+                binding.llTopic.visibility = View.VISIBLE
+                binding.clText.visibility = View.GONE
+                binding.clPdf.visibility = View.GONE
+                binding.clImage.visibility = View.GONE
+            }
+        }
+
         // Clicking "Other" opens SubjectActivity to select from all subjects
         binding.llOther.setOnClickListener {
             subjectLauncher.launch(Intent(this, SubjectActivity::class.java))
