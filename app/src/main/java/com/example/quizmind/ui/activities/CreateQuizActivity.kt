@@ -31,10 +31,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.ImageViewCompat
 import com.bumptech.glide.Glide
-import com.canhub.cropper.CropImageContract
-import com.canhub.cropper.CropImageContractOptions
-import com.canhub.cropper.CropImageOptions
-import com.canhub.cropper.CropImageView
+
 import com.example.quizmind.R
 import com.example.quizmind.databinding.ActivityCreateQuizBinding
 import com.example.quizmind.utils.ImageFileHelper
@@ -149,14 +146,14 @@ class CreateQuizActivity : AppCompatActivity() {
     }
 
     // Image cropping launcher
-    private val cropImageLauncher = registerForActivityResult(CropImageContract()) { result ->
-        if (result.isSuccessful) {
-            val croppedUri = result.uriContent
+    private val cropLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val croppedUri = result.data?.getParcelableExtra<Uri>("cropped_uri")
             if (croppedUri != null) {
                 handleImageCropped(croppedUri)
             }
-        } else if (result.error != null) {
-            Toast.makeText(this, "Cropping failed: ${result.error?.localizedMessage}", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -446,21 +443,10 @@ class CreateQuizActivity : AppCompatActivity() {
     }
 
     private fun startCrop(sourceUri: Uri) {
-        val options = CropImageContractOptions(
-            uri = sourceUri,
-            cropImageOptions = CropImageOptions().apply {
-                guidelines = CropImageView.Guidelines.ON
-                activityTitle = "Crop Notes"
-                toolbarColor = ContextCompat.getColor(this@CreateQuizActivity, R.color.app_color)
-                toolbarTitleColor = ContextCompat.getColor(this@CreateQuizActivity, R.color.white)
-                toolbarBackButtonColor = ContextCompat.getColor(this@CreateQuizActivity, R.color.white)
-                activityMenuIconColor = ContextCompat.getColor(this@CreateQuizActivity, R.color.white)
-                cropMenuCropButtonTitle = "Done"
-                outputCompressFormat = Bitmap.CompressFormat.JPEG
-                outputCompressQuality = 90
-            }
-        )
-        cropImageLauncher.launch(options)
+        val intent = Intent(this, CustomCropActivity::class.java).apply {
+            putExtra("source_uri", sourceUri)
+        }
+        cropLauncher.launch(intent)
     }
 
     private fun handleImageCropped(uri: Uri) {
