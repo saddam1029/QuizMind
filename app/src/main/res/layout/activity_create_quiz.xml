@@ -222,13 +222,154 @@
 
             </LinearLayout>
 
-            <!-- Card 2: PDF Section Card (cl_pdf) -->
+            <!-- Card 2: Text / Notes Section Card (cl_text) -->
+            <LinearLayout
+                android:id="@+id/cl_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:background="@drawable/bg_card_white"
+                android:padding="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_8sdp">
+
+                <!-- Top row: Input Source Badge -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="@dimen/_12sdp">
+
+                    <ImageView
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/ic_input_source"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Input Source"
+                        android:textColor="@color/app_color"
+                        android:textSize="@dimen/_10sdp"
+                        android:fontFamily="@font/inter_semi_bold" />
+                </LinearLayout>
+
+                <!-- Heading -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Text / Notes"
+                    android:textSize="@dimen/_18sdp"
+                    android:fontFamily="@font/inter_semi_bold"
+                    android:textColor="@color/qm_text_primary" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Paste your study material, lecture notes, or textbook excerpt."
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="@font/inter_regular"
+                    android:textColor="@color/qm_text_secondary"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginBottom="@dimen/_16sdp" />
+
+                <!-- Inner Card Container for Text preview / editor -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/bg_card_white"
+                    android:padding="@dimen/_12sdp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Photosynthesis is the biological process by which green plants and certain organisms transform light energy into chemical energy. During oxygenic photosynthesis,"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/inter_regular"
+                        android:textColor="@color/qm_text_secondary"
+                        android:layout_marginBottom="@dimen/_16sdp" />
+
+                    <!-- Actions Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <!-- Paste Button -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_30sdp"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:background="@drawable/bg_pill_gray"
+                            android:paddingHorizontal="@dimen/_10sdp"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <ImageView
+                                android:layout_width="@dimen/_14sdp"
+                                android:layout_height="@dimen/_14sdp"
+                                android:src="@drawable/ic_paste"
+                                android:layout_marginEnd="@dimen/_6sdp"
+                                android:contentDescription="@null" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Paste from Clipboard"
+                                android:textSize="@dimen/_10sdp"
+                                android:fontFamily="@font/inter_bold"
+                                android:textColor="@color/app_color" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_weight="1" />
+
+                        <!-- Word Count -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/_12sdp"
+                                android:layout_height="@dimen/_12sdp"
+                                android:src="@drawable/ic_total_words"
+                                android:layout_marginEnd="@dimen/_4sdp"
+                                android:contentDescription="@null" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="342 words"
+                                android:textSize="@dimen/_9sdp"
+                                android:fontFamily="@font/inter_regular"
+                                android:textColor="@color/qm_text_secondary" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Card 3: PDF Section Card (cl_pdf) -->
             <LinearLayout
                 android:id="@+id/cl_pdf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:background="@drawable/bg_card_white"
                 android:padding="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_8sdp">
@@ -400,18 +541,18 @@
 
             </LinearLayout>
 
-            <!-- Card 3: Text / Notes Section Card (cl_text) -->
+            <!-- Card 4: Image Section Card (cl_image) -->
             <LinearLayout
-                android:id="@+id/cl_text"
+                android:id="@+id/cl_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:background="@drawable/bg_card_white"
                 android:padding="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_8sdp">
 
-                <!-- Top row: Input Source Badge -->
+                <!-- Top row: PDF Source Badge -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -420,26 +561,26 @@
                     android:layout_marginBottom="@dimen/_12sdp">
 
                     <ImageView
-                        android:layout_width="@dimen/_20sdp"
-                        android:layout_height="@dimen/_20sdp"
-                        android:src="@drawable/ic_input_source"
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_image_source"
                         android:layout_marginEnd="@dimen/_6sdp"
                         android:contentDescription="@null" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Input Source"
+                        android:text="SOURCE ACTIVE"
                         android:textColor="@color/app_color"
                         android:textSize="@dimen/_10sdp"
-                        android:fontFamily="@font/inter_semi_bold" />
+                        android:fontFamily="@font/inter_bold" />
                 </LinearLayout>
 
                 <!-- Heading -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Text / Notes"
+                    android:text="Scan Image"
                     android:textSize="@dimen/_18sdp"
                     android:fontFamily="@font/inter_semi_bold"
                     android:textColor="@color/qm_text_primary" />
@@ -447,14 +588,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Paste your study material, lecture notes, or textbook excerpt."
-                    android:textSize="@dimen/_12sdp"
+                    android:text="Capture your notes to create a quiz."
+                    android:textSize="@dimen/_10sdp"
                     android:fontFamily="@font/inter_regular"
                     android:textColor="@color/qm_text_secondary"
                     android:layout_marginTop="@dimen/_2sdp"
                     android:layout_marginBottom="@dimen/_16sdp" />
 
-                <!-- Inner Card Container for Text preview / editor -->
+                <!-- Inner Card Container for PDF file info -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -462,76 +603,113 @@
                     android:background="@drawable/bg_card_white"
                     android:padding="@dimen/_12sdp">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Photosynthesis is the biological process by which green plants and certain organisms transform light energy into chemical energy. During oxygenic photosynthesis,"
-                        android:textSize="@dimen/_12sdp"
-                        android:fontFamily="@font/inter_regular"
-                        android:textColor="@color/qm_text_secondary"
-                        android:layout_marginBottom="@dimen/_16sdp" />
-
-                    <!-- Actions Row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="@dimen/_16sdp">
 
-                        <!-- Paste Button -->
+                        <!-- PDF Icon Square -->
+                        <ImageView
+                            android:layout_width="@dimen/_44sdp"
+                            android:layout_height="@dimen/_44sdp"
+                            android:src="@drawable/ic_scan_notes"
+                            android:layout_marginEnd="@dimen/_12sdp"
+                            android:contentDescription="@null" />
+
+                        <!-- File Details -->
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Image.png"
+                                android:textSize="@dimen/_14sdp"
+                                android:fontFamily="@font/inter_semi_bold"
+                                android:textColor="@color/qm_text_primary" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2.4 MB"
+                                android:textSize="@dimen/_9sdp"
+                                android:fontFamily="@font/inter_semi_bold"
+                                android:textColor="@color/qm_text_secondary"
+                                android:layout_marginTop="@dimen/_2sdp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Action Buttons Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="end">
+
+                        <!-- Replace Button -->
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="@dimen/_30sdp"
+                            android:layout_height="@dimen/_27sdp"
                             android:orientation="horizontal"
                             android:gravity="center"
                             android:background="@drawable/bg_pill_gray"
-                            android:paddingHorizontal="@dimen/_10sdp"
+                            android:paddingHorizontal="@dimen/_12sdp"
+                            android:layout_marginEnd="@dimen/_8sdp"
                             android:clickable="true"
                             android:focusable="true">
 
                             <ImageView
-                                android:layout_width="@dimen/_14sdp"
-                                android:layout_height="@dimen/_14sdp"
-                                android:src="@drawable/ic_paste"
+                                android:layout_width="@dimen/_9sdp"
+                                android:layout_height="@dimen/_9sdp"
+                                android:src="@drawable/ic_replace"
+                                app:tint="@color/app_color"
                                 android:layout_marginEnd="@dimen/_6sdp"
                                 android:contentDescription="@null" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Paste from Clipboard"
-                                android:textSize="@dimen/_10sdp"
+                                android:text="Replace"
+                                android:textSize="@dimen/_9sdp"
                                 android:fontFamily="@font/inter_bold"
                                 android:textColor="@color/app_color" />
 
                         </LinearLayout>
 
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="0dp"
-                            android:layout_weight="1" />
-
-                        <!-- Word Count -->
+                        <!-- Remove Button -->
                         <LinearLayout
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="@dimen/_27sdp"
                             android:orientation="horizontal"
-                            android:gravity="center_vertical">
+                            android:gravity="center"
+                            android:background="@drawable/bg_pill_gray"
+                            android:backgroundTint="#FEE2E2"
+                            android:paddingHorizontal="@dimen/_12sdp"
+                            android:clickable="true"
+                            android:focusable="true">
 
                             <ImageView
-                                android:layout_width="@dimen/_12sdp"
-                                android:layout_height="@dimen/_12sdp"
-                                android:src="@drawable/ic_total_words"
-                                android:layout_marginEnd="@dimen/_4sdp"
+                                android:layout_width="@dimen/_9sdp"
+                                android:layout_height="@dimen/_9sdp"
+                                android:src="@drawable/ic_remove"
+                                app:tint="#DC2626"
+                                android:layout_marginEnd="@dimen/_6sdp"
                                 android:contentDescription="@null" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="342 words"
+                                android:text="Remove"
                                 android:textSize="@dimen/_9sdp"
-                                android:fontFamily="@font/inter_regular"
-                                android:textColor="@color/qm_text_secondary" />
+                                android:fontFamily="@font/inter_bold"
+                                android:textColor="#DC2626" />
 
                         </LinearLayout>
 
