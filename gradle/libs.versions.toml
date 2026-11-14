@@ -30,6 +30,7 @@ googleId = "1.1.1"
 camerax = "1.6.2"
 mlkitTextRecognition = "16.0.1"
 pdfbox = "2.0.27.0"
+imageCropper = "4.7.0"
 
 # Testing
 junit = "4.13.2"
@@ -94,6 +95,7 @@ androidx-camera-view = { module = "androidx.camera:camera-view", version.ref = "
 # OCR and PDF extraction
 mlkit-text-recognition = { module = "com.google.mlkit:text-recognition", version.ref = "mlkitTextRecognition" }
 pdfbox-android = { module = "com.tom-roush:pdfbox-android", version.ref = "pdfbox" }
+android-image-cropper = { module = "com.vanniktech:android-image-cropper", version.ref = "imageCropper" }
 
 # Testing
 junit = { module = "junit:junit", version.ref = "junit" }

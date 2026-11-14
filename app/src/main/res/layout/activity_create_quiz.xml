@@ -64,7 +64,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:background="@drawable/bg_card_white"
                 android:padding="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_8sdp">
@@ -170,9 +170,10 @@
                         android:textColor="@color/qm_text_secondary" />
 
                     <TextView
+                        android:id="@+id/tv_topic_words"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="14/60"
+                        android:text="0/30"
                         android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_regular"
                         android:textColor="@color/qm_text_secondary" />
@@ -206,15 +207,17 @@
                         android:textColor="@color/qm_text_primary"
                         android:textSize="@dimen/_13sdp"
                         android:fontFamily="@font/inter_regular"
-                        android:inputType="text"
+                        android:inputType="textCapSentences"
                         android:autofillHints="name"
                         android:maxLines="1" />
 
                     <ImageView
-                        android:layout_width="@dimen/_18sdp"
-                        android:layout_height="@dimen/_18sdp"
+                        android:id="@+id/iv_clear"
+                        android:layout_width="@dimen/_15sdp"
+                        android:layout_height="@dimen/_15sdp"
                         android:src="@drawable/ic_close"
-                        android:contentDescription="@null"
+                        android:contentDescription="@string/qm_clear"
+                        android:visibility="gone"
                         android:clickable="true"
                         android:focusable="true" />
 
@@ -276,22 +279,30 @@
                     android:layout_marginTop="@dimen/_2sdp"
                     android:layout_marginBottom="@dimen/_16sdp" />
 
-                <!-- Inner Card Container for Text preview / editor -->
+                <!-- Inner Card Container for Text editor -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:background="@drawable/bg_card_white"
-                    android:padding="@dimen/_12sdp">
+                    android:orientation="vertical">
 
-                    <TextView
+                    <EditText
+                        android:id="@+id/et_text_notes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Photosynthesis is the biological process by which green plants and certain organisms transform light energy into chemical energy. During oxygenic photosynthesis,"
+                        android:minHeight="@dimen/_110sdp"
+                        android:maxHeight="@dimen/_220sdp"
+                        android:gravity="top|start"
+                        android:background="@drawable/bg_search_input"
+                        android:padding="@dimen/_12sdp"
+                        android:hint="Paste or type your study material, lecture notes, or textbook excerpt here..."
+                        android:textColorHint="@color/qm_text_secondary"
+                        android:textColor="@color/qm_text_primary"
                         android:textSize="@dimen/_12sdp"
                         android:fontFamily="@font/inter_regular"
-                        android:textColor="@color/qm_text_secondary"
-                        android:layout_marginBottom="@dimen/_16sdp" />
+                        android:inputType="textMultiLine|textCapSentences"
+                        android:scrollbars="vertical"
+                        android:overScrollMode="always"
+                        android:layout_marginBottom="@dimen/_12sdp" />
 
                     <!-- Actions Row -->
                     <LinearLayout
@@ -302,6 +313,7 @@
 
                         <!-- Paste Button -->
                         <LinearLayout
+                            android:id="@+id/ll_paste_text"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_30sdp"
                             android:orientation="horizontal"
@@ -348,9 +360,10 @@
                                 android:contentDescription="@null" />
 
                             <TextView
+                                android:id="@+id/tv_total_words"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="342 words"
+                                android:text="0 words"
                                 android:textSize="@dimen/_9sdp"
                                 android:fontFamily="@font/inter_regular"
                                 android:textColor="@color/qm_text_secondary" />
@@ -417,11 +430,81 @@
                     android:layout_marginTop="@dimen/_2sdp"
                     android:layout_marginBottom="@dimen/_16sdp" />
 
-                <!-- Inner Card Container for PDF file info -->
+                <!-- Unselected PDF State Layout -->
                 <LinearLayout
+                    android:id="@+id/ll_unselected_pdf"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="visible"
+                    android:background="@drawable/bg_card_dashed"
+                    android:paddingVertical="@dimen/_22sdp"
+                    android:paddingHorizontal="@dimen/_16sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="@dimen/_44sdp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:src="@drawable/ic_pdf_select"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Upload PDF"
+                        android:textSize="@dimen/_14sdp"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select your study material in PDF format"
+                        android:textSize="@dimen/_10sdp"
+                        android:fontFamily="@font/inter_regular"
+                        android:textColor="@color/qm_text_secondary"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:layout_marginBottom="@dimen/_12sdp" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/_30sdp"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:background="@drawable/bg_pill_gray"
+                        android:paddingHorizontal="@dimen/_14sdp">
+
+                        <ImageView
+                            android:layout_width="@dimen/_11sdp"
+                            android:layout_height="@dimen/_11sdp"
+                            android:src="@drawable/ic_upload_file"
+                            app:tint="@color/app_color"
+                            android:layout_marginEnd="@dimen/_6sdp"
+                            android:contentDescription="@null" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Choose PDF"
+                            android:textSize="@dimen/_10sdp"
+                            android:fontFamily="@font/inter_bold"
+                            android:textColor="@color/app_color" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Inner Card Container for PDF file info -->
+                <LinearLayout
+                    android:id="@+id/ll_selected_pdf"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
                     android:background="@drawable/bg_card_white"
                     android:padding="@dimen/_12sdp">
 
@@ -448,14 +531,18 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/tv_pdf_name"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Biology Chapter 3.pdf"
                                 android:textSize="@dimen/_14sdp"
                                 android:fontFamily="@font/inter_semi_bold"
-                                android:textColor="@color/qm_text_primary" />
+                                android:textColor="@color/qm_text_primary"
+                                android:maxLines="1"
+                                android:ellipsize="middle" />
 
                             <TextView
+                                android:id="@+id/tv_pages_size"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="12 pages · 2.4 MB"
@@ -477,6 +564,7 @@
 
                         <!-- Replace Button -->
                         <LinearLayout
+                            android:id="@+id/ll_replace_pdf"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_27sdp"
                             android:orientation="horizontal"
@@ -507,6 +595,7 @@
 
                         <!-- Remove Button -->
                         <LinearLayout
+                            android:id="@+id/ll_remove_pdf"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_27sdp"
                             android:orientation="horizontal"
@@ -547,7 +636,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:background="@drawable/bg_card_white"
                 android:padding="@dimen/_16sdp"
                 android:layout_marginTop="@dimen/_8sdp">
@@ -595,11 +684,123 @@
                     android:layout_marginTop="@dimen/_2sdp"
                     android:layout_marginBottom="@dimen/_16sdp" />
 
-                <!-- Inner Card Container for PDF file info -->
+                <!-- Unselected Image State Layout -->
                 <LinearLayout
+                    android:id="@+id/ll_unselected_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
+                    android:gravity="center"
+                    android:visibility="visible"
+                    android:background="@drawable/bg_card_dashed"
+                    android:paddingVertical="@dimen/_22sdp"
+                    android:paddingHorizontal="@dimen/_16sdp">
+
+                    <ImageView
+                        android:layout_width="@dimen/_44sdp"
+                        android:layout_height="@dimen/_44sdp"
+                        android:src="@drawable/ic_scan_notes"
+                        android:layout_marginBottom="@dimen/_10sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Scan Your Notes"
+                        android:textSize="@dimen/_14sdp"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Capture or select an image of your study notes"
+                        android:textSize="@dimen/_10sdp"
+                        android:fontFamily="@font/inter_regular"
+                        android:textColor="@color/qm_text_secondary"
+                        android:gravity="center"
+                        android:layout_marginTop="@dimen/_3sdp"
+                        android:layout_marginBottom="@dimen/_12sdp" />
+
+                    <!-- Actions Row: Camera & Gallery -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center">
+
+                        <!-- Camera Action -->
+                        <LinearLayout
+                            android:id="@+id/ll_camera_action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_30sdp"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:background="@drawable/bg_pill_gray"
+                            android:paddingHorizontal="@dimen/_12sdp"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <ImageView
+                                android:layout_width="@dimen/_12sdp"
+                                android:layout_height="@dimen/_12sdp"
+                                android:src="@drawable/ic_camera"
+                                app:tint="@color/app_color"
+                                android:layout_marginEnd="@dimen/_6sdp"
+                                android:contentDescription="@null" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Camera"
+                                android:textSize="@dimen/_10sdp"
+                                android:fontFamily="@font/inter_bold"
+                                android:textColor="@color/app_color" />
+
+                        </LinearLayout>
+
+                        <!-- Gallery Action -->
+                        <LinearLayout
+                            android:id="@+id/ll_gallery_action"
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/_30sdp"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:background="@drawable/bg_pill_gray"
+                            android:paddingHorizontal="@dimen/_12sdp"
+                            android:clickable="true"
+                            android:focusable="true">
+
+                            <ImageView
+                                android:layout_width="@dimen/_12sdp"
+                                android:layout_height="@dimen/_12sdp"
+                                android:src="@drawable/ic_gallery"
+                                app:tint="@color/app_color"
+                                android:layout_marginEnd="@dimen/_6sdp"
+                                android:contentDescription="@null" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Gallery"
+                                android:textSize="@dimen/_10sdp"
+                                android:fontFamily="@font/inter_bold"
+                                android:textColor="@color/app_color" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Inner Card Container for image file info -->
+                <LinearLayout
+                    android:id="@+id/ll_selected_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone"
                     android:background="@drawable/bg_card_white"
                     android:padding="@dimen/_12sdp">
 
@@ -610,11 +811,15 @@
                         android:gravity="center_vertical"
                         android:layout_marginBottom="@dimen/_16sdp">
 
-                        <!-- PDF Icon Square -->
-                        <ImageView
-                            android:layout_width="@dimen/_44sdp"
-                            android:layout_height="@dimen/_44sdp"
+                        <!-- Selected Image Thumbnail -->
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/iv_selected_image"
+                            android:layout_width="@dimen/_48sdp"
+                            android:layout_height="@dimen/_48sdp"
+                            android:scaleType="centerCrop"
                             android:src="@drawable/ic_scan_notes"
+                            android:background="@drawable/bg_pill_gray"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearance.QuizMind.RoundedImage"
                             android:layout_marginEnd="@dimen/_12sdp"
                             android:contentDescription="@null" />
 
@@ -626,14 +831,18 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:layout_width="wrap_content"
+                                android:id="@+id/tv_image_name"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="Image.png"
                                 android:textSize="@dimen/_14sdp"
                                 android:fontFamily="@font/inter_semi_bold"
-                                android:textColor="@color/qm_text_primary" />
+                                android:textColor="@color/qm_text_primary"
+                                android:maxLines="1"
+                                android:ellipsize="middle" />
 
                             <TextView
+                                android:id="@+id/tv_image_size"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="2.4 MB"
@@ -655,6 +864,7 @@
 
                         <!-- Replace Button -->
                         <LinearLayout
+                            android:id="@+id/ll_image_replace"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_27sdp"
                             android:orientation="horizontal"
@@ -685,6 +895,7 @@
 
                         <!-- Remove Button -->
                         <LinearLayout
+                            android:id="@+id/ll_image_remove"
                             android:layout_width="wrap_content"
                             android:layout_height="@dimen/_27sdp"
                             android:orientation="horizontal"

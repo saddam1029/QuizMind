@@ -123,6 +123,7 @@ dependencies {
 
     // Image Loading
     implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.android.image.cropper)
 
     // Existing tests
     testImplementation(libs.junit)
