@@ -31,6 +31,7 @@ class CreateQuizActivity : AppCompatActivity() {
     )
 
     private lateinit var subjectCards: List<SubjectCard>
+    private var currentSelectedSubjectIndex = 0
 
     private val subjectLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -39,10 +40,22 @@ class CreateQuizActivity : AppCompatActivity() {
             val name = result.data?.getStringExtra("selected_subject_name")
             val iconRes = result.data?.getIntExtra("selected_subject_icon", R.drawable.ic_science) ?: R.drawable.ic_science
             if (name != null) {
-                // Update 1st subject card with selected subject from SubjectActivity and select it
-                binding.tvSubject1.text = name
-                binding.ivSubject1.setImageResource(iconRes)
-                selectSubjectCard(0)
+                // Check if this subject already exists in cards 1 to 7
+                val matchedIndex = subjectCards.indices.take(7).find { index ->
+                    val cardText = subjectCards[index].text.text.toString()
+                    cardText.equals(name, ignoreCase = true) ||
+                    (name.equals("Math", ignoreCase = true) && cardText.equals("Mathematics", ignoreCase = true)) ||
+                    (name.equals("Mathematics", ignoreCase = true) && cardText.equals("Math", ignoreCase = true))
+                }
+
+                if (matchedIndex != null) {
+                    selectSubjectCard(matchedIndex)
+                } else {
+                    // Put in cardSubject1 (index 0) and select it
+                    binding.tvSubject1.text = name
+                    binding.ivSubject1.setImageResource(iconRes)
+                    selectSubjectCard(0)
+                }
             }
         }
     }
@@ -117,8 +130,12 @@ class CreateQuizActivity : AppCompatActivity() {
         subjectCards.forEachIndexed { index, card ->
             card.container.setOnClickListener {
                 if (index == subjectCards.size - 1) {
-                    // If clicking "Other...", launch SubjectActivity to pick from all subjects
-                    subjectLauncher.launch(Intent(this, SubjectActivity::class.java))
+                    // If clicking "Other...", launch SubjectActivity with current selected subject name
+                    val currentName = subjectCards.getOrNull(currentSelectedSubjectIndex)?.text?.text?.toString() ?: "Science"
+                    val intent = Intent(this, SubjectActivity::class.java).apply {
+                        putExtra("current_subject_name", currentName)
+                    }
+                    subjectLauncher.launch(intent)
                 } else {
                     selectSubjectCard(index)
                 }
@@ -127,6 +144,7 @@ class CreateQuizActivity : AppCompatActivity() {
     }
 
     private fun selectSubjectCard(selectedIndex: Int) {
+        currentSelectedSubjectIndex = selectedIndex
         subjectCards.forEachIndexed { index, card ->
             if (index == selectedIndex) {
                 card.container.setBackgroundResource(R.drawable.bg_pill_selected)

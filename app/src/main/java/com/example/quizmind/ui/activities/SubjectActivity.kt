@@ -82,7 +82,15 @@ class SubjectActivity : AppCompatActivity() {
             SubjectViewItem(binding.cardOther, binding.ivOther, binding.tvOther, binding.checkOther, "Other", R.drawable.ic_other)
         )
 
-        selectSubject(6) // Default Science
+        val initialSubjectName = intent.getStringExtra("current_subject_name") ?: "Science"
+        val initialIndex = subjectItems.indexOfFirst {
+            it.subjectName.equals(initialSubjectName, ignoreCase = true) ||
+            (initialSubjectName.equals("Mathematics", ignoreCase = true) && it.subjectName.equals("Math", ignoreCase = true)) ||
+            (initialSubjectName.equals("Math", ignoreCase = true) && it.subjectName.equals("Mathematics", ignoreCase = true))
+        }
+        currentSelectedIndex = if (initialIndex != -1) initialIndex else 6
+
+        selectSubject(currentSelectedIndex)
 
         subjectItems.forEachIndexed { index, item ->
             item.container.setOnClickListener {
