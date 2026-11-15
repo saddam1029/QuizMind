@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/qm_background"
+    tools:context=".ui.activities.ActiveQuizActivity">
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingVertical="@dimen/_12sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:src="@drawable/ic_back"
+            android:background="@drawable/bg_pill_gray"
+            android:padding="@dimen/_8sdp"
+            android:contentDescription="@string/qm_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Active Quiz"
+            android:textSize="@dimen/_18sdp"
+            android:fontFamily="@font/inter_semi_bold"
+            android:textColor="@color/qm_text_primary"
+            android:layout_marginStart="@dimen/_16sdp" />
+
+    </LinearLayout>
+
+    <!-- Scrollable Quiz Content -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollViewContent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:paddingBottom="@dimen/_16sdp">
+
+            <!-- Quiz Information Row: Close, Topic Title, Elapsed Timer -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginBottom="@dimen/_12sdp">
+
+                <ImageView
+                    android:id="@+id/btnCloseQuiz"
+                    android:layout_width="@dimen/_32sdp"
+                    android:layout_height="@dimen/_32sdp"
+                    android:src="@drawable/ic_close"
+                    android:background="@drawable/bg_timer_pill"
+                    android:padding="@dimen/_8sdp"
+                    app:tint="@color/qm_text_primary"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="Close Quiz" />
+
+                <TextView
+                    android:id="@+id/tvQuizTopic"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Biology Basics"
+                    android:textSize="@dimen/_16sdp"
+                    android:fontFamily="@font/inter_bold"
+                    android:textColor="@color/qm_text_primary"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:layout_marginHorizontal="@dimen/_10sdp" />
+
+                <LinearLayout
+                    android:id="@+id/llTimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_28sdp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_timer_pill"
+                    android:paddingHorizontal="@dimen/_10sdp">
+
+                    <ImageView
+                        android:layout_width="@dimen/_12sdp"
+                        android:layout_height="@dimen/_12sdp"
+                        android:src="@drawable/ic_clock"
+                        app:tint="@color/app_color"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvTimer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="00:00"
+                        android:textSize="@dimen/_11sdp"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:textColor="@color/app_color" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Progress Section Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_white"
+                android:padding="@dimen/_14sdp"
+                android:layout_marginBottom="@dimen/_12sdp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvQuestionProgress"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Question 1 of 10"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <TextView
+                        android:id="@+id/tvPercentageProgress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10% Complete"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:textColor="@color/app_color" />
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressBarQuiz"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_7sdp"
+                    android:max="100"
+                    android:progress="10"
+                    android:progressDrawable="@drawable/bg_progress_bar"
+                    android:layout_marginTop="@dimen/_10sdp" />
+
+            </LinearLayout>
+
+            <!-- Question Section Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_white"
+                android:padding="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_14sdp">
+
+                <TextView
+                    android:id="@+id/tvQuestionText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Loading question..."
+                    android:textSize="@dimen/_15sdp"
+                    android:fontFamily="@font/inter_semi_bold"
+                    android:textColor="@color/qm_text_primary"
+                    android:lineSpacingExtra="4dp" />
+
+            </LinearLayout>
+
+            <!-- Options Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <!-- Option A -->
+                <LinearLayout
+                    android:id="@+id/layoutOptionA"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_option_unselected"
+                    android:padding="@dimen/_12sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvLetterA"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:text="A"
+                        android:gravity="center"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/inter_bold"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_circle_letter_unselected" />
+
+                    <TextView
+                        android:id="@+id/tvOptionTextA"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:text="Option A"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/ivCheckA"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/bg_circle_radio_unselected"
+                        android:contentDescription="@null" />
+
+                </LinearLayout>
+
+                <!-- Option B -->
+                <LinearLayout
+                    android:id="@+id/layoutOptionB"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_option_unselected"
+                    android:padding="@dimen/_12sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvLetterB"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:text="B"
+                        android:gravity="center"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/inter_bold"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_circle_letter_unselected" />
+
+                    <TextView
+                        android:id="@+id/tvOptionTextB"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:text="Option B"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/ivCheckB"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/bg_circle_radio_unselected"
+                        android:contentDescription="@null" />
+
+                </LinearLayout>
+
+                <!-- Option C -->
+                <LinearLayout
+                    android:id="@+id/layoutOptionC"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_option_unselected"
+                    android:padding="@dimen/_12sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvLetterC"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:text="C"
+                        android:gravity="center"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/inter_bold"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_circle_letter_unselected" />
+
+                    <TextView
+                        android:id="@+id/tvOptionTextC"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:text="Option C"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/ivCheckC"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/bg_circle_radio_unselected"
+                        android:contentDescription="@null" />
+
+                </LinearLayout>
+
+                <!-- Option D -->
+                <LinearLayout
+                    android:id="@+id/layoutOptionD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/bg_option_unselected"
+                    android:padding="@dimen/_12sdp"
+                    android:layout_marginBottom="@dimen/_10sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <TextView
+                        android:id="@+id/tvLetterD"
+                        android:layout_width="@dimen/_30sdp"
+                        android:layout_height="@dimen/_30sdp"
+                        android:text="D"
+                        android:gravity="center"
+                        android:textSize="@dimen/_12sdp"
+                        android:fontFamily="@font/inter_bold"
+                        android:textColor="@color/qm_text_primary"
+                        android:background="@drawable/bg_circle_letter_unselected" />
+
+                    <TextView
+                        android:id="@+id/tvOptionTextD"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_marginStart="@dimen/_12sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:text="Option D"
+                        android:textSize="@dimen/_13sdp"
+                        android:fontFamily="@font/inter_medium"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:id="@+id/ivCheckD"
+                        android:layout_width="@dimen/_20sdp"
+                        android:layout_height="@dimen/_20sdp"
+                        android:src="@drawable/bg_circle_radio_unselected"
+                        android:contentDescription="@null" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Actions Row: Hint, Skip, Next -->
+    <LinearLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@color/qm_background"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingTop="@dimen/_12sdp"
+        android:paddingBottom="@dimen/_20sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- Hint Button -->
+        <LinearLayout
+            android:id="@+id/btnHint"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_40sdp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/bg_timer_pill"
+            android:paddingHorizontal="@dimen/_14sdp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:layout_width="@dimen/_14sdp"
+                android:layout_height="@dimen/_14sdp"
+                android:src="@drawable/ic_bulb"
+                app:tint="@color/app_color"
+                android:layout_marginEnd="@dimen/_6sdp"
+                android:contentDescription="@null" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hint"
+                android:textSize="@dimen/_12sdp"
+                android:fontFamily="@font/inter_bold"
+                android:textColor="@color/app_color" />
+
+        </LinearLayout>
+
+        <!-- Skip Button -->
+        <TextView
+            android:id="@+id/btnSkip"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Skip"
+            android:gravity="center"
+            android:textSize="@dimen/_13sdp"
+            android:fontFamily="@font/inter_semi_bold"
+            android:textColor="@color/qm_text_secondary"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- Next / Finish Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/_42sdp"
+            android:text="Next"
+            app:icon="@drawable/ic_arrow_right"
+            app:iconGravity="textEnd"
+            app:iconTint="@color/white"
+            app:iconSize="@dimen/_14sdp"
+            android:fontFamily="@font/inter_semi_bold"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_13sdp"
+            android:background="@drawable/bg_splash_button"
+            android:paddingHorizontal="@dimen/_18sdp"
+            app:backgroundTint="@null" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

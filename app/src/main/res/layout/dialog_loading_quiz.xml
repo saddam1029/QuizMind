@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/bg_card_white"
+    android:padding="@dimen/_24sdp">
+
+    <ProgressBar
+        android:id="@+id/progressBarLoading"
+        android:layout_width="@dimen/_44sdp"
+        android:layout_height="@dimen/_44sdp"
+        android:indeterminateTint="@color/app_color"
+        android:layout_marginBottom="@dimen/_16sdp" />
+
+    <TextView
+        android:id="@+id/tvLoadingTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Crafting Your Quiz with AI..."
+        android:textSize="@dimen/_15sdp"
+        android:fontFamily="@font/inter_semi_bold"
+        android:textColor="@color/qm_text_primary"
+        android:gravity="center" />
+
+    <TextView
+        android:id="@+id/tvLoadingSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gemini is analyzing your topic and designing smart questions."
+        android:textSize="@dimen/_11sdp"
+        android:fontFamily="@font/inter_regular"
+        android:textColor="@color/qm_text_secondary"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/_6sdp" />
+
+</LinearLayout>

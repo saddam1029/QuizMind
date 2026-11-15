@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/bg_card_white"
+    android:padding="@dimen/_20sdp">
+
+    <!-- Handle Bar -->
+    <View
+        android:layout_width="@dimen/_36sdp"
+        android:layout_height="@dimen/_4sdp"
+        android:background="@drawable/bg_pill_gray"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/_16sdp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="@dimen/_12sdp">
+
+        <LinearLayout
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:background="@drawable/bg_timer_pill"
+            android:gravity="center"
+            android:layout_marginEnd="@dimen/_12sdp">
+
+            <ImageView
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:src="@drawable/ic_bulb"
+                app:tint="@color/app_color"
+                android:contentDescription="@null" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Question Hint"
+            android:textSize="@dimen/_16sdp"
+            android:fontFamily="@font/inter_bold"
+            android:textColor="@color/qm_text_primary" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvHintContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/_13sdp"
+        android:fontFamily="@font/inter_regular"
+        android:textColor="@color/qm_text_secondary"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="@dimen/_20sdp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnGotIt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_44sdp"
+        android:text="Got it"
+        android:fontFamily="@font/inter_semi_bold"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_14sdp"
+        android:background="@drawable/bg_splash_button"
+        app:backgroundTint="@null" />
+
+</LinearLayout>

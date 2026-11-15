@@ -14,34 +14,58 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.Settings
 import android.text.Editable
+import android.text.InputType
 import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.ImageViewCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
-
 import com.example.quizmind.R
 import com.example.quizmind.databinding.ActivityCreateQuizBinding
+import com.example.quizmind.ui.viewmodel.CreateQuizUiState
+import com.example.quizmind.ui.viewmodel.CreateQuizViewModel
 import com.example.quizmind.utils.ImageFileHelper
 import com.example.quizmind.utils.PdfMetadataHelper
+import com.example.quizmind.utils.TopicValidator
 import com.example.quizmind.utils.WordCountHelper
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
+import com.tom_roush.pdfbox.pdmodel.PDDocument
+import com.tom_roush.pdfbox.text.PDFTextStripper
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
+@AndroidEntryPoint
 class CreateQuizActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCreateQuizBinding
+    private val viewModel: CreateQuizViewModel by viewModels()
+
     private var activeSourceType: String = "topic"
 
     // PDF selection state
@@ -53,6 +77,11 @@ class CreateQuizActivity : AppCompatActivity() {
 
     // Topic word count guard
     private var isUpdatingTopic = false
+
+    // Quiz configuration state
+    private var selectedQuestionCount = 10
+    private var selectedDifficulty = "Mixed"
+    private var loadingDialog: AlertDialog? = null
 
     private data class SubjectCard(
         val container: LinearLayout,
@@ -182,8 +211,18 @@ class CreateQuizActivity : AppCompatActivity() {
         setupPdfSection()
         setupImageSection()
 
+        // Handle prefill if coming from "Give Quiz Again"
+        intent.getStringExtra("prefill_topic")?.let { topic ->
+            if (topic.isNotBlank()) {
+                binding.etTopic.setText(topic)
+                binding.etTopic.setSelection(topic.length)
+            }
+        }
+
         // Setup shared quiz configuration
         setupSharedQuizConfiguration()
+
+        observeViewModel()
     }
 
     private fun setupCategoryVisibility(sourceType: String) {
@@ -228,19 +267,18 @@ class CreateQuizActivity : AppCompatActivity() {
             override fun afterTextChanged(s: Editable?) {
                 if (isUpdatingTopic) return
                 val input = s?.toString() ?: ""
-                val words = WordCountHelper.getWords(input)
-                val count = words.size
+                val letterCount = TopicValidator.countLetters(input)
 
-                if (count > 30) {
+                if (letterCount > 30) {
                     isUpdatingTopic = true
-                    val trimmed = WordCountHelper.trimToMaxWords(input, 30)
+                    val trimmed = TopicValidator.enforceMaxLetters(input, 30)
                     binding.etTopic.setText(trimmed)
                     binding.etTopic.setSelection(trimmed.length)
                     binding.tvTopicWords.text = "30/30"
                     binding.ivClear.visibility = View.VISIBLE
                     isUpdatingTopic = false
                 } else {
-                    binding.tvTopicWords.text = "$count/30"
+                    binding.tvTopicWords.text = "$letterCount/30"
                     binding.ivClear.visibility = if (input.trim().isNotEmpty()) View.VISIBLE else View.GONE
                 }
             }
@@ -282,7 +320,7 @@ class CreateQuizActivity : AppCompatActivity() {
         })
 
         binding.llPasteText.setOnClickListener {
-            val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clipboard = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
             if (!clipboard.hasPrimaryClip()) {
                 Toast.makeText(this, "Clipboard is empty", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -479,9 +517,8 @@ class CreateQuizActivity : AppCompatActivity() {
             subjectLauncher.launch(intent)
         }
 
-        setupRadioGroup(listOf(binding.tvQ5, binding.tvQ10, binding.tvQ15, binding.tvQ20, binding.tvQCustom), 1)
-        setupRadioGroup(listOf(binding.tvEasy, binding.tvMedium, binding.tvHard, binding.tvMixed), 3)
-
+        setupQuestionCountSelection()
+        setupDifficultySelection()
         setupSubjectRadioButtons()
 
         binding.btnGenerateQuiz.setOnClickListener {
@@ -489,45 +526,13 @@ class CreateQuizActivity : AppCompatActivity() {
         }
     }
 
-    private fun validateAndGenerateQuiz() {
-        when (activeSourceType) {
-            "topic" -> {
-                val topic = binding.etTopic.text?.toString()?.trim()
-                if (topic.isNullOrEmpty()) {
-                    Toast.makeText(this, "Please enter a topic", Toast.LENGTH_SHORT).show()
-                    binding.etTopic.requestFocus()
-                    return
-                }
-            }
-            "text" -> {
-                val notes = binding.etTextNotes.text?.toString()?.trim()
-                if (notes.isNullOrEmpty()) {
-                    Toast.makeText(this, "Please enter or paste study notes", Toast.LENGTH_SHORT).show()
-                    binding.etTextNotes.requestFocus()
-                    return
-                }
-            }
-            "pdf" -> {
-                if (selectedPdfUri == null) {
-                    Toast.makeText(this, "Please select a PDF document", Toast.LENGTH_SHORT).show()
-                    return
-                }
-            }
-            "image" -> {
-                if (selectedImageUri == null) {
-                    Toast.makeText(this, "Please capture or select an image of your notes", Toast.LENGTH_SHORT).show()
-                    return
-                }
-            }
-        }
+    private fun setupQuestionCountSelection() {
+        val qViews = listOf(binding.tvQ5, binding.tvQ10, binding.tvQ15, binding.tvQ20, binding.tvQCustom)
+        val counts = listOf(5, 10, 15, 20, -1)
 
-        val subjectName = subjectCards.getOrNull(currentSelectedSubjectIndex)?.text?.text?.toString() ?: "Science"
-        Toast.makeText(this, "Ready to generate $subjectName quiz!", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun setupRadioGroup(views: List<TextView>, defaultIndex: Int) {
-        views.forEachIndexed { index, view ->
-            if (index == defaultIndex) {
+        qViews.forEachIndexed { index, view ->
+            val isDefault = (index == 1) // 10 Qs default
+            if (isDefault) {
                 view.setBackgroundResource(R.drawable.bg_pill_selected)
                 view.setTextColor(ContextCompat.getColor(this, R.color.white))
                 view.setTypeface(null, Typeface.BOLD)
@@ -538,14 +543,243 @@ class CreateQuizActivity : AppCompatActivity() {
             }
 
             view.setOnClickListener {
-                views.forEach { v ->
-                    v.setBackgroundResource(R.drawable.bg_pill_unselected)
-                    v.setTextColor(ContextCompat.getColor(this, R.color.qm_text_primary))
-                    v.setTypeface(null, Typeface.NORMAL)
+                if (counts[index] == -1) {
+                    showCustomQuestionCountDialog(qViews, index)
+                } else {
+                    selectedQuestionCount = counts[index]
+                    updateSelectionUI(qViews, index)
                 }
+            }
+        }
+    }
+
+    private fun showCustomQuestionCountDialog(qViews: List<TextView>, customIndex: Int) {
+        val input = EditText(this).apply {
+            inputType = InputType.TYPE_CLASS_NUMBER
+            hint = "Enter number (1-50)"
+            setText("$selectedQuestionCount")
+            setSelection(text.length)
+            setPadding(40, 30, 40, 30)
+        }
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Custom Question Count")
+            .setMessage("Enter number of questions (1 to 50):")
+            .setView(input)
+            .setPositiveButton("OK") { _, _ ->
+                val text = input.text.toString().trim()
+                val count = text.toIntOrNull() ?: 10
+                val clamped = count.coerceIn(1, 50)
+                selectedQuestionCount = clamped
+                qViews[customIndex].text = "$clamped"
+                updateSelectionUI(qViews, customIndex)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun setupDifficultySelection() {
+        val diffViews = listOf(binding.tvEasy, binding.tvMedium, binding.tvHard, binding.tvMixed)
+        val diffs = listOf("Easy", "Medium", "Hard", "Mixed")
+
+        diffViews.forEachIndexed { index, view ->
+            val isDefault = (index == 3) // Mixed default
+            if (isDefault) {
                 view.setBackgroundResource(R.drawable.bg_pill_selected)
                 view.setTextColor(ContextCompat.getColor(this, R.color.white))
                 view.setTypeface(null, Typeface.BOLD)
+            } else {
+                view.setBackgroundResource(R.drawable.bg_pill_unselected)
+                view.setTextColor(ContextCompat.getColor(this, R.color.qm_text_primary))
+                view.setTypeface(null, Typeface.NORMAL)
+            }
+
+            view.setOnClickListener {
+                selectedDifficulty = diffs[index]
+                updateSelectionUI(diffViews, index)
+            }
+        }
+    }
+
+    private fun updateSelectionUI(views: List<TextView>, selectedIndex: Int) {
+        views.forEachIndexed { i, v ->
+            if (i == selectedIndex) {
+                v.setBackgroundResource(R.drawable.bg_pill_selected)
+                v.setTextColor(ContextCompat.getColor(this, R.color.white))
+                v.setTypeface(null, Typeface.BOLD)
+            } else {
+                v.setBackgroundResource(R.drawable.bg_pill_unselected)
+                v.setTextColor(ContextCompat.getColor(this, R.color.qm_text_primary))
+                v.setTypeface(null, Typeface.NORMAL)
+            }
+        }
+    }
+
+    private fun validateAndGenerateQuiz() {
+        val subjectName = subjectCards.getOrNull(currentSelectedSubjectIndex)?.text?.text?.toString() ?: "Science"
+        val timerEnabled = binding.switchTimer.isChecked
+
+        lifecycleScope.launch {
+            when (activeSourceType) {
+                "topic" -> {
+                    val topic = binding.etTopic.text?.toString()?.trim() ?: ""
+                    if (!TopicValidator.isValid(topic)) {
+                        Toast.makeText(this@CreateQuizActivity, "Please enter a valid topic (1-30 alphabetic characters).", Toast.LENGTH_SHORT).show()
+                        binding.etTopic.requestFocus()
+                        return@launch
+                    }
+                    viewModel.generateQuizFromContent(
+                        rawContent = topic,
+                        subject = subjectName,
+                        questionCount = selectedQuestionCount,
+                        difficulty = selectedDifficulty,
+                        timerEnabled = timerEnabled,
+                        isTopic = true
+                    )
+                }
+                "text" -> {
+                    val notes = binding.etTextNotes.text?.toString()?.trim() ?: ""
+                    if (notes.isBlank()) {
+                        Toast.makeText(this@CreateQuizActivity, "Please enter or paste study notes.", Toast.LENGTH_SHORT).show()
+                        binding.etTextNotes.requestFocus()
+                        return@launch
+                    }
+                    viewModel.generateQuizFromContent(
+                        rawContent = notes,
+                        subject = subjectName,
+                        questionCount = selectedQuestionCount,
+                        difficulty = selectedDifficulty,
+                        timerEnabled = timerEnabled,
+                        isTopic = false
+                    )
+                }
+                "pdf" -> {
+                    val uri = selectedPdfUri
+                    if (uri == null) {
+                        Toast.makeText(this@CreateQuizActivity, "Please select a PDF document.", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+                    showLoadingDialog()
+                    binding.btnGenerateQuiz.isEnabled = false
+                    val pdfText = extractTextFromPdf(uri)
+                    hideLoadingDialog()
+                    viewModel.generateQuizFromContent(
+                        rawContent = pdfText,
+                        subject = subjectName,
+                        questionCount = selectedQuestionCount,
+                        difficulty = selectedDifficulty,
+                        timerEnabled = timerEnabled,
+                        isTopic = false
+                    )
+                }
+                "image" -> {
+                    val uri = selectedImageUri
+                    if (uri == null) {
+                        Toast.makeText(this@CreateQuizActivity, "Please capture or select an image of your notes.", Toast.LENGTH_SHORT).show()
+                        return@launch
+                    }
+                    showLoadingDialog()
+                    binding.btnGenerateQuiz.isEnabled = false
+                    val imageText = extractTextFromImage(uri)
+                    hideLoadingDialog()
+                    viewModel.generateQuizFromContent(
+                        rawContent = imageText,
+                        subject = subjectName,
+                        questionCount = selectedQuestionCount,
+                        difficulty = selectedDifficulty,
+                        timerEnabled = timerEnabled,
+                        isTopic = false
+                    )
+                }
+            }
+        }
+    }
+
+    private suspend fun extractTextFromPdf(uri: Uri): String = withContext(Dispatchers.IO) {
+        try {
+            PDFBoxResourceLoader.init(applicationContext)
+            contentResolver.openInputStream(uri)?.use { inputStream ->
+                PDDocument.load(inputStream).use { document ->
+                    val stripper = PDFTextStripper()
+                    val text = stripper.getText(document).trim()
+                    if (text.isNotEmpty()) {
+                        return@withContext text
+                    }
+                }
+            }
+        } catch (_: Exception) {}
+        val metadata = PdfMetadataHelper.extractPdfMetadata(this@CreateQuizActivity, uri)
+        return@withContext metadata.name
+    }
+
+    private suspend fun extractTextFromImage(uri: Uri): String = withContext(Dispatchers.IO) {
+        try {
+            val image = InputImage.fromFilePath(this@CreateQuizActivity, uri)
+            val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+            val result = recognizer.process(image).await()
+            val text = result.text.trim()
+            if (text.isNotEmpty()) {
+                return@withContext text
+            }
+        } catch (_: Exception) {}
+        val metadata = ImageFileHelper.extractImageMetadata(this@CreateQuizActivity, uri)
+        return@withContext metadata.name
+    }
+
+    private fun showLoadingDialog() {
+        if (loadingDialog == null) {
+            val dialogView = layoutInflater.inflate(R.layout.dialog_loading_quiz, null)
+            loadingDialog = MaterialAlertDialogBuilder(this)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create()
+        }
+        if (loadingDialog?.isShowing == false) {
+            loadingDialog?.show()
+        }
+    }
+
+    private fun hideLoadingDialog() {
+        try {
+            loadingDialog?.dismiss()
+        } catch (_: Exception) {}
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    when (state) {
+                        is CreateQuizUiState.Idle -> {
+                            hideLoadingDialog()
+                            binding.btnGenerateQuiz.isEnabled = true
+                        }
+                        is CreateQuizUiState.Loading -> {
+                            showLoadingDialog()
+                            binding.btnGenerateQuiz.isEnabled = false
+                        }
+                        is CreateQuizUiState.Success -> {
+                            hideLoadingDialog()
+                            binding.btnGenerateQuiz.isEnabled = true
+                            viewModel.resetState()
+                            val intent = Intent(this@CreateQuizActivity, ActiveQuizActivity::class.java).apply {
+                                putExtra(ActiveQuizActivity.EXTRA_QUIZ, state.quiz)
+                            }
+                            startActivity(intent)
+                            finish()
+                        }
+                        is CreateQuizUiState.Error -> {
+                            hideLoadingDialog()
+                            binding.btnGenerateQuiz.isEnabled = true
+                            viewModel.resetState()
+                            MaterialAlertDialogBuilder(this@CreateQuizActivity)
+                                .setTitle("Generation Failed")
+                                .setMessage(state.message)
+                                .setPositiveButton("OK", null)
+                                .show()
+                        }
+                    }
+                }
             }
         }
     }

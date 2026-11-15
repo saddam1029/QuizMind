@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/qm_background"
+    tools:context=".ui.activities.QuizResultActivity">
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:paddingVertical="@dimen/_12sdp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:src="@drawable/ic_back"
+            android:background="@drawable/bg_pill_gray"
+            android:padding="@dimen/_8sdp"
+            android:contentDescription="@string/qm_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Results"
+            android:textSize="@dimen/_18sdp"
+            android:fontFamily="@font/inter_semi_bold"
+            android:textColor="@color/qm_text_primary"
+            android:layout_marginStart="@dimen/_16sdp" />
+
+    </LinearLayout>
+
+    <!-- Scrollable Result Content -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/_16sdp"
+            android:paddingBottom="@dimen/_24sdp">
+
+            <!-- Assessment Summary Header Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="@dimen/_6sdp"
+                android:layout_marginBottom="@dimen/_10sdp">
+
+                <ImageView
+                    android:layout_width="@dimen/_16sdp"
+                    android:layout_height="@dimen/_16sdp"
+                    android:src="@drawable/ic_stars"
+                    app:tint="@color/app_color"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="ASSESSMENT SUMMARY"
+                    android:textSize="@dimen/_11sdp"
+                    android:fontFamily="@font/inter_bold"
+                    android:textColor="@color/app_color" />
+
+                <ImageView
+                    android:id="@+id/btnCloseResult"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:src="@drawable/ic_close"
+                    android:background="@drawable/bg_timer_pill"
+                    android:padding="@dimen/_7sdp"
+                    app:tint="@color/qm_text_primary"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:contentDescription="Close Results" />
+
+            </LinearLayout>
+
+            <!-- Card 1: Quiz Completion & Score Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:background="@drawable/bg_card_white"
+                android:padding="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_12sdp">
+
+                <!-- Trophy Circle Badge -->
+                <LinearLayout
+                    android:layout_width="@dimen/_44sdp"
+                    android:layout_height="@dimen/_44sdp"
+                    android:background="@drawable/bg_timer_pill"
+                    android:gravity="center"
+                    android:layout_marginBottom="@dimen/_10sdp">
+
+                    <ImageView
+                        android:layout_width="@dimen/_22sdp"
+                        android:layout_height="@dimen/_22sdp"
+                        android:src="@drawable/ic_trophy"
+                        app:tint="@color/app_color"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvQuizCompleteTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Quiz Complete!"
+                    android:textSize="@dimen/_19sdp"
+                    android:fontFamily="@font/inter_bold"
+                    android:textColor="@color/qm_text_primary" />
+
+                <TextView
+                    android:id="@+id/tvResultTopic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Biology Basics"
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="@font/inter_regular"
+                    android:textColor="@color/qm_text_secondary"
+                    android:layout_marginTop="@dimen/_2sdp"
+                    android:layout_marginBottom="@dimen/_14sdp" />
+
+                <!-- Circular Progress Ring View -->
+                <com.example.quizmind.ui.custom.CircularScoreView
+                    android:id="@+id/circularScoreView"
+                    android:layout_width="@dimen/_140sdp"
+                    android:layout_height="@dimen/_140sdp"
+                    android:layout_marginBottom="@dimen/_6sdp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Final score"
+                    android:textSize="@dimen/_11sdp"
+                    android:fontFamily="@font/inter_medium"
+                    android:textColor="@color/qm_text_secondary"
+                    android:layout_marginBottom="@dimen/_14sdp" />
+
+                <!-- 3 Summary Chips -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <!-- Correct -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/bg_summary_chip"
+                        android:paddingVertical="@dimen/_8sdp"
+                        android:paddingHorizontal="@dimen/_6sdp"
+                        android:layout_marginEnd="@dimen/_4sdp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/_12sdp"
+                                android:layout_height="@dimen/_12sdp"
+                                android:src="@drawable/ic_check"
+                                app:tint="#16A34A"
+                                android:layout_marginEnd="@dimen/_4sdp"
+                                android:contentDescription="@null" />
+
+                            <TextView
+                                android:id="@+id/tvCorrectCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="7"
+                                android:textSize="@dimen/_13sdp"
+                                android:fontFamily="@font/inter_bold"
+                                android:textColor="#16A34A" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Correct"
+                            android:textSize="@dimen/_10sdp"
+                            android:fontFamily="@font/inter_regular"
+                            android:textColor="@color/qm_text_secondary"
+                            android:layout_marginTop="@dimen/_2sdp" />
+
+                    </LinearLayout>
+
+                    <!-- Wrong -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/bg_summary_chip"
+                        android:paddingVertical="@dimen/_8sdp"
+                        android:paddingHorizontal="@dimen/_6sdp"
+                        android:layout_marginHorizontal="@dimen/_2sdp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/_12sdp"
+                                android:layout_height="@dimen/_12sdp"
+                                android:src="@drawable/ic_cross"
+                                android:layout_marginEnd="@dimen/_4sdp"
+                                android:contentDescription="@null" />
+
+                            <TextView
+                                android:id="@+id/tvWrongCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2"
+                                android:textSize="@dimen/_13sdp"
+                                android:fontFamily="@font/inter_bold"
+                                android:textColor="#DC2626" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Wrong"
+                            android:textSize="@dimen/_10sdp"
+                            android:fontFamily="@font/inter_regular"
+                            android:textColor="@color/qm_text_secondary"
+                            android:layout_marginTop="@dimen/_2sdp" />
+
+                    </LinearLayout>
+
+                    <!-- Skipped -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/bg_summary_chip"
+                        android:paddingVertical="@dimen/_8sdp"
+                        android:paddingHorizontal="@dimen/_6sdp"
+                        android:layout_marginStart="@dimen/_4sdp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
+
+                            <ImageView
+                                android:layout_width="@dimen/_12sdp"
+                                android:layout_height="@dimen/_12sdp"
+                                android:src="@drawable/ic_minus"
+                                android:layout_marginEnd="@dimen/_4sdp"
+                                android:contentDescription="@null" />
+
+                            <TextView
+                                android:id="@+id/tvSkippedCount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="1"
+                                android:textSize="@dimen/_13sdp"
+                                android:fontFamily="@font/inter_bold"
+                                android:textColor="@color/qm_text_secondary" />
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Skipped"
+                            android:textSize="@dimen/_10sdp"
+                            android:fontFamily="@font/inter_regular"
+                            android:textColor="@color/qm_text_secondary"
+                            android:layout_marginTop="@dimen/_2sdp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Card 2: Feedback Banner -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_timer_pill"
+                android:padding="@dimen/_12sdp"
+                android:layout_marginBottom="@dimen/_12sdp">
+
+                <LinearLayout
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
+                    android:background="@drawable/bg_circle_letter_selected"
+                    android:gravity="center"
+                    android:layout_marginEnd="@dimen/_10sdp">
+
+                    <ImageView
+                        android:layout_width="@dimen/_16sdp"
+                        android:layout_height="@dimen/_16sdp"
+                        android:src="@drawable/ic_bulb"
+                        app:tint="@color/white"
+                        android:contentDescription="@null" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tvFeedbackMessage"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Good effort. Review your mistakes and try again."
+                    android:textSize="@dimen/_12sdp"
+                    android:fontFamily="@font/inter_medium"
+                    android:textColor="@color/qm_text_primary" />
+
+            </LinearLayout>
+
+            <!-- Card 3: Performance Breakdown Card -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@drawable/bg_card_white"
+                android:padding="@dimen/_14sdp"
+                android:layout_marginBottom="@dimen/_16sdp">
+
+                <!-- Header Row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="@dimen/_10sdp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Performance Breakdown"
+                        android:textSize="@dimen/_14sdp"
+                        android:fontFamily="@font/inter_bold"
+                        android:textColor="@color/qm_text_primary" />
+
+                    <ImageView
+                        android:layout_width="@dimen/_18sdp"
+                        android:layout_height="@dimen/_18sdp"
+                        android:src="@drawable/ic_analytics"
+                        app:tint="@color/qm_text_secondary"
+                        android:contentDescription="@null" />
+
+                </LinearLayout>
+
+                <!-- 2x2 Grid -->
+                <!-- Row 1: Correct Marks & Negative Marks -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/_8sdp">
+
+                    <!-- Correct Marks -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:background="@drawable/bg_performance_card"
+                        android:padding="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_4sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⊕ Correct Marks"
+                            android:textSize="@dimen/_10sdp"
+                            android:fontFamily="@font/inter_regular"
+                            android:textColor="@color/qm_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tvCorrectMarks"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="+70"
+                            android:textSize="@dimen/_16sdp"
+                            android:fontFamily="@font/inter_bold"
+                            android:textColor="#16A34A"
+                            android:layout_marginTop="@dimen/_4sdp" />
+
+                    </LinearLayout>
+
+                    <!-- Negative Marks -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:background="@drawable/bg_performance_card"
+                        android:padding="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/_4sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⊖ Negative Marks"
+                            android:textSize="@dimen/_10sdp"
+                            android:fontFamily="@font/inter_regular"
+                            android:textColor="@color/qm_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tvNegativeMarks"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="-2"
+                            android:textSize="@dimen/_16sdp"
+                            android:fontFamily="@font/inter_bold"
+                            android:textColor="#DC2626"
+                            android:layout_marginTop="@dimen/_4sdp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Row 2: Accuracy & Time Taken -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- Accuracy -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:background="@drawable/bg_performance_card"
+                        android:padding="@dimen/_10sdp"
+                        android:layout_marginEnd="@dimen/_4sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="% Accuracy"
+                            android:textSize="@dimen/_10sdp"
+                            android:fontFamily="@font/inter_regular"
+                            android:textColor="@color/qm_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tvAccuracy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="70%"
+                            android:textSize="@dimen/_16sdp"
+                            android:fontFamily="@font/inter_bold"
+                            android:textColor="@color/qm_text_primary"
+                            android:layout_marginTop="@dimen/_4sdp" />
+
+                    </LinearLayout>
+
+                    <!-- Time Taken -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:background="@drawable/bg_performance_card"
+                        android:padding="@dimen/_10sdp"
+                        android:layout_marginStart="@dimen/_4sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="⏱ Time Taken"
+                            android:textSize="@dimen/_10sdp"
+                            android:fontFamily="@font/inter_regular"
+                            android:textColor="@color/qm_text_secondary" />
+
+                        <TextView
+                            android:id="@+id/tvTimeTaken"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="04:18"
+                            android:textSize="@dimen/_16sdp"
+                            android:fontFamily="@font/inter_bold"
+                            android:textColor="@color/qm_text_primary"
+                            android:layout_marginTop="@dimen/_4sdp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Review Answers Button (Visible, but disabled as per specifications) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReviewAnswers"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_46sdp"
+                android:text="Review Answers (Coming Soon)"
+                app:icon="@drawable/ic_review"
+                app:iconGravity="textStart"
+                app:iconTint="@color/white"
+                app:iconSize="@dimen/_15sdp"
+                android:fontFamily="@font/inter_semi_bold"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_13sdp"
+                android:background="@drawable/bg_splash_button"
+                android:alpha="0.6"
+                app:backgroundTint="@null" />
+
+            <!-- Give Quiz Again Button -->
+            <LinearLayout
+                android:id="@+id/btnGiveQuizAgain"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_44sdp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/bg_timer_pill"
+                android:layout_marginTop="@dimen/_10sdp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="@dimen/_15sdp"
+                    android:layout_height="@dimen/_15sdp"
+                    android:src="@drawable/ic_refresh"
+                    app:tint="@color/app_color"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Give Quiz Again"
+                    android:textSize="@dimen/_13sdp"
+                    android:fontFamily="@font/inter_bold"
+                    android:textColor="@color/app_color" />
+
+            </LinearLayout>
+
+            <!-- Generate New Quiz Button -->
+            <LinearLayout
+                android:id="@+id/btnGenerateNewQuiz"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_40sdp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="@dimen/_14sdp"
+                    android:layout_height="@dimen/_14sdp"
+                    android:src="@drawable/ic_stars"
+                    app:tint="@color/app_color"
+                    android:layout_marginEnd="@dimen/_6sdp"
+                    android:contentDescription="@null" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Generate New Quiz"
+                    android:textSize="@dimen/_13sdp"
+                    android:fontFamily="@font/inter_semi_bold"
+                    android:textColor="@color/app_color" />
+
+            </LinearLayout>
+
+            <!-- Bottom Action Pills: Share & Download -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/_14sdp">
+
+                <!-- Share Button -->
+                <LinearLayout
+                    android:id="@+id/btnShare"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_34sdp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="@drawable/bg_pill_gray"
+                    android:paddingHorizontal="@dimen/_16sdp"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="@dimen/_13sdp"
+                        android:layout_height="@dimen/_13sdp"
+                        android:src="@drawable/ic_share"
+                        app:tint="@color/qm_text_primary"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Share"
+                        android:textSize="@dimen/_11sdp"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:textColor="@color/qm_text_primary" />
+
+                </LinearLayout>
+
+                <!-- Download Button -->
+                <LinearLayout
+                    android:id="@+id/btnDownload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/_34sdp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="@drawable/bg_pill_gray"
+                    android:paddingHorizontal="@dimen/_16sdp"
+                    android:layout_marginStart="@dimen/_8sdp"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:id="@+id/ivDownloadIcon"
+                        android:layout_width="@dimen/_13sdp"
+                        android:layout_height="@dimen/_13sdp"
+                        android:src="@drawable/ic_download"
+                        app:tint="@color/qm_text_primary"
+                        android:layout_marginEnd="@dimen/_6sdp"
+                        android:contentDescription="@null" />
+
+                    <TextView
+                        android:id="@+id/tvDownloadLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Download"
+                        android:textSize="@dimen/_11sdp"
+                        android:fontFamily="@font/inter_semi_bold"
+                        android:textColor="@color/qm_text_primary" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
