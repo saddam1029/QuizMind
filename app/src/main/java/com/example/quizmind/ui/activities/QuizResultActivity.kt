@@ -41,8 +41,8 @@ class QuizResultActivity : AppCompatActivity() {
             insets
         }
 
-        @Suppress("DEPRECATION")
-        quizResult = intent.getSerializableExtra(EXTRA_QUIZ_RESULT) as? QuizResult
+        val resultId = intent.getStringExtra(EXTRA_RESULT_ID)
+        quizResult = resultId?.let { viewModel.getResult(it) }
         val result = quizResult
 
         if (result == null) {
@@ -187,6 +187,6 @@ class QuizResultActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val EXTRA_QUIZ_RESULT = "extra_quiz_result"
+        const val EXTRA_RESULT_ID = "extra_result_id"
     }
 }

@@ -22,8 +22,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.quizmind.R
-import com.example.quizmind.data.model.Question
-import com.example.quizmind.data.model.Quiz
 import com.example.quizmind.databinding.ActivityActiveQuizBinding
 import com.example.quizmind.ui.viewmodel.ActiveQuizViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -37,9 +35,11 @@ import java.util.Locale
 class ActiveQuizActivity : AppCompatActivity() {
 
     companion object {
-        const val EXTRA_QUIZ = "extra_quiz"
+        const val EXTRA_QUIZ_ID = "extra_quiz_id"
         private const val TAG = "ActiveQuizActivity"
     }
+
+    private var openedResults = false
 
     private lateinit var binding: ActivityActiveQuizBinding
     private val viewModel: ActiveQuizViewModel by viewModels()
@@ -65,23 +65,20 @@ class ActiveQuizActivity : AppCompatActivity() {
             insets
         }
 
-        @Suppress("DEPRECATION")
-        val quiz = intent.getSerializableExtra(EXTRA_QUIZ) as? Quiz
-        if (quiz == null || quiz.questions.isEmpty()) {
-            Log.e(TAG, "Quiz data is null or empty in intent.")
+        val quizId = intent.getStringExtra(EXTRA_QUIZ_ID)
+        if (quizId.isNullOrBlank() || !viewModel.initializeQuiz(quizId)) {
+            Log.e(TAG, "Quiz data is missing for id=$quizId")
             Toast.makeText(this, "Quiz data is missing or corrupted.", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
 
-        Log.d(TAG, "ActiveQuizActivity started with quiz: '${quiz.topic}', questionsCount=${quiz.questions.size}")
+        Log.d(TAG, "ActiveQuizActivity started with quiz: '${viewModel.getQuizTitle()}'")
 
         setupOptionViews()
         setupListeners()
         setupBackHandler()
-
-        viewModel.initializeQuiz(quiz)
-        binding.tvQuizTopic.text = quiz.topic
+        binding.tvQuizTopic.text = viewModel.getQuizTitle()
 
         observeViewModel()
     }
@@ -119,29 +116,15 @@ class ActiveQuizActivity : AppCompatActivity() {
 
         binding.btnSkip.setOnClickListener {
             val currentIndex = viewModel.currentQuestionIndex.value
-            val isLast = viewModel.isLastQuestion()
-            Log.d(TAG, "btnSkip clicked on question #$currentIndex (isLast=$isLast)")
-            if (isLast) {
-                binding.btnNext.isEnabled = false
-                binding.btnSkip.isEnabled = false
-            }
+            Log.d(TAG, "btnSkip clicked on question #$currentIndex (isLast=${viewModel.isLastQuestion()})")
             viewModel.skipCurrentQuestion()
         }
 
         binding.btnNext.setOnClickListener {
             val currentIndex = viewModel.currentQuestionIndex.value
-            val isLast = viewModel.isLastQuestion()
-            Log.d(TAG, "btnNext clicked on question #$currentIndex (isLast=$isLast)")
-            if (isLast) {
-                // Disable temporarily to prevent multiple rapid taps from launching duplicate screens
-                binding.btnNext.isEnabled = false
-                binding.btnSkip.isEnabled = false
-            }
+            Log.d(TAG, "btnNext clicked on question #$currentIndex (isLast=${viewModel.isLastQuestion()})")
             val moved = viewModel.nextQuestion()
             if (!moved) {
-                // User hasn't selected an option and hasn't skipped
-                binding.btnNext.isEnabled = true
-                binding.btnSkip.isEnabled = true
                 Toast.makeText(this, "Please select an answer or tap Skip to continue.", Toast.LENGTH_SHORT).show()
             }
         }
@@ -179,12 +162,14 @@ class ActiveQuizActivity : AppCompatActivity() {
                 }
 
                 launch {
-                    viewModel.navigationEvent.collect { result ->
-                        Log.d(TAG, "Received navigationEvent: Navigating to QuizResultActivity for quizId=${result.quizId}")
+                    viewModel.resultLaunch.collect { launch ->
+                        if (launch == null || openedResults) return@collect
+                        Log.d(TAG, "Opening QuizResultActivity for quizId=${launch.quizId}")
                         val intent = Intent(this@ActiveQuizActivity, QuizResultActivity::class.java).apply {
-                            putExtra(QuizResultActivity.EXTRA_QUIZ_RESULT, result)
+                            putExtra(QuizResultActivity.EXTRA_RESULT_ID, launch.quizId)
                         }
                         startActivity(intent)
+                        openedResults = true
                         finish()
                     }
                 }

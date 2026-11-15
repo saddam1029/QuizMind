@@ -7,23 +7,27 @@ import com.example.quizmind.data.model.Question
 import com.example.quizmind.data.model.Quiz
 import com.example.quizmind.data.model.QuizResult
 import com.example.quizmind.data.repository.QuizRepository
+import com.example.quizmind.data.session.QuizSessionStore
 import com.example.quizmind.utils.QuizScoreCalculator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+data class QuizResultLaunch(
+    val quizId: String,
+    val sequence: Int
+)
+
 @HiltViewModel
 class ActiveQuizViewModel @Inject constructor(
-    private val quizRepository: QuizRepository
+    private val quizRepository: QuizRepository,
+    private val quizSessionStore: QuizSessionStore
 ) : ViewModel() {
 
     companion object {
@@ -42,18 +46,23 @@ class ActiveQuizViewModel @Inject constructor(
     private val _elapsedTimeSeconds = MutableStateFlow(0L)
     val elapsedTimeSeconds: StateFlow<Long> = _elapsedTimeSeconds.asStateFlow()
 
-    // Buffered single-shot channel for navigation to Results screen
-    private val _navigationEvent = Channel<QuizResult>(Channel.BUFFERED)
-    val navigationEvent: Flow<QuizResult> = _navigationEvent.receiveAsFlow()
+    private val _resultLaunch = MutableStateFlow<QuizResultLaunch?>(null)
+    val resultLaunch: StateFlow<QuizResultLaunch?> = _resultLaunch.asStateFlow()
 
     private var timerJob: Job? = null
     private var isTimerRunning = false
-    private var isFinishingQuiz = false
+    private var finishedResult: QuizResult? = null
+    private var launchSequence = 0
 
-    fun initializeQuiz(initialQuiz: Quiz) {
+    fun initializeQuiz(quizId: String): Boolean {
         if (quiz != null) {
             Log.d(TAG, "initializeQuiz: already initialized with quizId=${quiz?.id}")
-            return
+            return true
+        }
+        val initialQuiz = quizSessionStore.getQuiz(quizId)
+        if (initialQuiz == null || initialQuiz.questions.isEmpty()) {
+            Log.e(TAG, "initializeQuiz: quiz '$quizId' was not found in the session.")
+            return false
         }
         Log.d(TAG, "initializeQuiz: starting quiz '${initialQuiz.topic}' with ${initialQuiz.questions.size} questions.")
         quiz = initialQuiz
@@ -61,8 +70,8 @@ class ActiveQuizViewModel @Inject constructor(
         questions.addAll(initialQuiz.questions)
         _currentQuestionIndex.value = 0
         _selectedAnswer.value = questions.firstOrNull()?.selectedAnswer
-        isFinishingQuiz = false
         startTimer()
+        return true
     }
 
     private fun startTimer() {
@@ -150,11 +159,13 @@ class ActiveQuizViewModel @Inject constructor(
     }
 
     fun finishQuiz() {
-        if (isFinishingQuiz) {
-            Log.w(TAG, "finishQuiz() called but quiz is already finishing. Ignoring duplicate invocation.")
+        val existing = finishedResult
+        if (existing != null) {
+            Log.d(TAG, "finishQuiz: result already ready. Opening results again for quizId=${existing.quizId}")
+            publishResult(existing.quizId)
             return
         }
-        isFinishingQuiz = true
+
         stopTimer()
 
         val currentQuiz = quiz ?: run {
@@ -191,14 +202,10 @@ class ActiveQuizViewModel @Inject constructor(
             timeTakenSeconds = finalTimeSeconds,
             questions = questions.toList()
         )
+        finishedResult = result
+        quizSessionStore.putResult(result)
+        publishResult(result.quizId)
 
-        // 1. Immediately emit navigation event so the Results screen opens without delay
-        viewModelScope.launch {
-            Log.d(TAG, "Emitting navigationEvent to channel for quizId=${result.quizId}")
-            _navigationEvent.send(result)
-        }
-
-        // 2. Persist online quiz result to Firestore asynchronously in background (non-blocking)
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 Log.d(TAG, "Saving quiz result to Firestore in background...")
@@ -212,6 +219,12 @@ class ActiveQuizViewModel @Inject constructor(
                 Log.w(TAG, "Background Firestore save exception (non-fatal): ${e.message}")
             }
         }
+    }
+
+    private fun publishResult(quizId: String) {
+        launchSequence += 1
+        Log.d(TAG, "Publishing results navigation #$launchSequence for quizId=$quizId")
+        _resultLaunch.value = QuizResultLaunch(quizId, launchSequence)
     }
 
     fun getCurrentQuestion(): Question? {

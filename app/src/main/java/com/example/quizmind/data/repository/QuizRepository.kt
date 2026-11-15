@@ -22,14 +22,16 @@ class QuizRepository @Inject constructor(
 ) {
 
     suspend fun generateQuiz(
-        topic: String,
+        title: String,
+        sourceMaterial: String,
         subject: String,
         questionCount: Int,
         difficulty: String,
         timerEnabled: Boolean
     ): Result<Quiz> {
         return geminiQuizService.generateQuiz(
-            topic = topic,
+            title = title,
+            sourceMaterial = sourceMaterial,
             subject = subject,
             questionCount = questionCount,
             difficulty = difficulty,

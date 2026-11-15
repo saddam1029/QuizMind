@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizmind.data.model.Quiz
 import com.example.quizmind.data.repository.QuizRepository
+import com.example.quizmind.data.session.QuizSessionStore
 import com.example.quizmind.utils.TopicValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,7 +23,8 @@ sealed class CreateQuizUiState {
 
 @HiltViewModel
 class CreateQuizViewModel @Inject constructor(
-    private val quizRepository: QuizRepository
+    private val quizRepository: QuizRepository,
+    private val quizSessionStore: QuizSessionStore
 ) : ViewModel() {
 
     companion object {
@@ -39,11 +41,20 @@ class CreateQuizViewModel @Inject constructor(
         difficulty: String,
         timerEnabled: Boolean
     ) {
-        generateQuizFromContent(rawTopic, subject, questionCount, difficulty, timerEnabled, isTopic = true)
+        generateQuizFromContent(
+            title = rawTopic,
+            sourceMaterial = "",
+            subject = subject,
+            questionCount = questionCount,
+            difficulty = difficulty,
+            timerEnabled = timerEnabled,
+            isTopic = true
+        )
     }
 
     fun generateQuizFromContent(
-        rawContent: String,
+        title: String,
+        sourceMaterial: String,
         subject: String,
         questionCount: Int,
         difficulty: String,
@@ -55,18 +66,17 @@ class CreateQuizViewModel @Inject constructor(
             return
         }
 
-        val content = rawContent.trim()
-        if (content.isEmpty()) {
-            _uiState.value = CreateQuizUiState.Error("Please provide a valid topic or study material.")
-            return
-        }
-
+        val quizTitle = title.trim()
+        val material = sourceMaterial.trim()
         if (isTopic) {
-            val sanitized = TopicValidator.sanitizeTopic(content)
+            val sanitized = TopicValidator.sanitizeTopic(quizTitle)
             if (!TopicValidator.isValid(sanitized)) {
                 _uiState.value = CreateQuizUiState.Error("Please enter a valid topic (1-30 alphabetic characters).")
                 return
             }
+        } else if (material.isEmpty()) {
+            _uiState.value = CreateQuizUiState.Error("Please provide a valid topic or study material.")
+            return
         }
 
         if (questionCount <= 0) {
@@ -74,12 +84,14 @@ class CreateQuizViewModel @Inject constructor(
             return
         }
 
+        val resolvedTitle = if (isTopic) TopicValidator.sanitizeTopic(quizTitle) else quizTitle
         Log.d(TAG, "Requesting quiz generation: count=$questionCount, subject='$subject', difficulty='$difficulty'")
         _uiState.value = CreateQuizUiState.Loading
 
         viewModelScope.launch {
             val result = quizRepository.generateQuiz(
-                topic = content,
+                title = resolvedTitle,
+                sourceMaterial = if (isTopic) "" else material,
                 subject = subject,
                 questionCount = questionCount,
                 difficulty = difficulty,
@@ -89,6 +101,7 @@ class CreateQuizViewModel @Inject constructor(
             result.fold(
                 onSuccess = { quiz ->
                     Log.d(TAG, "Quiz successfully generated with ${quiz.questions.size} questions.")
+                    quizSessionStore.putQuiz(quiz)
                     _uiState.value = CreateQuizUiState.Success(quiz)
                 },
                 onFailure = { throwable ->
@@ -106,6 +119,10 @@ class CreateQuizViewModel @Inject constructor(
                             "Network connection error. Please verify your internet connection and retry."
                         throwable.message?.contains("App Check", ignoreCase = true) == true ->
                             "App Check verification failed. Please try again."
+                        throwable.message?.contains("not found", ignoreCase = true) == true ||
+                        throwable.message?.contains("no longer available", ignoreCase = true) == true ||
+                        throwable.message?.contains("is not supported", ignoreCase = true) == true ->
+                            "The quiz model is unavailable right now. Please try again in a moment."
                         else ->
                             throwable.localizedMessage ?: "Failed to generate quiz. Please retry."
                     }

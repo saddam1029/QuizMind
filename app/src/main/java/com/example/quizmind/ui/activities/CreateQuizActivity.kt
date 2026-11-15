@@ -629,7 +629,8 @@ class CreateQuizActivity : AppCompatActivity() {
                         return@launch
                     }
                     viewModel.generateQuizFromContent(
-                        rawContent = topic,
+                        title = TopicValidator.sanitizeTopic(topic),
+                        sourceMaterial = "",
                         subject = subjectName,
                         questionCount = selectedQuestionCount,
                         difficulty = selectedDifficulty,
@@ -645,7 +646,8 @@ class CreateQuizActivity : AppCompatActivity() {
                         return@launch
                     }
                     viewModel.generateQuizFromContent(
-                        rawContent = notes,
+                        title = shortTitle(notes, "Study Notes"),
+                        sourceMaterial = notes,
                         subject = subjectName,
                         questionCount = selectedQuestionCount,
                         difficulty = selectedDifficulty,
@@ -662,9 +664,20 @@ class CreateQuizActivity : AppCompatActivity() {
                     showLoadingDialog()
                     binding.btnGenerateQuiz.isEnabled = false
                     val pdfText = extractTextFromPdf(uri)
-                    hideLoadingDialog()
+                    if (pdfText.isBlank()) {
+                        hideLoadingDialog()
+                        binding.btnGenerateQuiz.isEnabled = true
+                        Toast.makeText(
+                            this@CreateQuizActivity,
+                            "Could not read text from this PDF. Choose a text-based PDF and try again.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@launch
+                    }
+                    val pdfName = binding.tvPdfName.text?.toString()?.substringBeforeLast('.')?.trim().orEmpty()
                     viewModel.generateQuizFromContent(
-                        rawContent = pdfText,
+                        title = pdfName.ifBlank { "PDF Notes" },
+                        sourceMaterial = pdfText,
                         subject = subjectName,
                         questionCount = selectedQuestionCount,
                         difficulty = selectedDifficulty,
@@ -681,9 +694,19 @@ class CreateQuizActivity : AppCompatActivity() {
                     showLoadingDialog()
                     binding.btnGenerateQuiz.isEnabled = false
                     val imageText = extractTextFromImage(uri)
-                    hideLoadingDialog()
+                    if (imageText.isBlank()) {
+                        hideLoadingDialog()
+                        binding.btnGenerateQuiz.isEnabled = true
+                        Toast.makeText(
+                            this@CreateQuizActivity,
+                            "Could not read any text from this image. Try a clearer photo.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        return@launch
+                    }
                     viewModel.generateQuizFromContent(
-                        rawContent = imageText,
+                        title = shortTitle(imageText, "Scanned Notes"),
+                        sourceMaterial = imageText,
                         subject = subjectName,
                         questionCount = selectedQuestionCount,
                         difficulty = selectedDifficulty,
@@ -708,8 +731,7 @@ class CreateQuizActivity : AppCompatActivity() {
                 }
             }
         } catch (_: Exception) {}
-        val metadata = PdfMetadataHelper.extractPdfMetadata(this@CreateQuizActivity, uri)
-        return@withContext metadata.name
+        return@withContext ""
     }
 
     private suspend fun extractTextFromImage(uri: Uri): String = withContext(Dispatchers.IO) {
@@ -722,8 +744,14 @@ class CreateQuizActivity : AppCompatActivity() {
                 return@withContext text
             }
         } catch (_: Exception) {}
-        val metadata = ImageFileHelper.extractImageMetadata(this@CreateQuizActivity, uri)
-        return@withContext metadata.name
+        return@withContext ""
+    }
+
+    private fun shortTitle(text: String, fallback: String): String {
+        val line = text.lineSequence().map { it.trim() }.firstOrNull { it.isNotEmpty() }.orEmpty()
+        val words = line.split("\\s+".toRegex()).filter { it.isNotEmpty() }.take(6).joinToString(" ")
+        val title = words.ifBlank { fallback }
+        return if (title.length > 60) title.take(57).trimEnd() + "..." else title
     }
 
     private fun showLoadingDialog() {
@@ -761,9 +789,10 @@ class CreateQuizActivity : AppCompatActivity() {
                         is CreateQuizUiState.Success -> {
                             hideLoadingDialog()
                             binding.btnGenerateQuiz.isEnabled = true
+                            val quizId = state.quiz.id
                             viewModel.resetState()
                             val intent = Intent(this@CreateQuizActivity, ActiveQuizActivity::class.java).apply {
-                                putExtra(ActiveQuizActivity.EXTRA_QUIZ, state.quiz)
+                                putExtra(ActiveQuizActivity.EXTRA_QUIZ_ID, quizId)
                             }
                             startActivity(intent)
                             finish()
