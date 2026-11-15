@@ -15,10 +15,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.QuizMind">
+        android:theme="@style/Theme.QuizMind.Splash">
         <activity
             android:name=".ui.activities.MainActivity"
             android:exported="true"
+            android:theme="@style/Theme.QuizMind"
             android:windowSoftInputMode="adjustResize">
 
             <!-- <intent-filter> -->
@@ -31,6 +32,7 @@
         <activity
             android:name=".ui.activities.SplashActivity"
             android:exported="true"
+            android:theme="@style/Theme.QuizMind.Splash"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -41,34 +43,47 @@
         <activity
             android:name=".ui.activities.FragmentActivity"
             android:exported="false"
+            android:theme="@style/Theme.QuizMind"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activities.OnboardingActivity"
             android:exported="false"
+            android:theme="@style/Theme.QuizMind"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activities.LoginActivity"
             android:exported="false"
+            android:theme="@style/Theme.QuizMind"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activities.CreateQuizActivity"
             android:exported="false"
+            android:theme="@style/Theme.QuizMind"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activities.CustomCropActivity"
             android:exported="false"
+            android:theme="@style/Theme.QuizMind"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activities.SubjectActivity"
             android:exported="false"
+            android:theme="@style/Theme.QuizMind"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activities.ActiveQuizActivity"
             android:exported="false"
+            android:theme="@style/Theme.QuizMind"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activities.QuizResultActivity"
             android:exported="false"
+            android:theme="@style/Theme.QuizMind"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.activities.HistoryActivity"
+            android:exported="false"
+            android:theme="@style/Theme.QuizMind"
             android:windowSoftInputMode="adjustResize" />
 
         <provider

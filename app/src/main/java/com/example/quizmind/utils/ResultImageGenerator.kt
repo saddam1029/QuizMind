@@ -71,7 +71,12 @@ object ResultImageGenerator {
             typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
             textAlign = Paint.Align.CENTER
         }
-        canvas.drawText("${result.topic} • ${result.subject}", width / 2f, 345f, topicPaint)
+        canvas.drawText(
+            "${result.topic} • ${result.subject} • ${result.difficulty}",
+            width / 2f,
+            345f,
+            topicPaint
+        )
 
         // Circular Score Ring
         val ringCenterX = width / 2f
@@ -204,7 +209,7 @@ object ResultImageGenerator {
             canvas,
             RectF(gridStartX, gridY, gridStartX + gridCardW, gridY + gridCardH),
             "⊕ Correct Marks",
-            "+${result.correctMarks}",
+            QuizScoreCalculator.formatSignedMarks(result.correctMarks),
             Color.parseColor("#16A34A"),
             gridBgPaint,
             chipBorder
@@ -215,7 +220,7 @@ object ResultImageGenerator {
             canvas,
             RectF(gridStartX + gridCardW + gridGapX, gridY, gridStartX + (2 * gridCardW) + gridGapX, gridY + gridCardH),
             "⊖ Negative Marks",
-            "${result.negativeMarks}",
+            QuizScoreCalculator.formatMarks(result.negativeMarks),
             Color.parseColor("#DC2626"),
             gridBgPaint,
             chipBorder

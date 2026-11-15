@@ -200,7 +200,10 @@ class ActiveQuizViewModel @Inject constructor(
             maxScore = score.maxScore,
             accuracyPercentage = score.accuracyPercentage,
             timeTakenSeconds = finalTimeSeconds,
-            questions = questions.toList()
+            questions = questions.toList(),
+            completionId = java.util.UUID.randomUUID().toString(),
+            source = quizSessionStore.getQuizSource(currentQuiz.id) ?: QuizResult.SOURCE_ONLINE,
+            timerEnabled = currentQuiz.timerEnabled
         )
         finishedResult = result
         quizSessionStore.putResult(result)
@@ -208,15 +211,15 @@ class ActiveQuizViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                Log.d(TAG, "Saving quiz result to Firestore in background...")
-                val saveRes = quizRepository.saveQuizResultToFirestore(result)
+                Log.d(TAG, "Saving quiz result history...")
+                val saveRes = quizRepository.saveQuizResult(result)
                 if (saveRes.isSuccess) {
-                    Log.d(TAG, "Quiz result successfully saved to Firestore.")
+                    Log.d(TAG, "Quiz result history saved.")
                 } else {
-                    Log.w(TAG, "Firestore save returned error (non-fatal): ${saveRes.exceptionOrNull()?.message}")
+                    Log.w(TAG, "History save returned error (non-fatal): ${saveRes.exceptionOrNull()?.message}")
                 }
             } catch (e: Exception) {
-                Log.w(TAG, "Background Firestore save exception (non-fatal): ${e.message}")
+                Log.w(TAG, "Background history save exception (non-fatal): ${e.message}")
             }
         }
     }

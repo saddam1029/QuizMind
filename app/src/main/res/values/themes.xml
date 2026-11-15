@@ -1,20 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.QuizMind" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <style name="Base.Theme.QuizMind" parent="Theme.Material3.DayNight.NoActionBar" />
+
+    <style name="Theme.QuizMind" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/qm_background</item>
+        <item name="android:windowBackground">@color/qm_background</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
-
-    <style name="Theme.QuizMind"
-        parent="Theme.MaterialComponents.DayNight.NoActionBar">
-
+    <!-- Shown by the system before SplashActivity inflates — removes the white flash. -->
+    <style name="Theme.QuizMind.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/qm_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_logo</item>
+        <item name="windowSplashScreenAnimationDuration">0</item>
+        <item name="postSplashScreenTheme">@style/Theme.QuizMind</item>
+        <item name="android:windowBackground">@drawable/bg_splash_window</item>
         <item name="android:statusBarColor">@color/qm_background</item>
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-
-        <!-- Black status bar icons -->
+        <item name="android:navigationBarColor">@color/qm_background</item>
         <item name="android:windowLightStatusBar">true</item>
-
     </style>
 
     <style name="ShapeAppearance.QuizMind.RoundedImage" parent="ShapeAppearance.MaterialComponents.SmallComponent">

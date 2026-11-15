@@ -3,21 +3,36 @@ package com.example.quizmind.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.quizmind.R
+import com.example.quizmind.data.model.HistoryItem
+import com.example.quizmind.data.session.QuizSessionStore
 import com.example.quizmind.databinding.ActivityMainBinding
 import com.example.quizmind.model.RecentQuiz
 import com.example.quizmind.ui.adapters.RecentQuizAdapter
+import com.example.quizmind.ui.viewmodel.HomeViewModel
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: RecentQuizAdapter
+    private val viewModel: HomeViewModel by viewModels()
+
+    @Inject
+    lateinit var quizSessionStore: QuizSessionStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         setupUserData()
         setupRecyclerView()
         setupClickListeners()
+        observeViewModel()
     }
 
     private fun setupUserData() {
@@ -65,71 +81,72 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         adapter = RecentQuizAdapter(
-            onItemClick = { _ ->
-                // Handle quiz click
+            onItemClick = { quiz ->
+                openHistoryResult(quiz.id)
             },
             onMenuClick = { _ ->
-                // Handle quiz menu click
+                startActivity(Intent(this, HistoryActivity::class.java))
             }
         )
 
         binding.rvRecentQuizzes.layoutManager = LinearLayoutManager(this)
         binding.rvRecentQuizzes.adapter = adapter
-
-        val sampleQuizzes = listOf(
-            RecentQuiz(
-                id = "1",
-                title = "Biology Basics",
-                questionInfo = "10 questions · Mixed",
-                score = "68/100",
-                iconResId = R.drawable.ic_computer
-            ),
-            RecentQuiz(
-                id = "2",
-                title = "History of Pakistan",
-                questionInfo = "15 questions · Mixed",
-                score = "110/150",
-                iconResId = R.drawable.ic_computer
-            ),
-            RecentQuiz(
-                id = "3",
-                title = "Kotlin Basics",
-                questionInfo = "20 questions · Hard",
-                score = "148/200",
-                iconResId = R.drawable.ic_computer
-            )
-        )
-
-        adapter.submitList(sampleQuizzes)
     }
 
     private fun setupClickListeners() {
         binding.cardTopic.setOnClickListener {
-            val intent = Intent(this, CreateQuizActivity::class.java).apply {
-                putExtra("source_type", "topic")
-            }
-            startActivity(intent)
+            openCreate("topic")
         }
         binding.cardTextNotes.setOnClickListener {
-            val intent = Intent(this, CreateQuizActivity::class.java).apply {
-                putExtra("source_type", "text")
-            }
-            startActivity(intent)
+            openCreate("text")
         }
         binding.cardPdf.setOnClickListener {
-            val intent = Intent(this, CreateQuizActivity::class.java).apply {
-                putExtra("source_type", "pdf")
-            }
-            startActivity(intent)
+            openCreate("pdf")
         }
         binding.cardScanNotes.setOnClickListener {
-            val intent = Intent(this, CreateQuizActivity::class.java).apply {
-                putExtra("source_type", "image")
-            }
-            startActivity(intent)
+            openCreate("image")
         }
         binding.tvViewAll.setOnClickListener {
-            // View All action
+            startActivity(Intent(this, HistoryActivity::class.java))
         }
+    }
+
+    private fun observeViewModel() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    viewModel.credits.collect { credits ->
+                        binding.tvCreditsCount.text = credits.toString()
+                    }
+                }
+                launch {
+                    viewModel.recentHistory.collect { items ->
+                        adapter.submitList(items.take(5).map { it.toRecentQuiz() })
+                    }
+                }
+            }
+        }
+    }
+
+    private fun openCreate(sourceType: String) {
+        startActivity(
+            Intent(this, CreateQuizActivity::class.java).apply {
+                putExtra("source_type", sourceType)
+            }
+        )
+    }
+
+    private fun openHistoryResult(completionId: String) {
+        startActivity(Intent(this, HistoryActivity::class.java))
+    }
+
+    private fun HistoryItem.toRecentQuiz(): RecentQuiz {
+        return RecentQuiz(
+            id = completionId,
+            title = title,
+            questionInfo = subtitle,
+            score = scoreLabel,
+            iconResId = R.drawable.ic_computer
+        )
     }
 }

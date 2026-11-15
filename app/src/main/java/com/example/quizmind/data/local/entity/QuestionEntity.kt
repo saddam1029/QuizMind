@@ -29,7 +29,5 @@ data class QuestionEntity(
     val optionD: String,
     val correctAnswer: String,
     val explanation: String,
-    val hint: String,
-    val selectedAnswer: String?,
-    val isSkipped: Boolean
+    val hint: String
 )

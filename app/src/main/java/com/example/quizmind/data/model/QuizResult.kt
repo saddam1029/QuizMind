@@ -1,5 +1,6 @@
 package com.example.quizmind.data.model
 
+import com.example.quizmind.utils.QuizScoreCalculator
 import java.io.Serializable
 import java.util.Locale
 
@@ -19,15 +20,20 @@ data class QuizResult(
     val accuracyPercentage: Int,
     val timeTakenSeconds: Long,
     val questions: List<Question>,
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = System.currentTimeMillis(),
+    val completionId: String = quizId,
+    val source: String = SOURCE_ONLINE,
+    val timerEnabled: Boolean = false
 ) : Serializable {
 
     val formattedTime: String
-        get() {
-            val minutes = timeTakenSeconds / 60
-            val seconds = timeTakenSeconds % 60
-            return String.format(Locale.US, "%02d:%02d", minutes, seconds)
-        }
+        get() = formatDuration(timeTakenSeconds)
+
+    val averageTimeSeconds: Long
+        get() = QuizScoreCalculator.averageTimeSeconds(timeTakenSeconds, totalQuestions)
+
+    val formattedAverageTime: String
+        get() = formatDuration(averageTimeSeconds)
 
     val feedbackMessage: String
         get() = when {
@@ -36,4 +42,15 @@ data class QuizResult(
             accuracyPercentage >= 40 -> "Decent attempt! Practice more to improve your score."
             else -> "Keep practicing! You will improve with more revision."
         }
+
+    companion object {
+        const val SOURCE_ONLINE = "online"
+        const val SOURCE_DOWNLOADED = "downloaded"
+
+        fun formatDuration(totalSeconds: Long): String {
+            val minutes = totalSeconds / 60
+            val seconds = totalSeconds % 60
+            return String.format(Locale.US, "%02d:%02d", minutes, seconds)
+        }
+    }
 }

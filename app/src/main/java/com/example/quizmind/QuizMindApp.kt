@@ -4,6 +4,7 @@ import android.app.Application
 import com.google.firebase.Firebase
 import com.google.firebase.initialize
 import dagger.hilt.android.HiltAndroidApp
+import java.util.concurrent.Executors
 
 @HiltAndroidApp
 class QuizMindApp : Application() {
@@ -11,10 +12,10 @@ class QuizMindApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // Initialize Firebase
+        // Keep startup light: init Firebase quickly, defer App Check off the first frame.
         Firebase.initialize(context = this)
-
-        // Initialize App Check for the current build type
-        AppCheckInitializer.install()
+        Executors.newSingleThreadExecutor().execute {
+            runCatching { AppCheckInitializer.install() }
+        }
     }
 }

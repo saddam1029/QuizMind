@@ -19,6 +19,12 @@ class QuizSessionStore @Inject constructor() {
         }
     }
 
+    private val quizSources = object : LinkedHashMap<String, String>(8, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, String>?): Boolean {
+            return size > MAX_ENTRIES
+        }
+    }
+
     private val results = object : LinkedHashMap<String, QuizResult>(8, 0.75f, true) {
         override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, QuizResult>?): Boolean {
             return size > MAX_ENTRIES
@@ -26,22 +32,27 @@ class QuizSessionStore @Inject constructor() {
     }
 
     @Synchronized
-    fun putQuiz(quiz: Quiz) {
+    fun putQuiz(quiz: Quiz, source: String = QuizResult.SOURCE_ONLINE) {
         quizzes[quiz.id] = quiz
+        quizSources[quiz.id] = source
     }
 
     @Synchronized
     fun getQuiz(quizId: String): Quiz? = quizzes[quizId]
 
     @Synchronized
+    fun getQuizSource(quizId: String): String? = quizSources[quizId]
+
+    @Synchronized
     fun putResult(result: QuizResult) {
         results[result.quizId] = result
+        results[result.completionId] = result
     }
 
     @Synchronized
-    fun getResult(quizId: String): QuizResult? = results[quizId]
+    fun getResult(id: String): QuizResult? = results[id]
 
     private companion object {
-        const val MAX_ENTRIES = 4
+        const val MAX_ENTRIES = 6
     }
 }

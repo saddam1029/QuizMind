@@ -18,6 +18,7 @@ import com.example.quizmind.data.model.QuizResult
 import com.example.quizmind.databinding.ActivityQuizResultBinding
 import com.example.quizmind.ui.viewmodel.DownloadState
 import com.example.quizmind.ui.viewmodel.QuizResultViewModel
+import com.example.quizmind.utils.QuizScoreCalculator
 import com.example.quizmind.utils.ResultImageGenerator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -58,24 +59,23 @@ class QuizResultActivity : AppCompatActivity() {
     }
 
     private fun populateResultUI(result: QuizResult) {
-        binding.tvResultTopic.text = "${result.topic} • ${result.subject}"
-
-        // Circular score indicator
+        // Card 1 header values only — layout structure stays unchanged.
+        binding.tvResultTopic.text = "${result.topic} • ${result.subject} • ${result.difficulty}"
         binding.circularScoreView.setScore(result.finalScore, result.maxScore, animate = true)
-
-        // Summary chips
         binding.tvCorrectCount.text = result.correctCount.toString()
         binding.tvWrongCount.text = result.wrongCount.toString()
         binding.tvSkippedCount.text = result.skippedCount.toString()
-
-        // Feedback message
         binding.tvFeedbackMessage.text = result.feedbackMessage
 
-        // Performance breakdown
-        binding.tvCorrectMarks.text = "+${result.correctMarks}"
-        binding.tvNegativeMarks.text = result.negativeMarks.toString()
+        // Card 3 performance breakdown
+        binding.tvTotalQuestions.text = result.totalQuestions.toString()
+        binding.tvTotalMarks.text = QuizScoreCalculator.formatMarks(result.maxScore)
+        binding.tvCorrectMarks.text = QuizScoreCalculator.formatSignedMarks(result.correctMarks)
+        binding.tvNegativeMarks.text = QuizScoreCalculator.formatMarks(result.negativeMarks)
         binding.tvAccuracy.text = "${result.accuracyPercentage}%"
+        binding.tvBreakdownFinalScore.text = QuizScoreCalculator.formatMarks(result.finalScore)
         binding.tvTimeTaken.text = result.formattedTime
+        binding.tvAverageTime.text = result.formattedAverageTime
     }
 
     private fun setupListeners(result: QuizResult) {
@@ -124,9 +124,17 @@ class QuizResultActivity : AppCompatActivity() {
             }
         }
 
-        // Download result to Room
+        // Download complete quiz to Room for offline play
         binding.btnDownload.setOnClickListener {
-            viewModel.downloadQuiz(result)
+            if (result.questions.isEmpty()) {
+                Toast.makeText(
+                    this,
+                    "This result has no questions to download. Use History → Download instead.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                viewModel.downloadQuiz(result)
+            }
         }
     }
 

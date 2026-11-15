@@ -7,18 +7,11 @@ import androidx.room.PrimaryKey
 data class QuizEntity(
     @PrimaryKey
     val id: String,
+    val title: String,
     val topic: String,
     val subject: String,
     val difficulty: String,
     val totalQuestions: Int,
-    val correctCount: Int,
-    val wrongCount: Int,
-    val skippedCount: Int,
-    val correctMarks: Int,
-    val negativeMarks: Int,
-    val finalScore: Int,
-    val maxScore: Int,
-    val accuracyPercentage: Int,
-    val timeTakenSeconds: Long,
+    val timerEnabled: Boolean = false,
     val downloadedAt: Long = System.currentTimeMillis()
 )

@@ -223,6 +223,8 @@ class CreateQuizActivity : AppCompatActivity() {
         setupSharedQuizConfiguration()
 
         observeViewModel()
+        // Prefetch the AI model while the user fills the form.
+        viewModel.warmUpAi()
     }
 
     private fun setupCategoryVisibility(sourceType: String) {
@@ -789,6 +791,13 @@ class CreateQuizActivity : AppCompatActivity() {
                         is CreateQuizUiState.Success -> {
                             hideLoadingDialog()
                             binding.btnGenerateQuiz.isEnabled = true
+                            if (state.creditsUsed > 0L) {
+                                Toast.makeText(
+                                    this@CreateQuizActivity,
+                                    "-${state.creditsUsed} credits used",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                             val quizId = state.quiz.id
                             viewModel.resetState()
                             val intent = Intent(this@CreateQuizActivity, ActiveQuizActivity::class.java).apply {
