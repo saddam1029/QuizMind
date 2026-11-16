@@ -11,6 +11,7 @@ import com.example.quizmind.data.model.QuizResult
 import com.example.quizmind.data.model.QuizSourceType
 import java.util.UUID
 
+
 fun QuizResult.toDownloadQuizEntity(): QuizEntity {
     return QuizEntity(
         id = quizId,
@@ -122,7 +123,35 @@ fun HistoryEntity.toHistoryItem(isDownloaded: Boolean): HistoryItem {
         source = source,
         sourceType = QuizSourceType.normalize(sourceType),
         isDownloaded = isDownloaded,
-        firestoreSynced = firestoreSynced
+        firestoreSynced = firestoreSynced,
+        isCompleted = true
+    )
+}
+
+fun QuizEntity.toUnattemptedHistoryItem(): HistoryItem {
+    return HistoryItem(
+        completionId = HistoryItem.downloadPlaceholderId(id),
+        quizId = id,
+        title = title.ifBlank { topic },
+        topic = topic,
+        subject = subject,
+        difficulty = difficulty,
+        totalQuestions = totalQuestions,
+        correctCount = 0,
+        wrongCount = 0,
+        skippedCount = 0,
+        correctMarks = 0,
+        negativeMarks = 0,
+        finalScore = 0,
+        maxScore = 0,
+        accuracyPercentage = 0,
+        timeTakenSeconds = 0L,
+        completedAt = downloadedAt,
+        source = QuizResult.SOURCE_DOWNLOADED,
+        sourceType = QuizSourceType.normalize(sourceType),
+        isDownloaded = true,
+        firestoreSynced = true,
+        isCompleted = false
     )
 }
 

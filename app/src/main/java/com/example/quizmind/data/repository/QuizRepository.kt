@@ -6,6 +6,7 @@ import android.net.NetworkCapabilities
 import com.example.quizmind.data.credits.CreditPolicy
 import com.example.quizmind.data.local.dao.QuizDao
 import com.example.quizmind.data.local.entity.PendingDeleteEntity
+import com.example.quizmind.data.local.entity.QuizEntity
 import com.example.quizmind.data.local.entity.QuizWithQuestions
 import com.example.quizmind.data.mapper.toDownloadQuestionEntities
 import com.example.quizmind.data.mapper.toDownloadQuizEntity
@@ -14,6 +15,7 @@ import com.example.quizmind.data.mapper.toHistoryItem
 import com.example.quizmind.data.mapper.toPlayableQuiz
 import com.example.quizmind.data.mapper.toQuestionList
 import com.example.quizmind.data.mapper.toQuizResult
+import com.example.quizmind.data.mapper.toUnattemptedHistoryItem
 import com.example.quizmind.data.model.GeneratedQuiz
 import com.example.quizmind.data.model.HistoryItem
 import com.example.quizmind.data.model.Quiz
@@ -139,7 +141,11 @@ class QuizRepository @Inject constructor(
 
         var synced = 0
 
-        quizDao.getPendingDeletes().forEach { pending ->
+        for (pending in quizDao.getPendingDeletes()) {
+            if (HistoryItem.isDownloadPlaceholderId(pending.completionId)) {
+                quizDao.removePendingDelete(pending.completionId)
+                continue
+            }
             val deleted = firestoreDataSource.deleteHistory(pending.completionId)
             if (deleted.isSuccess) {
                 quizDao.removePendingDelete(pending.completionId)
@@ -165,7 +171,7 @@ class QuizRepository @Inject constructor(
         }
 
     /**
-     * Room-only completed history (downloaded attempts + pending online saves).
+     * Room source of truth for offline: completed local attempts + downloaded packages.
      */
     fun observeLocalHistory(query: String = ""): Flow<List<HistoryItem>> {
         val localFlow = if (query.isBlank()) {
@@ -174,8 +180,11 @@ class QuizRepository @Inject constructor(
             quizDao.searchHistory(query.trim())
         }
         return combine(localFlow, quizDao.getAllDownloadedQuizzes()) { localHistory, downloads ->
-            val downloadedIds = downloads.map { it.quiz.id }.toSet()
-            localHistory.map { it.toHistoryItem(isDownloaded = it.quizId in downloadedIds) }
+            val downloadEntities = downloads.map { it.quiz }
+            val attempts = localHistory.map { entity ->
+                entity.toHistoryItem(isDownloaded = downloadEntities.any { it.id == entity.quizId })
+            }
+            mergeAttemptsWithDownloads(attempts, downloadEntities, query)
         }
     }
 
@@ -186,23 +195,26 @@ class QuizRepository @Inject constructor(
             } else {
                 quizDao.searchHistoryOnce(query.trim())
             }
-            val downloadedIds = quizDao.getAllDownloadedQuizIds().toSet()
-            local.map { it.toHistoryItem(isDownloaded = it.quizId in downloadedIds) }
+            val downloadEntities = quizDao.getAllDownloadedQuizEntities()
+            val attempts = local.map { entity ->
+                entity.toHistoryItem(isDownloaded = downloadEntities.any { it.id == entity.quizId })
+            }
+            mergeAttemptsWithDownloads(attempts, downloadEntities, query)
         }
 
     /**
-     * Online: Firestore history ∪ unsynced Room rows (deduped by completionId).
-     * Offline: Room only.
+     * Online: Firestore history ∪ Room attempts ∪ Room downloads.
+     * Offline: Room attempts ∪ Room downloads (never depends on Firestore).
      */
     suspend fun loadMergedHistory(query: String = ""): Result<List<HistoryItem>> =
         withContext(Dispatchers.IO) {
             syncPendingHistory()
-            val downloadedIds = quizDao.getAllDownloadedQuizIds().toSet()
+            val downloadEntities = quizDao.getAllDownloadedQuizEntities()
+            val downloadedIds = downloadEntities.map { it.id }.toSet()
             val q = query.trim()
 
             if (!isOnline()) {
-                val local = getLocalHistorySnapshot(q)
-                return@withContext Result.success(local)
+                return@withContext Result.success(getLocalHistorySnapshot(q))
             }
 
             val remote = firestoreDataSource.fetchHistory().getOrElse { error ->
@@ -217,31 +229,65 @@ class QuizRepository @Inject constructor(
             val pendingLocal = quizDao.getUnsyncedHistory()
                 .map { it.toHistoryItem(isDownloaded = it.quizId in downloadedIds) }
 
+            val allLocalAttempts = quizDao.getAllHistory()
+                .map { it.toHistoryItem(isDownloaded = it.quizId in downloadedIds) }
+
             val merged = LinkedHashMap<String, HistoryItem>()
             remote.forEach { item ->
-                merged[item.completionId] = item.copy(isDownloaded = item.quizId in downloadedIds)
+                merged[item.completionId] = item.copy(
+                    isDownloaded = item.quizId in downloadedIds,
+                    isCompleted = true
+                )
             }
-            // Unsynced local wins so offline renames/completions are not overwritten.
+            allLocalAttempts.forEach { item ->
+                if (!merged.containsKey(item.completionId)) {
+                    merged[item.completionId] = item
+                }
+            }
             pendingLocal.forEach { item ->
                 merged[item.completionId] = item
             }
 
-            val items = merged.values
-                .sortedByDescending { it.completedAt }
-                .filter {
-                    q.isBlank() ||
-                        it.title.contains(q, ignoreCase = true) ||
-                        it.topic.contains(q, ignoreCase = true)
-                }
-            Result.success(items)
+            Result.success(
+                mergeAttemptsWithDownloads(merged.values.toList(), downloadEntities, q)
+            )
         }
 
-    /** @deprecated Prefer [loadMergedHistory]. Kept for callers that expect the old name. */
+    private fun mergeAttemptsWithDownloads(
+        attempts: List<HistoryItem>,
+        downloads: List<QuizEntity>,
+        query: String
+    ): List<HistoryItem> {
+        val downloadedIds = downloads.map { it.id }.toSet()
+        val attemptQuizIds = attempts.map { it.quizId }.toSet()
+        val q = query.trim()
+
+        val attemptItems = attempts.map { item ->
+            item.copy(isDownloaded = item.quizId in downloadedIds || item.isDownloaded)
+        }
+
+        val unattempted = downloads
+            .filter { it.id !in attemptQuizIds }
+            .map { it.toUnattemptedHistoryItem() }
+
+        return (attemptItems + unattempted)
+            .filter {
+                q.isBlank() ||
+                    it.title.contains(q, ignoreCase = true) ||
+                    it.topic.contains(q, ignoreCase = true)
+            }
+            .sortedByDescending { it.completedAt }
+    }
+
     suspend fun loadOnlineHistory(query: String = ""): Result<List<HistoryItem>> =
         loadMergedHistory(query)
 
     fun observeHistory(query: String = ""): Flow<List<HistoryItem>> = observeLocalHistory(query)
 
+    /**
+     * Saves the full quiz package for offline play and caches the completion
+     * summary in Room so History remains visible without internet.
+     */
     suspend fun downloadQuizToRoom(result: QuizResult): Result<Unit> = withContext(Dispatchers.IO) {
         try {
             if (result.questions.isEmpty()) {
@@ -250,11 +296,18 @@ class QuizRepository @Inject constructor(
                 )
             }
             if (quizDao.isQuizDownloaded(result.quizId)) {
+                // Still ensure the completion summary is cached for offline History.
+                quizDao.insertHistory(
+                    result.toHistoryEntity(synced = true, persistQuestions = false)
+                )
                 return@withContext Result.failure(IllegalStateException("Quiz already downloaded."))
             }
             quizDao.insertQuizWithQuestions(
                 result.toDownloadQuizEntity(),
                 result.toDownloadQuestionEntities()
+            )
+            quizDao.insertHistory(
+                result.toHistoryEntity(synced = true, persistQuestions = false)
             )
             Result.success(Unit)
         } catch (e: Exception) {
@@ -293,6 +346,13 @@ class QuizRepository @Inject constructor(
                 return@withContext Result.failure(IllegalArgumentException("Title cannot be empty."))
             }
 
+            if (!item.isCompleted || HistoryItem.isDownloadPlaceholderId(item.completionId)) {
+                if (quizDao.isQuizDownloaded(item.quizId)) {
+                    quizDao.renameDownloadedQuiz(item.quizId, title)
+                }
+                return@withContext Result.success(Unit)
+            }
+
             val local = quizDao.getHistoryById(item.completionId)
             if (local != null) {
                 quizDao.renameHistory(item.completionId, title)
@@ -313,7 +373,6 @@ class QuizRepository @Inject constructor(
                 if (local != null) {
                     quizDao.markHistoryUnsynced(item.completionId)
                 } else {
-                    // Online-only item renamed while offline: keep a pending local row.
                     quizDao.insertHistory(
                         item.copy(title = title, topic = title, firestoreSynced = false)
                             .toLocalPendingEntity(title)
@@ -349,11 +408,21 @@ class QuizRepository @Inject constructor(
         )
 
     /**
-     * Deletes a completion history record from Room and Firestore.
-     * Downloaded quiz packages remain available for offline replay.
+     * Deletes a completion history record, or a download package for unattempted downloads.
      */
     suspend fun deleteHistory(item: HistoryItem): Result<Unit> = withContext(Dispatchers.IO) {
+        if (!item.isCompleted || HistoryItem.isDownloadPlaceholderId(item.completionId)) {
+            quizDao.deleteQuizById(item.quizId)
+            quizDao.deleteHistoryByQuizId(item.quizId)
+            return@withContext Result.success(Unit)
+        }
+
         quizDao.deleteHistory(item.completionId)
+
+        // If this was a downloaded quiz and no local attempts remain, keep the package
+        // so offline retake still works. Only remove package when explicitly deleting
+        // an unattempted download card (handled above).
+
         if (isOnline()) {
             val remote = firestoreDataSource.deleteHistory(item.completionId)
             quizDao.removePendingDelete(item.completionId)

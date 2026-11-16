@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity() {
             id = completionId,
             title = title,
             questionInfo = subtitle,
-            score = scoreLabel,
+            score = if (isCompleted) scoreLabel else "Downloaded",
             iconResId = com.example.quizmind.utils.HistoryDisplayHelper.subjectIconRes(subject)
         )
     }

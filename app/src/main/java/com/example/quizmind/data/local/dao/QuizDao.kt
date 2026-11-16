@@ -41,6 +41,12 @@ interface QuizDao {
     @Query("SELECT id FROM downloaded_quizzes")
     suspend fun getAllDownloadedQuizIds(): List<String>
 
+    @Query("SELECT * FROM downloaded_quizzes ORDER BY downloadedAt DESC")
+    suspend fun getAllDownloadedQuizEntities(): List<QuizEntity>
+
+    @Query("DELETE FROM history_entries WHERE quizId = :quizId")
+    suspend fun deleteHistoryByQuizId(quizId: String)
+
     @Query("UPDATE downloaded_quizzes SET title = :title, topic = :title WHERE id = :quizId")
     suspend fun renameDownloadedQuiz(quizId: String, title: String)
 

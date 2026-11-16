@@ -21,11 +21,24 @@ data class HistoryItem(
     val source: String,
     val sourceType: String = QuizSourceType.TOPIC,
     val isDownloaded: Boolean = false,
-    val firestoreSynced: Boolean = true
+    val firestoreSynced: Boolean = true,
+    /** False for Room download packages that have never been attempted locally. */
+    val isCompleted: Boolean = true
 ) {
     val scoreLabel: String
-        get() = "$finalScore/$maxScore"
+        get() = if (isCompleted) "$finalScore/$maxScore" else "Downloaded"
 
     val subtitle: String
-        get() = "$totalQuestions questions · $difficulty · $accuracyPercentage%"
+        get() = if (isCompleted) {
+            "$totalQuestions questions · $difficulty · $accuracyPercentage%"
+        } else {
+            "$totalQuestions questions · $difficulty · Downloaded"
+        }
+
+    companion object {
+        fun downloadPlaceholderId(quizId: String): String = "download_$quizId"
+
+        fun isDownloadPlaceholderId(completionId: String): Boolean =
+            completionId.startsWith("download_")
+    }
 }

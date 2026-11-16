@@ -60,7 +60,8 @@ class HistoryActivity : AppCompatActivity() {
         }
 
         adapter = HistoryAdapter(
-            onMenuClick = { item -> showMenu(item) }
+            onMenuClick = { item -> showMenu(item) },
+            onPlayClick = { item -> playDownloadedQuiz(item) }
         )
         binding.rvHistory.layoutManager = LinearLayoutManager(this)
         binding.rvHistory.adapter = adapter
@@ -175,13 +176,18 @@ class HistoryActivity : AppCompatActivity() {
         dialog.setContentView(view)
 
         view.findViewById<TextView>(R.id.tvMenuTitle).text = item.title
-        view.findViewById<TextView>(R.id.tvMenuSubtitle).text =
+        view.findViewById<TextView>(R.id.tvMenuSubtitle).text = if (item.isCompleted) {
             "${item.totalQuestions} Questions · ${item.difficulty.ifBlank { "Mixed" }} · Latest score: ${item.finalScore}/${item.maxScore}"
+        } else {
+            "${item.totalQuestions} Questions · ${item.difficulty.ifBlank { "Mixed" }} · Downloaded"
+        }
 
         val btnDownload = view.findViewById<View>(R.id.btnDownload)
         val tvDownloadLabel = view.findViewById<TextView>(R.id.tvDownloadLabel)
         val tvDownloadMeta = view.findViewById<TextView>(R.id.tvDownloadMeta)
         val btnGiveAgain = view.findViewById<View>(R.id.btnGiveAgain)
+        val btnReview = view.findViewById<View>(R.id.btnReview)
+        val btnShare = view.findViewById<View>(R.id.btnShare)
 
         if (item.isDownloaded) {
             tvDownloadLabel.text = "Already Downloaded"
@@ -192,29 +198,21 @@ class HistoryActivity : AppCompatActivity() {
 
         view.findViewById<View>(R.id.btnCloseMenu).setOnClickListener { dialog.dismiss() }
 
-        view.findViewById<View>(R.id.btnReview).setOnClickListener {
-            dialog.dismiss()
-            openResultSummary(item)
+        if (item.isCompleted) {
+            btnReview.visibility = View.VISIBLE
+            btnShare.visibility = View.VISIBLE
+            btnReview.setOnClickListener {
+                dialog.dismiss()
+                openResultSummary(item)
+            }
+        } else {
+            btnReview.visibility = View.GONE
+            btnShare.visibility = View.GONE
         }
 
         btnGiveAgain.setOnClickListener {
             dialog.dismiss()
-            lifecycleScope.launch {
-                val quiz = viewModel.prepareReplay(item)
-                if (quiz == null) {
-                    Toast.makeText(
-                        this@HistoryActivity,
-                        "Download this quiz first to play it again offline.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    startActivity(
-                        Intent(this@HistoryActivity, ActiveQuizActivity::class.java).apply {
-                            putExtra(ActiveQuizActivity.EXTRA_QUIZ_ID, quiz.id)
-                        }
-                    )
-                }
-            }
+            playDownloadedQuiz(item)
         }
 
         btnDownload.setOnClickListener {
@@ -228,8 +226,9 @@ class HistoryActivity : AppCompatActivity() {
             }
         }
 
-        view.findViewById<View>(R.id.btnShare).setOnClickListener {
+        btnShare.setOnClickListener {
             dialog.dismiss()
+            if (!item.isCompleted) return@setOnClickListener
             try {
                 ResultImageGenerator.shareResult(this, item.toQuizResultSummary())
             } catch (e: Exception) {
@@ -302,6 +301,10 @@ class HistoryActivity : AppCompatActivity() {
     }
 
     private fun openResultSummary(item: HistoryItem) {
+        if (!item.isCompleted) {
+            playDownloadedQuiz(item)
+            return
+        }
         val result = item.toQuizResultSummary()
         quizSessionStore.putResult(result)
         startActivity(
@@ -309,5 +312,24 @@ class HistoryActivity : AppCompatActivity() {
                 putExtra(QuizResultActivity.EXTRA_RESULT_ID, result.completionId)
             }
         )
+    }
+
+    private fun playDownloadedQuiz(item: HistoryItem) {
+        lifecycleScope.launch {
+            val quiz = viewModel.prepareReplay(item)
+            if (quiz == null) {
+                Toast.makeText(
+                    this@HistoryActivity,
+                    "Download this quiz first to play it offline.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                startActivity(
+                    Intent(this@HistoryActivity, ActiveQuizActivity::class.java).apply {
+                        putExtra(ActiveQuizActivity.EXTRA_QUIZ_ID, quiz.id)
+                    }
+                )
+            }
+        }
     }
 }
