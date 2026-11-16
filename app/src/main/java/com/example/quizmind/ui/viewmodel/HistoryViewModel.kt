@@ -42,17 +42,17 @@ class HistoryViewModel @Inject constructor(
         observeJob?.cancel()
         observeJob = viewModelScope.launch {
             _uiState.value = HistoryUiState.Loading
-            quizRepository.syncPendingHistory()
-
-            if (quizRepository.isOnline()) {
-                val remote = quizRepository.loadOnlineHistory(_query.value)
-                remote.onSuccess { items ->
-                    _uiState.value = HistoryUiState.Ready(items, offline = false)
-                }.onFailure {
-                    observeLocal(fallbackError = it.localizedMessage)
-                }
-            } else {
+            val offline = !quizRepository.isOnline()
+            if (offline) {
                 observeLocal()
+                return@launch
+            }
+
+            val merged = quizRepository.loadMergedHistory(_query.value)
+            merged.onSuccess { items ->
+                _uiState.value = HistoryUiState.Ready(items, offline = false)
+            }.onFailure { error ->
+                observeLocal(fallbackError = error.localizedMessage)
             }
         }
     }
@@ -65,11 +65,13 @@ class HistoryViewModel @Inject constructor(
     private fun observeLocal(fallbackError: String? = null) {
         observeJob?.cancel()
         observeJob = viewModelScope.launch {
-            quizRepository.observeHistory(_query.value).collectLatest { items ->
-                if (items.isEmpty() && fallbackError != null && quizRepository.isOnline().not()) {
-                    _uiState.value = HistoryUiState.Ready(items, offline = true)
-                } else {
-                    _uiState.value = HistoryUiState.Ready(items, offline = !quizRepository.isOnline())
+            quizRepository.observeLocalHistory(_query.value).collectLatest { items ->
+                _uiState.value = HistoryUiState.Ready(
+                    items = items,
+                    offline = !quizRepository.isOnline()
+                )
+                if (items.isEmpty() && fallbackError != null && quizRepository.isOnline()) {
+                    _uiState.value = HistoryUiState.Error(fallbackError)
                 }
             }
         }

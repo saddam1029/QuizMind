@@ -637,7 +637,8 @@ class CreateQuizActivity : AppCompatActivity() {
                         questionCount = selectedQuestionCount,
                         difficulty = selectedDifficulty,
                         timerEnabled = timerEnabled,
-                        isTopic = true
+                        isTopic = true,
+                        sourceType = activeSourceType
                     )
                 }
                 "text" -> {
@@ -654,7 +655,8 @@ class CreateQuizActivity : AppCompatActivity() {
                         questionCount = selectedQuestionCount,
                         difficulty = selectedDifficulty,
                         timerEnabled = timerEnabled,
-                        isTopic = false
+                        isTopic = false,
+                        sourceType = activeSourceType
                     )
                 }
                 "pdf" -> {
@@ -684,7 +686,8 @@ class CreateQuizActivity : AppCompatActivity() {
                         questionCount = selectedQuestionCount,
                         difficulty = selectedDifficulty,
                         timerEnabled = timerEnabled,
-                        isTopic = false
+                        isTopic = false,
+                        sourceType = activeSourceType
                     )
                 }
                 "image" -> {
@@ -713,7 +716,8 @@ class CreateQuizActivity : AppCompatActivity() {
                         questionCount = selectedQuestionCount,
                         difficulty = selectedDifficulty,
                         timerEnabled = timerEnabled,
-                        isTopic = false
+                        isTopic = false,
+                        sourceType = activeSourceType
                     )
                 }
             }

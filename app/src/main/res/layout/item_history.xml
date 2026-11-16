@@ -107,22 +107,24 @@
 
     <ImageView
         android:id="@+id/ivMenu"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="@dimen/_24sdp"
+        android:layout_height="@dimen/_24sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:background="?attr/selectableItemBackgroundBorderless"
         android:contentDescription="@null"
+        android:padding="@dimen/_3sdp"
         android:src="@drawable/ic_menu_dots"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivIcon" />
 
     <LinearLayout
         android:id="@+id/layoutScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/_12sdp"
+        android:layout_marginEnd="@dimen/_6sdp"
         android:gravity="end"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/ivMenu"
         app:layout_constraintTop_toTopOf="@id/ivIcon">
 
 

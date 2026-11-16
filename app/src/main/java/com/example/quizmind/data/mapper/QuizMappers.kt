@@ -8,6 +8,7 @@ import com.example.quizmind.data.model.HistoryItem
 import com.example.quizmind.data.model.Question
 import com.example.quizmind.data.model.Quiz
 import com.example.quizmind.data.model.QuizResult
+import com.example.quizmind.data.model.QuizSourceType
 import java.util.UUID
 
 fun QuizResult.toDownloadQuizEntity(): QuizEntity {
@@ -19,6 +20,7 @@ fun QuizResult.toDownloadQuizEntity(): QuizEntity {
         difficulty = difficulty,
         totalQuestions = totalQuestions,
         timerEnabled = timerEnabled,
+        sourceType = QuizSourceType.normalize(sourceType),
         downloadedAt = System.currentTimeMillis()
     )
 }
@@ -50,7 +52,8 @@ fun QuizWithQuestions.toPlayableQuiz(): Quiz {
         difficulty = quiz.difficulty,
         questionCount = ordered.size,
         questions = ordered.map { it.toQuestion() },
-        timerEnabled = quiz.timerEnabled
+        timerEnabled = quiz.timerEnabled,
+        sourceType = QuizSourceType.normalize(quiz.sourceType)
     )
 }
 
@@ -67,7 +70,7 @@ fun QuestionEntity.toQuestion(): Question {
     )
 }
 
-fun QuizResult.toHistoryEntity(synced: Boolean): HistoryEntity {
+fun QuizResult.toHistoryEntity(synced: Boolean, persistQuestions: Boolean = false): HistoryEntity {
     return HistoryEntity(
         completionId = completionId,
         quizId = quizId,
@@ -87,7 +90,13 @@ fun QuizResult.toHistoryEntity(synced: Boolean): HistoryEntity {
         timeTakenSeconds = timeTakenSeconds,
         completedAt = timestamp,
         source = source,
-        firestoreSynced = synced
+        sourceType = QuizSourceType.normalize(sourceType),
+        firestoreSynced = synced,
+        questionsJson = if (persistQuestions && questions.isNotEmpty()) {
+            questions.toQuestionsJson()
+        } else {
+            null
+        }
     )
 }
 
@@ -111,6 +120,7 @@ fun HistoryEntity.toHistoryItem(isDownloaded: Boolean): HistoryItem {
         timeTakenSeconds = timeTakenSeconds,
         completedAt = completedAt,
         source = source,
+        sourceType = QuizSourceType.normalize(sourceType),
         isDownloaded = isDownloaded,
         firestoreSynced = firestoreSynced
     )
@@ -135,6 +145,31 @@ fun HistoryItem.toQuizResultSummary(): QuizResult {
         questions = emptyList(),
         timestamp = completedAt,
         completionId = completionId,
-        source = source
+        source = source,
+        sourceType = QuizSourceType.normalize(sourceType)
+    )
+}
+
+fun HistoryEntity.toQuizResult(questions: List<Question>): QuizResult {
+    return QuizResult(
+        quizId = quizId,
+        topic = title,
+        subject = subject,
+        difficulty = difficulty,
+        totalQuestions = totalQuestions,
+        correctCount = correctCount,
+        wrongCount = wrongCount,
+        skippedCount = skippedCount,
+        correctMarks = correctMarks,
+        negativeMarks = negativeMarks,
+        finalScore = finalScore,
+        maxScore = maxScore,
+        accuracyPercentage = accuracyPercentage,
+        timeTakenSeconds = timeTakenSeconds,
+        questions = questions,
+        timestamp = completedAt,
+        completionId = completionId,
+        source = source,
+        sourceType = QuizSourceType.normalize(sourceType)
     )
 }

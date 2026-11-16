@@ -19,6 +19,7 @@ data class HistoryItem(
     val timeTakenSeconds: Long,
     val completedAt: Long,
     val source: String,
+    val sourceType: String = QuizSourceType.TOPIC,
     val isDownloaded: Boolean = false,
     val firestoreSynced: Boolean = true
 ) {

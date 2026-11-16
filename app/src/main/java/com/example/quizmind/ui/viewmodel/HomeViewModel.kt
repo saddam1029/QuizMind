@@ -6,8 +6,10 @@ import com.example.quizmind.data.credits.CreditPolicy
 import com.example.quizmind.data.model.HistoryItem
 import com.example.quizmind.data.repository.QuizRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,18 +22,24 @@ class HomeViewModel @Inject constructor(
     val credits: StateFlow<Long> = quizRepository.observeCredits()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), CreditPolicy.STARTING_CREDITS)
 
-    val recentHistory: StateFlow<List<HistoryItem>> = quizRepository.observeHistory()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+    private val _recentHistory = MutableStateFlow<List<HistoryItem>>(emptyList())
+    val recentHistory: StateFlow<List<HistoryItem>> = _recentHistory.asStateFlow()
 
     init {
+        refreshHistory()
+    }
+
+    fun refreshHistory() {
         viewModelScope.launch {
             try {
-                quizRepository.syncPendingHistory()
-                if (quizRepository.isOnline()) {
-                    quizRepository.loadOnlineHistory()
+                val result = quizRepository.loadMergedHistory()
+                _recentHistory.value = result.getOrElse {
+                    quizRepository.getLocalHistorySnapshot()
                 }
             } catch (_: Exception) {
-                // Home must open even when Firestore is offline.
+                _recentHistory.value = runCatching {
+                    quizRepository.getLocalHistorySnapshot()
+                }.getOrDefault(emptyList())
             }
         }
     }

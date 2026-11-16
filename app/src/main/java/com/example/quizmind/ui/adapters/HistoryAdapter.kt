@@ -5,15 +5,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.quizmind.R
 import com.example.quizmind.data.model.HistoryItem
+import com.example.quizmind.data.model.QuizSourceType
 import com.example.quizmind.databinding.ItemHistoryBinding
+import com.example.quizmind.utils.HistoryDisplayHelper
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 class HistoryAdapter(
-    private val onItemClick: (HistoryItem) -> Unit,
     private val onMenuClick: (HistoryItem) -> Unit
 ) : ListAdapter<HistoryItem, HistoryAdapter.HistoryViewHolder>(Diff) {
 
@@ -36,17 +36,18 @@ class HistoryAdapter(
             binding.tvTitle.text = item.title
             binding.tvQuestionCount.text = "${item.totalQuestions} Qs"
             binding.tvDifficulty.text = item.difficulty.ifBlank { "Mixed" }
-            binding.tvSourceType.text = "Topic"
-            binding.ivSourceType.setImageResource(R.drawable.ic_topic_small)
+            binding.tvSourceType.text = QuizSourceType.displayLabel(item.sourceType)
+            binding.ivSourceType.setImageResource(HistoryDisplayHelper.sourceTypeIconRes(item.sourceType))
             binding.tvScorePercent.text = "${item.accuracyPercentage}%"
             binding.tvScore.text = "${item.finalScore} / ${item.maxScore}"
             binding.tvMeta.text = dateFormat.format(Date(item.completedAt))
-            binding.ivIcon.setImageResource(R.drawable.ic_biology)
+            binding.ivIcon.setImageResource(HistoryDisplayHelper.subjectIconRes(item.subject))
 
-            binding.root.setOnClickListener { onMenuClick(item) }
-            binding.btnReview.setOnClickListener { onItemClick(item) }
             binding.ivMenu.setOnClickListener { onMenuClick(item) }
-
+            // Review is visible but intentionally not wired yet.
+            binding.btnReview.setOnClickListener(null)
+            binding.btnReview.isClickable = false
+            binding.root.setOnClickListener(null)
         }
     }
 

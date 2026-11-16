@@ -3,6 +3,7 @@ package com.example.quizmind.di
 import android.content.Context
 import androidx.room.Room
 import com.example.quizmind.data.local.QuizDatabase
+import com.example.quizmind.data.local.QuizDatabaseMigrations
 import com.example.quizmind.data.local.dao.QuizDao
 import dagger.Module
 import dagger.Provides
@@ -24,7 +25,10 @@ object DatabaseModule {
             context,
             QuizDatabase::class.java,
             "quizmind_database"
-        ).fallbackToDestructiveMigration().build()
+        )
+            .addMigrations(QuizDatabaseMigrations.MIGRATION_2_3)
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

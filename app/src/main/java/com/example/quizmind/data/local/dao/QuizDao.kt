@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.quizmind.data.local.entity.HistoryEntity
+import com.example.quizmind.data.local.entity.PendingDeleteEntity
 import com.example.quizmind.data.local.entity.QuestionEntity
 import com.example.quizmind.data.local.entity.QuizEntity
 import com.example.quizmind.data.local.entity.QuizWithQuestions
@@ -52,8 +53,18 @@ interface QuizDao {
     @Query("SELECT * FROM history_entries ORDER BY completedAt DESC")
     fun observeHistory(): Flow<List<HistoryEntity>>
 
-    @Query("SELECT * FROM history_entries WHERE title LIKE '%' || :query || '%' OR topic LIKE '%' || :query || '%' ORDER BY completedAt DESC")
+    @Query("SELECT * FROM history_entries ORDER BY completedAt DESC")
+    suspend fun getAllHistory(): List<HistoryEntity>
+
+    @Query(
+        "SELECT * FROM history_entries WHERE title LIKE '%' || :query || '%' OR topic LIKE '%' || :query || '%' ORDER BY completedAt DESC"
+    )
     fun searchHistory(query: String): Flow<List<HistoryEntity>>
+
+    @Query(
+        "SELECT * FROM history_entries WHERE title LIKE '%' || :query || '%' OR topic LIKE '%' || :query || '%' ORDER BY completedAt DESC"
+    )
+    suspend fun searchHistoryOnce(query: String): List<HistoryEntity>
 
     @Query("SELECT * FROM history_entries WHERE completionId = :completionId LIMIT 1")
     suspend fun getHistoryById(completionId: String): HistoryEntity?
@@ -64,6 +75,9 @@ interface QuizDao {
     @Query("UPDATE history_entries SET firestoreSynced = 1 WHERE completionId = :completionId")
     suspend fun markHistorySynced(completionId: String)
 
+    @Query("UPDATE history_entries SET firestoreSynced = 0 WHERE completionId = :completionId")
+    suspend fun markHistoryUnsynced(completionId: String)
+
     @Query("UPDATE history_entries SET title = :title, topic = :title WHERE completionId = :completionId")
     suspend fun renameHistory(completionId: String, title: String)
 
@@ -72,4 +86,13 @@ interface QuizDao {
 
     @Query("UPDATE history_entries SET title = :title, topic = :title WHERE quizId = :quizId")
     suspend fun renameHistoryByQuizId(quizId: String, title: String)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPendingDelete(entry: PendingDeleteEntity)
+
+    @Query("SELECT * FROM pending_history_deletes ORDER BY createdAt ASC")
+    suspend fun getPendingDeletes(): List<PendingDeleteEntity>
+
+    @Query("DELETE FROM pending_history_deletes WHERE completionId = :completionId")
+    suspend fun removePendingDelete(completionId: String)
 }

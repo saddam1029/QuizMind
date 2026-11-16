@@ -23,7 +23,8 @@ data class QuizResult(
     val timestamp: Long = System.currentTimeMillis(),
     val completionId: String = quizId,
     val source: String = SOURCE_ONLINE,
-    val timerEnabled: Boolean = false
+    val timerEnabled: Boolean = false,
+    val sourceType: String = QuizSourceType.TOPIC
 ) : Serializable {
 
     val formattedTime: String

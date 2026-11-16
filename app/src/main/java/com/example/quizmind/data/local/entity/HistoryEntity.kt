@@ -8,7 +8,8 @@ import androidx.room.PrimaryKey
     tableName = "history_entries",
     indices = [
         Index(value = ["quizId"]),
-        Index(value = ["completedAt"])
+        Index(value = ["completedAt"]),
+        Index(value = ["firestoreSynced"])
     ]
 )
 data class HistoryEntity(
@@ -31,5 +32,8 @@ data class HistoryEntity(
     val timeTakenSeconds: Long,
     val completedAt: Long,
     val source: String,
-    val firestoreSynced: Boolean = false
+    val sourceType: String = "topic",
+    val firestoreSynced: Boolean = false,
+    /** Serialized questions for pending online sync when download package is unavailable. */
+    val questionsJson: String? = null
 )

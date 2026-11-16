@@ -203,7 +203,8 @@ class ActiveQuizViewModel @Inject constructor(
             questions = questions.toList(),
             completionId = java.util.UUID.randomUUID().toString(),
             source = quizSessionStore.getQuizSource(currentQuiz.id) ?: QuizResult.SOURCE_ONLINE,
-            timerEnabled = currentQuiz.timerEnabled
+            timerEnabled = currentQuiz.timerEnabled,
+            sourceType = currentQuiz.sourceType
         )
         finishedResult = result
         quizSessionStore.putResult(result)

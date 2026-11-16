@@ -13,5 +13,6 @@ data class QuizEntity(
     val difficulty: String,
     val totalQuestions: Int,
     val timerEnabled: Boolean = false,
+    val sourceType: String = "topic",
     val downloadedAt: Long = System.currentTimeMillis()
 )

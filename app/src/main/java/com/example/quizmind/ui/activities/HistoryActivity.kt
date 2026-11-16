@@ -60,7 +60,6 @@ class HistoryActivity : AppCompatActivity() {
         }
 
         adapter = HistoryAdapter(
-            onItemClick = { item -> openResultSummary(item) },
             onMenuClick = { item -> showMenu(item) }
         )
         binding.rvHistory.layoutManager = LinearLayoutManager(this)

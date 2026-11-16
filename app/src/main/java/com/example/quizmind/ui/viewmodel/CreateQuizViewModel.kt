@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizmind.data.model.Quiz
 import com.example.quizmind.data.model.QuizResult
+import com.example.quizmind.data.model.QuizSourceType
 import com.example.quizmind.data.repository.QuizRepository
 import com.example.quizmind.data.session.QuizSessionStore
 import com.example.quizmind.utils.TopicValidator
@@ -46,7 +47,8 @@ class CreateQuizViewModel @Inject constructor(
         subject: String,
         questionCount: Int,
         difficulty: String,
-        timerEnabled: Boolean
+        timerEnabled: Boolean,
+        sourceType: String = QuizSourceType.TOPIC
     ) {
         generateQuizFromContent(
             title = rawTopic,
@@ -55,7 +57,8 @@ class CreateQuizViewModel @Inject constructor(
             questionCount = questionCount,
             difficulty = difficulty,
             timerEnabled = timerEnabled,
-            isTopic = true
+            isTopic = true,
+            sourceType = sourceType
         )
     }
 
@@ -66,7 +69,8 @@ class CreateQuizViewModel @Inject constructor(
         questionCount: Int,
         difficulty: String,
         timerEnabled: Boolean,
-        isTopic: Boolean
+        isTopic: Boolean,
+        sourceType: String = QuizSourceType.TOPIC
     ) {
         if (_uiState.value is CreateQuizUiState.Loading) {
             Log.w(TAG, "generateQuizFromContent ignored: Generation already in progress.")
@@ -112,11 +116,14 @@ class CreateQuizViewModel @Inject constructor(
                         "Quiz generated with ${generated.quiz.questions.size} questions. " +
                             "Credits used=${deduction.deducted}"
                     )
-                    quizSessionStore.putQuiz(generated.quiz, QuizResult.SOURCE_ONLINE)
+                    val quizWithSource = generated.quiz.copy(
+                        sourceType = QuizSourceType.normalize(sourceType)
+                    )
+                    quizSessionStore.putQuiz(quizWithSource, QuizResult.SOURCE_ONLINE)
                     if (deduction.deducted > 0L) {
                         _creditToast.emit(deduction.deducted)
                     }
-                    _uiState.value = CreateQuizUiState.Success(generated.quiz, deduction.deducted)
+                    _uiState.value = CreateQuizUiState.Success(quizWithSource, deduction.deducted)
                 },
                 onFailure = { throwable ->
                     Log.e(TAG, "Quiz generation failed: ${throwable.message}", throwable)

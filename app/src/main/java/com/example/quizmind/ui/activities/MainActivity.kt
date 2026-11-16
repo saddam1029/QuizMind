@@ -54,6 +54,11 @@ class MainActivity : AppCompatActivity() {
         observeViewModel()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshHistory()
+    }
+
     private fun setupUserData() {
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
@@ -155,7 +160,7 @@ class MainActivity : AppCompatActivity() {
             title = title,
             questionInfo = subtitle,
             score = scoreLabel,
-            iconResId = R.drawable.ic_computer
+            iconResId = com.example.quizmind.utils.HistoryDisplayHelper.subjectIconRes(subject)
         )
     }
 }

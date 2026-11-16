@@ -12,5 +12,6 @@ data class Quiz(
     val questions: List<Question>,
     val timerEnabled: Boolean = false,
     var timeTakenSeconds: Long = 0L,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    val sourceType: String = QuizSourceType.TOPIC
 ) : Serializable

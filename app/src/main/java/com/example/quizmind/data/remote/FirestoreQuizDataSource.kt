@@ -3,6 +3,7 @@ package com.example.quizmind.data.remote
 import com.example.quizmind.data.model.HistoryItem
 import com.example.quizmind.data.model.Question
 import com.example.quizmind.data.model.QuizResult
+import com.example.quizmind.data.model.QuizSourceType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -75,6 +76,7 @@ class FirestoreQuizDataSource @Inject constructor() {
                         ?: (data["timestamp"] as? Number)?.toLong()
                         ?: 0L,
                     source = data["source"] as? String ?: QuizResult.SOURCE_ONLINE,
+                    sourceType = QuizSourceType.normalize(data["sourceType"] as? String),
                     firestoreSynced = true
                 )
             }
@@ -173,7 +175,8 @@ class FirestoreQuizDataSource @Inject constructor() {
                         ?: System.currentTimeMillis(),
                     completionId = completionId,
                     source = data["source"] as? String ?: QuizResult.SOURCE_ONLINE,
-                    timerEnabled = data["timerEnabled"] as? Boolean ?: false
+                    timerEnabled = data["timerEnabled"] as? Boolean ?: false,
+                    sourceType = QuizSourceType.normalize(data["sourceType"] as? String)
                 )
             )
         } catch (e: Exception) {
@@ -205,6 +208,7 @@ class FirestoreQuizDataSource @Inject constructor() {
             "completedAt" to result.timestamp,
             "timestamp" to result.timestamp,
             "source" to result.source,
+            "sourceType" to QuizSourceType.normalize(result.sourceType),
             "timerEnabled" to result.timerEnabled,
             "questions" to result.questions.map { q ->
                 hashMapOf(
