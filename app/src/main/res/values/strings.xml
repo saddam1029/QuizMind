@@ -42,7 +42,7 @@
     <string name="qm_scan_notes_subtitle">Capture a page</string>
     <string name="qm_recent_quizzes">Recent Quizzes</string>
     <string name="qm_recent_quizzes_subtitle">Review progress &amp; repeat</string>
-    <string name="qm_view_all">View All ></string>
+    <string name="qm_view_all">View All</string>
     <string name="qm_latest_score">Latest score</string>
 
     <string name="qm_clear">Clear</string>

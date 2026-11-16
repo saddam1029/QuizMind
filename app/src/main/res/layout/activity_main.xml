@@ -368,17 +368,33 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardPdf" />
 
-        <TextView
+        <LinearLayout
             android:id="@+id/tvViewAll"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_semi_bold"
-            android:text="@string/qm_view_all"
-            android:textColor="@color/app_color"
-            android:textSize="@dimen/_12sdp"
+            android:gravity="center_vertical"
             app:layout_constraintBottom_toBottomOf="@+id/tvRecentQuizzesTitle"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvRecentQuizzesTitle" />
+            app:layout_constraintTop_toTopOf="@+id/tvRecentQuizzesTitle">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_semi_bold"
+                android:text="@string/qm_view_all"
+                android:textColor="@color/app_color"
+                android:textSize="@dimen/_12sdp" />
+
+            <ImageView
+                android:layout_width="@dimen/_9sdp"
+                android:layout_height="@dimen/_9sdp"
+                android:contentDescription="@null"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:src="@drawable/ic_right_arow" />
+
+        </LinearLayout>
+
+
 
         <TextView
             android:id="@+id/tvRecentQuizzesSubtitle"
@@ -403,7 +419,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvRecentQuizzesSubtitle"
             tools:itemCount="3"
-            tools:listitem="@layout/item_recent_quiz" />
+            tools:listitem="@layout/item_history" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutEmpty"

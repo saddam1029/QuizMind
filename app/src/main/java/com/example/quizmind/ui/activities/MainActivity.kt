@@ -3,6 +3,7 @@ package com.example.quizmind.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -14,11 +15,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.quizmind.R
+import com.example.quizmind.data.mapper.toQuizResultSummary
 import com.example.quizmind.data.model.HistoryItem
+import com.example.quizmind.data.model.QuizResult
+import com.example.quizmind.data.repository.QuizRepository
 import com.example.quizmind.data.session.QuizSessionStore
 import com.example.quizmind.databinding.ActivityMainBinding
-import com.example.quizmind.model.RecentQuiz
-import com.example.quizmind.ui.adapters.RecentQuizAdapter
+import com.example.quizmind.ui.adapters.HistoryAdapter
 import com.example.quizmind.ui.viewmodel.HomeViewModel
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
@@ -30,11 +33,14 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private lateinit var adapter: RecentQuizAdapter
+    private lateinit var adapter: HistoryAdapter
     private val viewModel: HomeViewModel by viewModels()
 
     @Inject
     lateinit var quizSessionStore: QuizSessionStore
+
+    @Inject
+    lateinit var quizRepository: QuizRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,13 +93,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = RecentQuizAdapter(
-            onItemClick = { quiz ->
-                openHistoryResult(quiz.id)
-            },
-            onMenuClick = { _ ->
+        adapter = HistoryAdapter(
+            onMenuClick = {
                 startActivity(Intent(this, HistoryActivity::class.java))
-            }
+            },
+            onReviewClick = { item -> openResultSummary(item) },
+            onPlayClick = { item -> playDownloadedQuiz(item) }
         )
 
         binding.rvRecentQuizzes.layoutManager = LinearLayoutManager(this)
@@ -131,11 +136,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 launch {
                     viewModel.recentHistory.collect { items ->
-                        val recentList = items.take(5).map { it.toRecentQuiz() }
+                        val recentList = items.take(5)
                         adapter.submitList(recentList)
                         val empty = recentList.isEmpty()
                         binding.layoutEmpty.visibility = if (empty) View.VISIBLE else View.GONE
-                        binding.rvRecentQuizzes.visibility = if (empty) View.GONE else android.view.View.VISIBLE
+                        binding.rvRecentQuizzes.visibility = if (empty) View.GONE else View.VISIBLE
                     }
                 }
             }
@@ -150,17 +155,37 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
-    private fun openHistoryResult(completionId: String) {
-        startActivity(Intent(this, HistoryActivity::class.java))
+    private fun openResultSummary(item: HistoryItem) {
+        if (!item.isCompleted) {
+            playDownloadedQuiz(item)
+            return
+        }
+        val result = item.toQuizResultSummary()
+        quizSessionStore.putResult(result)
+        startActivity(
+            Intent(this, QuizResultActivity::class.java).apply {
+                putExtra(QuizResultActivity.EXTRA_RESULT_ID, result.completionId)
+            }
+        )
     }
 
-    private fun HistoryItem.toRecentQuiz(): RecentQuiz {
-        return RecentQuiz(
-            id = completionId,
-            title = title,
-            questionInfo = subtitle,
-            score = if (isCompleted) scoreLabel else "Downloaded",
-            iconResId = com.example.quizmind.utils.HistoryDisplayHelper.subjectIconRes(subject)
-        )
+    private fun playDownloadedQuiz(item: HistoryItem) {
+        lifecycleScope.launch {
+            val quiz = quizRepository.getPlayableDownloadedQuiz(item.quizId)
+            if (quiz == null) {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Download this quiz first to play it offline.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                quizSessionStore.putQuiz(quiz, QuizResult.SOURCE_DOWNLOADED)
+                startActivity(
+                    Intent(this@MainActivity, ActiveQuizActivity::class.java).apply {
+                        putExtra(ActiveQuizActivity.EXTRA_QUIZ_ID, quiz.id)
+                    }
+                )
+            }
+        }
     }
 }

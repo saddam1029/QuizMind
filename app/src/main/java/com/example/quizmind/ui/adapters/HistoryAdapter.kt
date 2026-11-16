@@ -18,7 +18,8 @@ import java.util.Locale
 
 class HistoryAdapter(
     private val onMenuClick: (HistoryItem) -> Unit,
-    private val onPlayClick: (HistoryItem) -> Unit
+    private val onReviewClick: (HistoryItem) -> Unit,
+    private val onPlayClick: (HistoryItem) -> Unit = onReviewClick
 ) : ListAdapter<HistoryItem, HistoryAdapter.HistoryViewHolder>(Diff) {
 
     private val dateFormat = SimpleDateFormat("d MMM yyyy", Locale.US)
@@ -54,16 +55,10 @@ class HistoryAdapter(
                 )
                 binding.tvScore.text = "${item.finalScore} / ${item.maxScore}"
                 binding.tvMeta.text = dateFormat.format(Date(item.completedAt))
-                if (item.isDownloaded) {
-                    binding.btnReview.text = "Play →"
-                    binding.btnReview.isClickable = true
-                    binding.btnReview.isFocusable = true
-                    binding.btnReview.setOnClickListener { onPlayClick(item) }
-                } else {
-                    binding.btnReview.text = "Review →"
-                    binding.btnReview.isClickable = false
-                    binding.btnReview.setOnClickListener(null)
-                }
+                binding.btnReview.text = "Review →"
+                binding.btnReview.isClickable = true
+                binding.btnReview.isFocusable = true
+                binding.btnReview.setOnClickListener { onReviewClick(item) }
             } else {
                 binding.tvScorePercent.visibility = View.VISIBLE
                 binding.tvScorePercent.text = "Saved"
