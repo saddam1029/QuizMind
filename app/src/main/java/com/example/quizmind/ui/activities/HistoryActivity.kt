@@ -1,14 +1,18 @@
 package com.example.quizmind.ui.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -62,6 +66,48 @@ class HistoryActivity : AppCompatActivity() {
         binding.rvHistory.layoutManager = LinearLayoutManager(this)
         binding.rvHistory.adapter = adapter
 
+        binding.ivSearch.setOnClickListener {
+            openSearch()
+        }
+
+        binding.ivBack.setOnClickListener {
+            if (binding.etSearch.visibility == View.VISIBLE) {
+                closeSearch()
+            } else {
+                finish()
+            }
+        }
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (binding.etSearch.visibility == View.VISIBLE) {
+                    closeSearch()
+                } else {
+                    finish()
+                }
+            }
+        })
+
+        @SuppressLint("ClickableViewAccessibility")
+        binding.etSearch.setOnTouchListener { v, event ->
+            if (event.action == MotionEvent.ACTION_UP) {
+                val drawableEnd = binding.etSearch.compoundDrawablesRelative[2]
+                    ?: binding.etSearch.compoundDrawables[2]
+                if (drawableEnd != null) {
+                    val width = drawableEnd.intrinsicWidth.takeIf { it > 0 } ?: 48
+                    val extraTapArea = 32
+                    val rightBound = binding.etSearch.right - binding.etSearch.paddingRight
+                    val leftBound = rightBound - width - extraTapArea
+                    if (event.rawX >= leftBound) {
+                        closeSearch()
+                        v.performClick()
+                        return@setOnTouchListener true
+                    }
+                }
+            }
+            false
+        }
+
         binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
@@ -71,6 +117,27 @@ class HistoryActivity : AppCompatActivity() {
         })
 
         observeState()
+    }
+
+    private fun openSearch() {
+        binding.ivSearch.visibility = View.GONE
+        binding.tvHistory.visibility = View.GONE
+        binding.ivBack.visibility = View.GONE
+        binding.etSearch.visibility = View.VISIBLE
+        binding.etSearch.requestFocus()
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(binding.etSearch, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    private fun closeSearch() {
+        binding.etSearch.setText("")
+        binding.etSearch.visibility = View.GONE
+        binding.ivSearch.visibility = View.VISIBLE
+        binding.tvHistory.visibility = View.VISIBLE
+        binding.ivBack.visibility = View.VISIBLE
+        viewModel.search("")
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.etSearch.windowToken, 0)
     }
 
     override fun onResume() {
@@ -109,12 +176,26 @@ class HistoryActivity : AppCompatActivity() {
         dialog.setContentView(view)
 
         view.findViewById<TextView>(R.id.tvMenuTitle).text = item.title
-        val btnDownload = view.findViewById<TextView>(R.id.btnDownload)
-        val btnGiveAgain = view.findViewById<TextView>(R.id.btnGiveAgain)
+        view.findViewById<TextView>(R.id.tvMenuSubtitle).text =
+            "${item.totalQuestions} Questions · ${item.difficulty.ifBlank { "Mixed" }} · Latest score: ${item.finalScore}/${item.maxScore}"
+
+        val btnDownload = view.findViewById<View>(R.id.btnDownload)
+        val tvDownloadLabel = view.findViewById<TextView>(R.id.tvDownloadLabel)
+        val tvDownloadMeta = view.findViewById<TextView>(R.id.tvDownloadMeta)
+        val btnGiveAgain = view.findViewById<View>(R.id.btnGiveAgain)
 
         if (item.isDownloaded) {
-            btnDownload.text = "Already Downloaded"
+            tvDownloadLabel.text = "Already Downloaded"
+            tvDownloadMeta.text = "Saved"
             btnDownload.isEnabled = false
+            btnDownload.alpha = 0.5f
+        }
+
+        view.findViewById<View>(R.id.btnCloseMenu).setOnClickListener { dialog.dismiss() }
+
+        view.findViewById<View>(R.id.btnReview).setOnClickListener {
+            dialog.dismiss()
+            openResultSummary(item)
         }
 
         btnGiveAgain.setOnClickListener {
@@ -148,7 +229,7 @@ class HistoryActivity : AppCompatActivity() {
             }
         }
 
-        view.findViewById<TextView>(R.id.btnShare).setOnClickListener {
+        view.findViewById<View>(R.id.btnShare).setOnClickListener {
             dialog.dismiss()
             try {
                 ResultImageGenerator.shareResult(this, item.toQuizResultSummary())
@@ -157,12 +238,12 @@ class HistoryActivity : AppCompatActivity() {
             }
         }
 
-        view.findViewById<TextView>(R.id.btnRename).setOnClickListener {
+        view.findViewById<View>(R.id.btnRename).setOnClickListener {
             dialog.dismiss()
             showRenameDialog(item)
         }
 
-        view.findViewById<TextView>(R.id.btnDelete).setOnClickListener {
+        view.findViewById<View>(R.id.btnDelete).setOnClickListener {
             dialog.dismiss()
             showDeleteDialog(item)
         }
@@ -176,39 +257,49 @@ class HistoryActivity : AppCompatActivity() {
         input.setText(item.title)
         input.setSelection(input.text.length)
 
-        MaterialAlertDialogBuilder(this)
+        val dialog = MaterialAlertDialogBuilder(this)
             .setView(view)
-            .setPositiveButton("Save") { _, _ ->
-                viewModel.rename(item, input.text.toString()) { result ->
-                    result.onSuccess {
-                        Toast.makeText(this, "Quiz renamed.", Toast.LENGTH_SHORT).show()
-                    }.onFailure {
-                        Toast.makeText(this, it.localizedMessage ?: "Rename failed.", Toast.LENGTH_SHORT).show()
-                    }
+            .create()
+
+        view.findViewById<TextView>(R.id.btnCancelRename).setOnClickListener { dialog.dismiss() }
+        view.findViewById<TextView>(R.id.btnSaveRename).setOnClickListener {
+            dialog.dismiss()
+            viewModel.rename(item, input.text.toString()) { result ->
+                result.onSuccess {
+                    Toast.makeText(this, "Quiz renamed.", Toast.LENGTH_SHORT).show()
+                }.onFailure {
+                    Toast.makeText(this, it.localizedMessage ?: "Rename failed.", Toast.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+        }
+
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
     }
 
     private fun showDeleteDialog(item: HistoryItem) {
         val view = LayoutInflater.from(this).inflate(R.layout.dialog_delete_history, null)
         view.findViewById<TextView>(R.id.tvDeleteMessage).text =
-            "Delete \"${item.title}\" from history? This cannot be undone."
+            "${item.title} and its result will be permanently removed."
 
-        MaterialAlertDialogBuilder(this)
+        val dialog = MaterialAlertDialogBuilder(this)
             .setView(view)
-            .setPositiveButton("Delete") { _, _ ->
-                viewModel.delete(item) { result ->
-                    result.onSuccess {
-                        Toast.makeText(this, "History item deleted.", Toast.LENGTH_SHORT).show()
-                    }.onFailure {
-                        Toast.makeText(this, it.localizedMessage ?: "Delete failed.", Toast.LENGTH_SHORT).show()
-                    }
+            .create()
+
+        view.findViewById<TextView>(R.id.btnCancelDelete).setOnClickListener { dialog.dismiss() }
+        view.findViewById<TextView>(R.id.btnConfirmDelete).setOnClickListener {
+            dialog.dismiss()
+            viewModel.delete(item) { result ->
+                result.onSuccess {
+                    Toast.makeText(this, "History item deleted.", Toast.LENGTH_SHORT).show()
+                }.onFailure {
+                    Toast.makeText(this, it.localizedMessage ?: "Delete failed.", Toast.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("Cancel", null)
-            .show()
+        }
+
+        dialog.show()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
     }
 
     private fun openResultSummary(item: HistoryItem) {

@@ -8,7 +8,7 @@
     android:background="@color/qm_background"
     tools:context=".ui.activities.HistoryActivity">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,41 +19,72 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:layout_width="@dimen/_28sdp"
-            android:layout_height="@dimen/_28sdp"
+            android:id="@+id/iv_back"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
             android:contentDescription="@null"
-            android:src="@drawable/history_image" />
+            android:padding="@dimen/_8sdp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
 
         <TextView
+            android:id="@+id/tv_history"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/_10sdp"
             android:layout_weight="1"
             android:fontFamily="@font/inter_bold"
             android:text="History"
+            android:layout_marginStart="@dimen/_10sdp"
             android:textColor="@color/qm_text_primary"
-            android:textSize="@dimen/_18sdp" />
-    </LinearLayout>
+            android:textSize="@dimen/_18sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_back"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
 
-    <EditText
-        android:id="@+id/etSearch"
-        android:layout_width="0dp"
-        android:layout_height="@dimen/_42sdp"
-        android:layout_marginHorizontal="@dimen/_16sdp"
-        android:background="@drawable/bg_search_input"
-        android:drawableStart="@drawable/ic_search"
-        android:drawablePadding="@dimen/_8sdp"
-        android:fontFamily="@font/inter_regular"
-        android:hint="Search quiz history"
-        android:imeOptions="actionSearch"
-        android:inputType="text"
-        android:paddingHorizontal="@dimen/_12sdp"
-        android:textColor="@color/qm_text_primary"
-        android:textColorHint="@color/qm_text_secondary"
-        android:textSize="@dimen/_12sdp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/topBar" />
+        <ImageView
+            android:id="@+id/iv_search"
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            android:contentDescription="@null"
+            android:padding="@dimen/_8sdp"
+            android:src="@drawable/ic_search"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <EditText
+            android:id="@+id/etSearch"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_42sdp"
+            android:layout_marginHorizontal="@dimen/_16sdp"
+            android:background="@drawable/bg_search_input"
+            android:drawableStart="@drawable/ic_search"
+            android:drawableEnd="@drawable/ic_cross"
+            android:drawableTint="@color/app_color"
+            android:drawablePadding="@dimen/_8sdp"
+            android:fontFamily="@font/inter_regular"
+            android:hint="Search quiz history"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:visibility="gone"
+            android:paddingHorizontal="@dimen/_12sdp"
+            android:textColor="@color/qm_text_primary"
+            android:textColorHint="@color/qm_text_secondary"
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -64,12 +95,13 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etSearch" />
+        app:layout_constraintTop_toBottomOf="@id/topBar" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHistory"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="gone"
         android:clipToPadding="false"
         android:paddingHorizontal="@dimen/_16sdp"
         android:paddingTop="@dimen/_12sdp"
@@ -77,46 +109,72 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etSearch"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
         tools:listitem="@layout/item_history" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layoutEmpty"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/_300sdp"
+        android:layout_height="@dimen/_300sdp"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="@dimen/_24sdp"
-        android:visibility="gone"
+        android:visibility="visible"
+        android:background="@drawable/iv_empty_history"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/etSearch">
+        app:layout_constraintTop_toBottomOf="@id/topBar">
 
-        <ImageView
-            android:layout_width="@dimen/_160sdp"
-            android:layout_height="@dimen/_160sdp"
-            android:contentDescription="@null"
-            android:src="@drawable/empty_history_image" />
 
         <TextView
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_12sdp"
             android:fontFamily="@font/inter_bold"
             android:text="No quiz history yet"
+            android:layout_marginTop="@dimen/_15sdp"
             android:textColor="@color/qm_text_primary"
-            android:textSize="@dimen/_15sdp" />
+            android:textSize="@dimen/_15sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.5" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/_4sdp"
             android:fontFamily="@font/inter_regular"
             android:gravity="center"
-            android:text="Complete a quiz to see it here."
+            android:layout_marginTop="@dimen/_5sdp"
+            android:text="Create your first AI-powered quiz and\nstart learning."
             android:textColor="@color/qm_text_secondary"
-            android:textSize="@dimen/_12sdp" />
-    </LinearLayout>
+            android:textSize="@dimen/_12sdp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDone"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginHorizontal="@dimen/_30sdp"
+            android:layout_marginBottom="@dimen/_20sdp"
+            android:background="@drawable/bg_splash_button"
+            android:fontFamily="@font/inter_semi_bold"
+            android:text="Create Quiz"
+            app:icon="@drawable/ic_create_quiz_robo"
+            app:iconGravity="textStart"
+            app:iconSize="@dimen/_15sdp"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_13sdp"
+            app:backgroundTint="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

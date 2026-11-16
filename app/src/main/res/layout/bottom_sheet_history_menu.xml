@@ -1,77 +1,286 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_card_white"
+    android:background="@drawable/bg_bottom_sheet"
     android:orientation="vertical"
-    android:padding="@dimen/_16sdp">
+    android:paddingBottom="@dimen/_16sdp">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_90sdp"
-        android:adjustViewBounds="true"
-        android:contentDescription="@null"
-        android:scaleType="fitCenter"
-        android:src="@drawable/bottom_sheet_menu_image" />
+    <View
+        android:layout_width="@dimen/_36sdp"
+        android:layout_height="@dimen/_4sdp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/_10sdp"
+        android:background="@drawable/bg_pill_gray" />
 
-    <TextView
-        android:id="@+id/tvMenuTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:fontFamily="@font/inter_bold"
-        android:text="Quiz actions"
-        android:textColor="@color/qm_text_primary"
-        android:textSize="@dimen/_15sdp" />
+        android:layout_marginTop="@dimen/_14sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_20sdp">
 
-    <TextView
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvMenuTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/inter_bold"
+                android:maxLines="1"
+                android:text="Biology Basics"
+                android:textColor="@color/qm_text_primary"
+                android:textSize="@dimen/_16sdp" />
+
+            <TextView
+                android:id="@+id/tvMenuSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_2sdp"
+                android:ellipsize="end"
+                android:fontFamily="@font/inter_regular"
+                android:maxLines="1"
+                android:text="10 Questions · Mixed · Latest score: 68/100"
+                android:textColor="@color/qm_text_secondary"
+                android:textSize="@dimen/_11sdp" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/btnCloseMenu"
+            android:layout_width="@dimen/_28sdp"
+            android:layout_height="@dimen/_28sdp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@null"
+            android:padding="@dimen/_6sdp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/qm_text_secondary" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/_14sdp"
+        android:background="@color/qm_border" />
+
+    <!-- Review -->
+    <LinearLayout
+        android:id="@+id/btnReview"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_48sdp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_20sdp">
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_review"
+            app:tint="@color/qm_text_primary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_semi_bold"
+            android:text="Review"
+            android:textColor="@color/qm_text_primary"
+            android:textSize="@dimen/_13sdp" />
+
+        <ImageView
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_chevron_right" />
+    </LinearLayout>
+
+    <!-- Give Quiz Again -->
+    <LinearLayout
         android:id="@+id/btnGiveAgain"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_42sdp"
+        android:layout_height="@dimen/_48sdp"
+        android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
-        android:fontFamily="@font/inter_semi_bold"
-        android:text="Give Quiz Again"
-        android:textColor="@color/qm_text_primary"
-        android:textSize="@dimen/_13sdp" />
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_20sdp">
 
-    <TextView
-        android:id="@+id/btnDownload"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/_42sdp"
-        android:gravity="center_vertical"
-        android:fontFamily="@font/inter_semi_bold"
-        android:text="Download Quiz"
-        android:textColor="@color/qm_text_primary"
-        android:textSize="@dimen/_13sdp" />
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_refresh"
+            app:tint="@color/qm_text_primary" />
 
-    <TextView
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_semi_bold"
+            android:text="Give Quiz Again"
+            android:textColor="@color/qm_text_primary"
+            android:textSize="@dimen/_13sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_retake_chip"
+            android:fontFamily="@font/inter_semi_bold"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:paddingVertical="@dimen/_3sdp"
+            android:text="Retake"
+            android:textColor="@color/app_color"
+            android:textSize="@dimen/_10sdp" />
+    </LinearLayout>
+
+    <!-- Share Result -->
+    <LinearLayout
         android:id="@+id/btnShare"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_42sdp"
+        android:layout_height="@dimen/_48sdp"
+        android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
-        android:fontFamily="@font/inter_semi_bold"
-        android:text="Share Result"
-        android:textColor="@color/qm_text_primary"
-        android:textSize="@dimen/_13sdp" />
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_20sdp">
 
-    <TextView
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_share"
+            app:tint="@color/qm_text_primary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_semi_bold"
+            android:text="Share Result"
+            android:textColor="@color/qm_text_primary"
+            android:textSize="@dimen/_13sdp" />
+
+        <ImageView
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_chevron_right" />
+    </LinearLayout>
+
+    <!-- Download Result -->
+    <LinearLayout
+        android:id="@+id/btnDownload"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_48sdp"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_20sdp">
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_download"
+            app:tint="@color/qm_text_primary" />
+
+        <TextView
+            android:id="@+id/tvDownloadLabel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_semi_bold"
+            android:text="Download Result"
+            android:textColor="@color/qm_text_primary"
+            android:textSize="@dimen/_13sdp" />
+
+        <TextView
+            android:id="@+id/tvDownloadMeta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_semi_bold"
+            android:text="PDF"
+            android:textColor="@color/qm_text_secondary"
+            android:textSize="@dimen/_11sdp" />
+    </LinearLayout>
+
+    <!-- Rename -->
+    <LinearLayout
         android:id="@+id/btnRename"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_42sdp"
+        android:layout_height="@dimen/_48sdp"
+        android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
-        android:fontFamily="@font/inter_semi_bold"
-        android:text="Rename"
-        android:textColor="@color/qm_text_primary"
-        android:textSize="@dimen/_13sdp" />
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_20sdp">
 
-    <TextView
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_paste"
+            app:tint="@color/qm_text_primary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_semi_bold"
+            android:text="Rename"
+            android:textColor="@color/qm_text_primary"
+            android:textSize="@dimen/_13sdp" />
+
+        <ImageView
+            android:layout_width="@dimen/_16sdp"
+            android:layout_height="@dimen/_16sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_chevron_right" />
+    </LinearLayout>
+
+    <!-- Delete -->
+    <LinearLayout
         android:id="@+id/btnDelete"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/_42sdp"
+        android:layout_height="@dimen/_48sdp"
+        android:background="?attr/selectableItemBackground"
         android:gravity="center_vertical"
-        android:fontFamily="@font/inter_semi_bold"
-        android:text="Delete"
-        android:textColor="#DC2626"
-        android:textSize="@dimen/_13sdp" />
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_20sdp">
+
+        <ImageView
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_remove" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_14sdp"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_semi_bold"
+            android:text="Delete"
+            android:textColor="#BA1A1A"
+            android:textSize="@dimen/_13sdp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_semi_bold"
+            android:text="Permanent"
+            android:textColor="#BA1A1A"
+            android:textSize="@dimen/_11sdp" />
+    </LinearLayout>
 
 </LinearLayout>

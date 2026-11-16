@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/_10sdp"
-    android:background="@drawable/bg_card_white"
-    android:padding="@dimen/_12sdp">
+    android:background="@drawable/bg_history_card">
 
     <ImageView
         android:id="@+id/ivIcon"
-        android:layout_width="@dimen/_36sdp"
-        android:layout_height="@dimen/_36sdp"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginStart="@dimen/_12sdp"
+        android:layout_marginTop="@dimen/_12sdp"
         android:background="@drawable/bg_icon_container"
-        android:padding="@dimen/_8sdp"
-        android:src="@drawable/ic_computer"
+        android:contentDescription="@null"
+        android:padding="@dimen/_9sdp"
+        android:src="@drawable/ic_biology"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,60 +29,175 @@
         android:ellipsize="end"
         android:fontFamily="@font/inter_bold"
         android:maxLines="1"
-        android:text="Biology Basics"
         android:textColor="@color/qm_text_primary"
         android:textSize="@dimen/_13sdp"
-        app:layout_constraintEnd_toStartOf="@id/ivMenu"
+        app:layout_constraintEnd_toStartOf="@id/layoutScore"
         app:layout_constraintStart_toEndOf="@id/ivIcon"
-        app:layout_constraintTop_toTopOf="@id/ivIcon" />
+        app:layout_constraintTop_toTopOf="@id/ivIcon"
+        tools:text="Biology Basics" />
 
-    <TextView
-        android:id="@+id/tvSubtitle"
+    <LinearLayout
+        android:id="@+id/layoutMeta"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_2sdp"
-        android:fontFamily="@font/inter_regular"
-        android:text="10 questions · Mixed · 70%"
-        android:textColor="@color/qm_text_secondary"
-        android:textSize="@dimen/_11sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="@id/tvTitle"
         app:layout_constraintStart_toStartOf="@id/tvTitle"
-        app:layout_constraintTop_toBottomOf="@id/tvTitle" />
+        app:layout_constraintTop_toBottomOf="@id/tvTitle">
 
-    <TextView
-        android:id="@+id/tvScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:fontFamily="@font/inter_semi_bold"
-        android:text="7/10"
-        android:textColor="@color/app_color"
-        android:textSize="@dimen/_12sdp"
-        app:layout_constraintStart_toStartOf="@id/tvTitle"
-        app:layout_constraintTop_toBottomOf="@id/tvSubtitle" />
+        <TextView
+            android:id="@+id/tvQuestionCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_qs_chip"
+            android:fontFamily="@font/inter_semi_bold"
+            android:paddingHorizontal="@dimen/_7sdp"
+            android:paddingVertical="@dimen/_2sdp"
+            android:textColor="@color/app_color"
+            android:textSize="@dimen/_9sdp"
+            tools:text="10 Qs" />
 
-    <TextView
-        android:id="@+id/tvMeta"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/_8sdp"
-        android:fontFamily="@font/inter_regular"
-        android:text="Science · Online"
-        android:textColor="@color/qm_text_secondary"
-        android:textSize="@dimen/_11sdp"
-        app:layout_constraintBottom_toBottomOf="@id/tvScore"
-        app:layout_constraintEnd_toEndOf="@id/tvTitle"
-        app:layout_constraintStart_toEndOf="@id/tvScore"
-        app:layout_constraintTop_toTopOf="@id/tvScore" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:fontFamily="@font/inter_regular"
+            android:text="·"
+            android:textColor="@color/qm_text_secondary"
+            android:textSize="@dimen/_10sdp" />
+
+        <TextView
+            android:id="@+id/tvDifficulty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_regular"
+            android:textColor="@color/qm_text_secondary"
+            android:textSize="@dimen/_10sdp"
+            tools:text="Mixed" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/_5sdp"
+            android:fontFamily="@font/inter_regular"
+            android:text="·"
+            android:textColor="@color/qm_text_secondary"
+            android:textSize="@dimen/_10sdp" />
+
+        <ImageView
+            android:id="@+id/ivSourceType"
+            android:layout_width="@dimen/_11sdp"
+            android:layout_height="@dimen/_11sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_topic_small" />
+
+
+        <TextView
+            android:id="@+id/tvSourceType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_3sdp"
+            android:fontFamily="@font/inter_semi_bold"
+            android:textColor="@color/app_color"
+            android:textSize="@dimen/_10sdp"
+            tools:text="Topic" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/ivMenu"
-        android:layout_width="@dimen/_28sdp"
-        android:layout_height="@dimen/_28sdp"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:padding="@dimen/_4sdp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@null"
         android:src="@drawable/ic_menu_dots"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/layoutScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/_12sdp"
+        android:gravity="end"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ivIcon">
+
+
+        <TextView
+            android:id="@+id/tvScorePercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_score_pill"
+            android:fontFamily="@font/inter_bold"
+            android:paddingHorizontal="@dimen/_8sdp"
+            android:paddingVertical="@dimen/_3sdp"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10sdp"
+            tools:text="68%" />
+
+        <TextView
+            android:id="@+id/tvScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_3sdp"
+            android:fontFamily="@font/inter_semi_bold"
+            android:textColor="@color/qm_text_secondary"
+            android:textSize="@dimen/_10sdp"
+            tools:text="68 / 100" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/layoutFooter"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_36sdp"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:background="@drawable/bg_history_footer"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_12sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivIcon">
+
+        <ImageView
+            android:layout_width="@dimen/_14sdp"
+            android:layout_height="@dimen/_14sdp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_check"
+            app:tint="@color/qm_text_secondary" />
+
+        <TextView
+            android:id="@+id/tvMeta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_6sdp"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:fontFamily="@font/inter_regular"
+            android:maxLines="1"
+            android:textColor="@color/qm_text_secondary"
+            android:textSize="@dimen/_10sdp"
+            tools:text="18 May 2026" />
+
+        <TextView
+            android:id="@+id/btnReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/inter_semi_bold"
+            android:paddingHorizontal="@dimen/_4sdp"
+            android:paddingVertical="@dimen/_2sdp"
+            android:text="Review →"
+            android:textColor="@color/app_color"
+            android:textSize="@dimen/_11sdp" />
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

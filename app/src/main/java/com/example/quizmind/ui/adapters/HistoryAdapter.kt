@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.quizmind.R
 import com.example.quizmind.data.model.HistoryItem
-import com.example.quizmind.data.model.QuizResult
 import com.example.quizmind.databinding.ItemHistoryBinding
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -18,7 +17,7 @@ class HistoryAdapter(
     private val onMenuClick: (HistoryItem) -> Unit
 ) : ListAdapter<HistoryItem, HistoryAdapter.HistoryViewHolder>(Diff) {
 
-    private val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.US)
+    private val dateFormat = SimpleDateFormat("d MMM yyyy", Locale.US)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val binding = ItemHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -35,15 +34,19 @@ class HistoryAdapter(
 
         fun bind(item: HistoryItem) {
             binding.tvTitle.text = item.title
-            binding.tvSubtitle.text = item.subtitle
-            binding.tvScore.text = item.scoreLabel
-            val sourceLabel = if (item.source == QuizResult.SOURCE_DOWNLOADED) "Downloaded" else "Online"
-            val dateLabel = dateFormat.format(Date(item.completedAt))
-            binding.tvMeta.text = "${item.subject} · $sourceLabel · $dateLabel"
-            binding.ivIcon.setImageResource(R.drawable.ic_computer)
+            binding.tvQuestionCount.text = "${item.totalQuestions} Qs"
+            binding.tvDifficulty.text = item.difficulty.ifBlank { "Mixed" }
+            binding.tvSourceType.text = "Topic"
+            binding.ivSourceType.setImageResource(R.drawable.ic_topic_small)
+            binding.tvScorePercent.text = "${item.accuracyPercentage}%"
+            binding.tvScore.text = "${item.finalScore} / ${item.maxScore}"
+            binding.tvMeta.text = dateFormat.format(Date(item.completedAt))
+            binding.ivIcon.setImageResource(R.drawable.ic_biology)
 
-            binding.root.setOnClickListener { onItemClick(item) }
+            binding.root.setOnClickListener { onMenuClick(item) }
+            binding.btnReview.setOnClickListener { onItemClick(item) }
             binding.ivMenu.setOnClickListener { onMenuClick(item) }
+
         }
     }
 
