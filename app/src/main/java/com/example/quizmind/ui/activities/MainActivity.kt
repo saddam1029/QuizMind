@@ -2,6 +2,7 @@ package com.example.quizmind.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.example.quizmind.databinding.ActivityMainBinding
 import com.example.quizmind.model.RecentQuiz
 import com.example.quizmind.ui.adapters.RecentQuizAdapter
 import com.example.quizmind.ui.viewmodel.HomeViewModel
+import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -109,6 +111,9 @@ class MainActivity : AppCompatActivity() {
         binding.tvViewAll.setOnClickListener {
             startActivity(Intent(this, HistoryActivity::class.java))
         }
+        binding.layoutEmpty.findViewById<MaterialButton>(R.id.btnDone).setOnClickListener {
+            openCreate("topic")
+        }
     }
 
     private fun observeViewModel() {
@@ -121,7 +126,11 @@ class MainActivity : AppCompatActivity() {
                 }
                 launch {
                     viewModel.recentHistory.collect { items ->
-                        adapter.submitList(items.take(5).map { it.toRecentQuiz() })
+                        val recentList = items.take(5).map { it.toRecentQuiz() }
+                        adapter.submitList(recentList)
+                        val empty = recentList.isEmpty()
+                        binding.layoutEmpty.visibility = if (empty) View.VISIBLE else View.GONE
+                        binding.rvRecentQuizzes.visibility = if (empty) View.GONE else android.view.View.VISIBLE
                     }
                 }
             }
