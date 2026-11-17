@@ -22,7 +22,9 @@ import com.example.quizmind.data.repository.QuizRepository
 import com.example.quizmind.data.session.QuizSessionStore
 import com.example.quizmind.databinding.ActivityMainBinding
 import com.example.quizmind.ui.adapters.HistoryAdapter
+import com.example.quizmind.ui.viewmodel.HomeHistoryUiState
 import com.example.quizmind.ui.viewmodel.HomeViewModel
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -135,16 +137,56 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 launch {
-                    viewModel.recentHistory.collect { items ->
-                        val recentList = items.take(5)
-                        adapter.submitList(recentList)
-                        val empty = recentList.isEmpty()
-                        binding.layoutEmpty.visibility = if (empty) View.VISIBLE else View.GONE
-                        binding.rvRecentQuizzes.visibility = if (empty) View.GONE else View.VISIBLE
+                    viewModel.historyUiState.collect { state ->
+                        renderHistoryState(state)
                     }
                 }
             }
         }
+    }
+
+    private fun renderHistoryState(state: HomeHistoryUiState) {
+        val shimmer = historyShimmer()
+        when (state) {
+            is HomeHistoryUiState.Loading -> {
+                binding.layoutEmpty.visibility = View.GONE
+                binding.rvRecentQuizzes.visibility = View.GONE
+                shimmer.visibility = View.VISIBLE
+                shimmer.startShimmer()
+            }
+            is HomeHistoryUiState.Ready -> {
+                shimmer.stopShimmer()
+                shimmer.visibility = View.GONE
+                val recentList = state.items.take(5)
+                adapter.submitList(recentList)
+                val empty = recentList.isEmpty()
+                binding.layoutEmpty.visibility = if (empty) View.VISIBLE else View.GONE
+                binding.rvRecentQuizzes.visibility = if (empty) View.GONE else View.VISIBLE
+            }
+            is HomeHistoryUiState.Error -> {
+                shimmer.stopShimmer()
+                shimmer.visibility = View.GONE
+                val cached = state.cachedItems.take(5)
+                adapter.submitList(cached)
+                if (cached.isNotEmpty()) {
+                    binding.layoutEmpty.visibility = View.GONE
+                    binding.rvRecentQuizzes.visibility = View.VISIBLE
+                } else {
+                    binding.rvRecentQuizzes.visibility = View.GONE
+                    binding.layoutEmpty.visibility = View.VISIBLE
+                    Toast.makeText(this, state.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun historyShimmer(): ShimmerFrameLayout {
+        return binding.layoutHistorySkeleton.root as ShimmerFrameLayout
+    }
+
+    override fun onDestroy() {
+        historyShimmer().stopShimmer()
+        super.onDestroy()
     }
 
     private fun openCreate(sourceType: String) {

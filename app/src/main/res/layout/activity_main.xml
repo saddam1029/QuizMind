@@ -408,6 +408,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvRecentQuizzesTitle" />
 
+        <!-- Recent Quizzes skeleton (shown only while history is loading) -->
+        <include
+            android:id="@+id/layoutHistorySkeleton"
+            layout="@layout/layout_history_skeleton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_12sdp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvRecentQuizzesSubtitle" />
+
         <!-- Recent Quizzes RecyclerView -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecentQuizzes"
@@ -415,11 +427,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/_12sdp"
             android:nestedScrollingEnabled="false"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvRecentQuizzesSubtitle"
             tools:itemCount="3"
-            tools:listitem="@layout/item_history" />
+            tools:listitem="@layout/item_history"
+            tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutEmpty"

@@ -43,6 +43,7 @@
 
     <!-- Scrollable Form Content -->
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollCreateQuiz"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -1609,5 +1610,17 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <!-- Shown while AI generation / PDF-OCR is loading (replaces dialog loader) -->
+    <include
+        android:id="@+id/layoutCreateQuizSkeleton"
+        layout="@layout/layout_create_quiz_skeleton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

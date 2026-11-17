@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.recyclerview)
     implementation(libs.material)
+    implementation(libs.facebook.shimmer)
 
     // sdp and ssp
     implementation("com.intuit.sdp:sdp-android:1.1.1")
