@@ -315,12 +315,34 @@ class QuizRepository @Inject constructor(
         }
     }
 
+    /**
+     * Downloads a quiz package for offline play from a history completion.
+     * Prefers in-memory/local question payloads, then Firestore.
+     */
     suspend fun downloadHistoryItem(completionId: String): Result<Unit> = withContext(Dispatchers.IO) {
+        val local = quizDao.getHistoryById(completionId)
+        val localQuestions = local?.questionsJson.toQuestionList()
+        if (local != null && localQuestions.isNotEmpty()) {
+            return@withContext downloadQuizToRoom(local.toQuizResult(localQuestions))
+        }
+
         val result = firestoreDataSource.fetchResultForDownload(completionId)
         result.fold(
             onSuccess = { downloadQuizToRoom(it) },
             onFailure = { Result.failure(it) }
         )
+    }
+
+    /**
+     * Result-screen download: use embedded questions when present, otherwise
+     * resolve the package via [downloadHistoryItem] (Room / Firestore).
+     */
+    suspend fun downloadFromResultScreen(result: QuizResult): Result<Unit> = withContext(Dispatchers.IO) {
+        if (result.questions.isNotEmpty()) {
+            downloadQuizToRoom(result)
+        } else {
+            downloadHistoryItem(result.completionId)
+        }
     }
 
     suspend fun isQuizDownloaded(quizId: String): Boolean = withContext(Dispatchers.IO) {

@@ -125,16 +125,9 @@ class QuizResultActivity : AppCompatActivity() {
         }
 
         // Download complete quiz to Room for offline play
+        // (works after live completion AND when opened via History/Home Review)
         binding.btnDownload.setOnClickListener {
-            if (result.questions.isEmpty()) {
-                Toast.makeText(
-                    this,
-                    "This result has no questions to download. Use History → Download instead.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
-                viewModel.downloadQuiz(result)
-            }
+            viewModel.downloadQuiz(result)
         }
     }
 

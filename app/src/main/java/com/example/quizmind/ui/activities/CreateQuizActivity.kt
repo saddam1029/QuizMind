@@ -28,6 +28,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -46,7 +47,6 @@ import com.example.quizmind.utils.ImageFileHelper
 import com.example.quizmind.utils.PdfMetadataHelper
 import com.example.quizmind.utils.TopicValidator
 import com.example.quizmind.utils.WordCountHelper
-import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
@@ -81,6 +81,7 @@ class CreateQuizActivity : AppCompatActivity() {
     // Quiz configuration state
     private var selectedQuestionCount = 10
     private var selectedDifficulty = "Mixed"
+    private var loadingDialog: AlertDialog? = null
 
     private data class SubjectCard(
         val container: LinearLayout,
@@ -664,11 +665,11 @@ class CreateQuizActivity : AppCompatActivity() {
                         Toast.makeText(this@CreateQuizActivity, "Please select a PDF document.", Toast.LENGTH_SHORT).show()
                         return@launch
                     }
-                    showCreateQuizSkeleton()
+                    showLoadingDialog()
                     binding.btnGenerateQuiz.isEnabled = false
                     val pdfText = extractTextFromPdf(uri)
                     if (pdfText.isBlank()) {
-                        hideCreateQuizSkeleton()
+                        hideLoadingDialog()
                         binding.btnGenerateQuiz.isEnabled = true
                         Toast.makeText(
                             this@CreateQuizActivity,
@@ -695,11 +696,11 @@ class CreateQuizActivity : AppCompatActivity() {
                         Toast.makeText(this@CreateQuizActivity, "Please capture or select an image of your notes.", Toast.LENGTH_SHORT).show()
                         return@launch
                     }
-                    showCreateQuizSkeleton()
+                    showLoadingDialog()
                     binding.btnGenerateQuiz.isEnabled = false
                     val imageText = extractTextFromImage(uri)
                     if (imageText.isBlank()) {
-                        hideCreateQuizSkeleton()
+                        hideLoadingDialog()
                         binding.btnGenerateQuiz.isEnabled = true
                         Toast.makeText(
                             this@CreateQuizActivity,
@@ -759,32 +760,24 @@ class CreateQuizActivity : AppCompatActivity() {
         return if (title.length > 60) title.take(57).trimEnd() + "..." else title
     }
 
-    private fun createQuizShimmer(): ShimmerFrameLayout {
-        return binding.layoutCreateQuizSkeleton.root as ShimmerFrameLayout
-    }
-
-    private fun showCreateQuizSkeleton() {
-        binding.scrollCreateQuiz.visibility = View.INVISIBLE
-        val shimmer = createQuizShimmer()
-        shimmer.visibility = View.VISIBLE
-        shimmer.startShimmer()
-    }
-
-    private fun hideCreateQuizSkeleton() {
-        val shimmer = createQuizShimmer()
-        shimmer.stopShimmer()
-        shimmer.visibility = View.GONE
-        binding.scrollCreateQuiz.visibility = View.VISIBLE
-    }
-
-    override fun onDestroy() {
-        if (::binding.isInitialized) {
-            try {
-                createQuizShimmer().stopShimmer()
-            } catch (_: Exception) {
-            }
+    private fun showLoadingDialog() {
+        if (loadingDialog == null) {
+            val dialogView = layoutInflater.inflate(R.layout.dialog_loading_quiz, null)
+            loadingDialog = MaterialAlertDialogBuilder(this)
+                .setView(dialogView)
+                .setCancelable(false)
+                .create()
         }
-        super.onDestroy()
+        if (loadingDialog?.isShowing == false) {
+            loadingDialog?.show()
+        }
+    }
+
+    private fun hideLoadingDialog() {
+        try {
+            loadingDialog?.dismiss()
+        } catch (_: Exception) {
+        }
     }
 
     private fun observeViewModel() {
@@ -793,15 +786,15 @@ class CreateQuizActivity : AppCompatActivity() {
                 viewModel.uiState.collect { state ->
                     when (state) {
                         is CreateQuizUiState.Idle -> {
-                            hideCreateQuizSkeleton()
+                            hideLoadingDialog()
                             binding.btnGenerateQuiz.isEnabled = true
                         }
                         is CreateQuizUiState.Loading -> {
-                            showCreateQuizSkeleton()
+                            showLoadingDialog()
                             binding.btnGenerateQuiz.isEnabled = false
                         }
                         is CreateQuizUiState.Success -> {
-                            hideCreateQuizSkeleton()
+                            hideLoadingDialog()
                             binding.btnGenerateQuiz.isEnabled = true
                             if (state.creditsUsed > 0L) {
                                 Toast.makeText(
@@ -819,7 +812,7 @@ class CreateQuizActivity : AppCompatActivity() {
                             finish()
                         }
                         is CreateQuizUiState.Error -> {
-                            hideCreateQuizSkeleton()
+                            hideLoadingDialog()
                             binding.btnGenerateQuiz.isEnabled = true
                             viewModel.resetState()
                             MaterialAlertDialogBuilder(this@CreateQuizActivity)

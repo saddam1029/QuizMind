@@ -1,9 +1,11 @@
 package com.example.quizmind.ui.adapters
 
+import android.content.res.ColorStateList
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.widget.ImageViewCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -45,6 +47,7 @@ class HistoryAdapter(
             binding.ivSourceType.setImageResource(HistoryDisplayHelper.sourceTypeIconRes(item.sourceType))
             binding.ivIcon.setImageResource(HistoryDisplayHelper.subjectIconRes(item.subject))
             binding.ivMenu.setOnClickListener { onMenuClick(item) }
+            bindSaveStatus(item)
 
             if (item.isCompleted) {
                 binding.tvScorePercent.visibility = View.VISIBLE
@@ -75,6 +78,23 @@ class HistoryAdapter(
             }
 
             binding.root.setOnClickListener(null)
+        }
+
+        private fun bindSaveStatus(item: HistoryItem) {
+            val context = binding.root.context
+            if (item.isDownloaded) {
+                binding.ivSaveStatus.setImageResource(R.drawable.ic_download)
+                ImageViewCompat.setImageTintList(
+                    binding.ivSaveStatus,
+                    ColorStateList.valueOf(ContextCompat.getColor(context, R.color.app_color))
+                )
+            } else {
+                binding.ivSaveStatus.setImageResource(R.drawable.ic_cloud)
+                ImageViewCompat.setImageTintList(
+                    binding.ivSaveStatus,
+                    ColorStateList.valueOf(ContextCompat.getColor(context, R.color.qm_text_secondary))
+                )
+            }
         }
     }
 

@@ -5,12 +5,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.enableEdgeToEdge
@@ -22,17 +19,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.quizmind.R
 import com.example.quizmind.data.mapper.toQuizResultSummary
 import com.example.quizmind.data.model.HistoryItem
 import com.example.quizmind.data.session.QuizSessionStore
 import com.example.quizmind.databinding.ActivityHistoryBinding
 import com.example.quizmind.ui.adapters.HistoryAdapter
+import com.example.quizmind.ui.history.HistoryItemMenuHelper
 import com.example.quizmind.ui.viewmodel.HistoryUiState
 import com.example.quizmind.ui.viewmodel.HistoryViewModel
-import com.example.quizmind.utils.ResultImageGenerator
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.facebook.shimmer.ShimmerFrameLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -43,6 +38,7 @@ class HistoryActivity : AppCompatActivity() {
     private lateinit var binding: ActivityHistoryBinding
     private val viewModel: HistoryViewModel by viewModels()
     private lateinit var adapter: HistoryAdapter
+    private lateinit var historyMenuHelper: HistoryItemMenuHelper
 
     @Inject
     lateinit var quizSessionStore: QuizSessionStore
@@ -59,8 +55,33 @@ class HistoryActivity : AppCompatActivity() {
             insets
         }
 
+        historyMenuHelper = HistoryItemMenuHelper(
+            activity = this,
+            callbacks = object : HistoryItemMenuHelper.Callbacks {
+                override fun onDownload(item: HistoryItem, onDone: (Result<Unit>) -> Unit) {
+                    viewModel.download(item, onDone)
+                }
+
+                override fun onRename(item: HistoryItem, newTitle: String, onDone: (Result<Unit>) -> Unit) {
+                    viewModel.rename(item, newTitle, onDone)
+                }
+
+                override fun onDelete(item: HistoryItem, onDone: (Result<Unit>) -> Unit) {
+                    viewModel.delete(item, onDone)
+                }
+
+                override fun onOpenResult(item: HistoryItem) {
+                    openResultSummary(item)
+                }
+
+                override fun onPlay(item: HistoryItem) {
+                    playDownloadedQuiz(item)
+                }
+            }
+        )
+
         adapter = HistoryAdapter(
-            onMenuClick = { item -> showMenu(item) },
+            onMenuClick = { item -> historyMenuHelper.show(item) },
             onReviewClick = { item -> openResultSummary(item) },
             onPlayClick = { item -> playDownloadedQuiz(item) }
         )
@@ -146,23 +167,42 @@ class HistoryActivity : AppCompatActivity() {
         viewModel.refresh()
     }
 
+    private fun historyShimmer(): ShimmerFrameLayout {
+        return binding.layoutHistorySkeleton.root
+    }
+
     private fun observeState() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
+                    val shimmer = historyShimmer()
                     when (state) {
                         is HistoryUiState.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
+                            binding.layoutEmpty.visibility = View.GONE
+                            binding.rvHistory.visibility = View.GONE
+                            shimmer.visibility = View.VISIBLE
+                            shimmer.startShimmer()
                         }
                         is HistoryUiState.Ready -> {
-                            binding.progressBar.visibility = View.GONE
+                            shimmer.stopShimmer()
+                            shimmer.visibility = View.GONE
                             adapter.submitList(state.items)
                             val empty = state.items.isEmpty()
                             binding.layoutEmpty.visibility = if (empty) View.VISIBLE else View.GONE
                             binding.rvHistory.visibility = if (empty) View.GONE else View.VISIBLE
                         }
                         is HistoryUiState.Error -> {
-                            binding.progressBar.visibility = View.GONE
+                            shimmer.stopShimmer()
+                            shimmer.visibility = View.GONE
+                            val cached = state.cachedItems
+                            adapter.submitList(cached)
+                            if (cached.isNotEmpty()) {
+                                binding.layoutEmpty.visibility = View.GONE
+                                binding.rvHistory.visibility = View.VISIBLE
+                            } else {
+                                binding.rvHistory.visibility = View.GONE
+                                binding.layoutEmpty.visibility = View.VISIBLE
+                            }
                             Toast.makeText(this@HistoryActivity, state.message, Toast.LENGTH_SHORT).show()
                         }
                     }
@@ -171,134 +211,14 @@ class HistoryActivity : AppCompatActivity() {
         }
     }
 
-    private fun showMenu(item: HistoryItem) {
-        val dialog = BottomSheetDialog(this)
-        val view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_history_menu, null)
-        dialog.setContentView(view)
-
-        view.findViewById<TextView>(R.id.tvMenuTitle).text = item.title
-        view.findViewById<TextView>(R.id.tvMenuSubtitle).text = if (item.isCompleted) {
-            "${item.totalQuestions} Questions · ${item.difficulty.ifBlank { "Mixed" }} · Latest score: ${item.finalScore}/${item.maxScore}"
-        } else {
-            "${item.totalQuestions} Questions · ${item.difficulty.ifBlank { "Mixed" }} · Downloaded"
-        }
-
-        val btnDownload = view.findViewById<View>(R.id.btnDownload)
-        val tvDownloadLabel = view.findViewById<TextView>(R.id.tvDownloadLabel)
-        val tvDownloadMeta = view.findViewById<TextView>(R.id.tvDownloadMeta)
-        val btnGiveAgain = view.findViewById<View>(R.id.btnGiveAgain)
-        val btnReview = view.findViewById<View>(R.id.btnReview)
-        val btnShare = view.findViewById<View>(R.id.btnShare)
-
-        if (item.isDownloaded) {
-            tvDownloadLabel.text = "Already Downloaded"
-            tvDownloadMeta.text = "Saved"
-            btnDownload.isEnabled = false
-            btnDownload.alpha = 0.5f
-        }
-
-        view.findViewById<View>(R.id.btnCloseMenu).setOnClickListener { dialog.dismiss() }
-
-        if (item.isCompleted) {
-            btnReview.visibility = View.VISIBLE
-            btnShare.visibility = View.VISIBLE
-            btnReview.setOnClickListener {
-                dialog.dismiss()
-                openResultSummary(item)
-            }
-        } else {
-            btnReview.visibility = View.GONE
-            btnShare.visibility = View.GONE
-        }
-
-        btnGiveAgain.setOnClickListener {
-            dialog.dismiss()
-            playDownloadedQuiz(item)
-        }
-
-        btnDownload.setOnClickListener {
-            dialog.dismiss()
-            viewModel.download(item) { result ->
-                result.onSuccess {
-                    Toast.makeText(this, "Quiz downloaded for offline play.", Toast.LENGTH_SHORT).show()
-                }.onFailure {
-                    Toast.makeText(this, it.localizedMessage ?: "Download failed.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
-        btnShare.setOnClickListener {
-            dialog.dismiss()
-            if (!item.isCompleted) return@setOnClickListener
+    override fun onDestroy() {
+        if (::binding.isInitialized) {
             try {
-                ResultImageGenerator.shareResult(this, item.toQuizResultSummary())
-            } catch (e: Exception) {
-                Toast.makeText(this, e.localizedMessage ?: "Share failed.", Toast.LENGTH_SHORT).show()
+                historyShimmer().stopShimmer()
+            } catch (_: Exception) {
             }
         }
-
-        view.findViewById<View>(R.id.btnRename).setOnClickListener {
-            dialog.dismiss()
-            showRenameDialog(item)
-        }
-
-        view.findViewById<View>(R.id.btnDelete).setOnClickListener {
-            dialog.dismiss()
-            showDeleteDialog(item)
-        }
-
-        dialog.show()
-    }
-
-    private fun showRenameDialog(item: HistoryItem) {
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_rename_history, null)
-        val input = view.findViewById<EditText>(R.id.etRename)
-        input.setText(item.title)
-        input.setSelection(input.text.length)
-
-        val dialog = MaterialAlertDialogBuilder(this)
-            .setView(view)
-            .create()
-
-        view.findViewById<TextView>(R.id.btnCancelRename).setOnClickListener { dialog.dismiss() }
-        view.findViewById<TextView>(R.id.btnSaveRename).setOnClickListener {
-            dialog.dismiss()
-            viewModel.rename(item, input.text.toString()) { result ->
-                result.onSuccess {
-                    Toast.makeText(this, "Quiz renamed.", Toast.LENGTH_SHORT).show()
-                }.onFailure {
-                    Toast.makeText(this, it.localizedMessage ?: "Rename failed.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
-        dialog.show()
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-    }
-
-    private fun showDeleteDialog(item: HistoryItem) {
-        val view = LayoutInflater.from(this).inflate(R.layout.dialog_delete_history, null)
-        view.findViewById<TextView>(R.id.tvDeleteMessage).text =
-            "${item.title} and its result will be permanently removed."
-
-        val dialog = MaterialAlertDialogBuilder(this)
-            .setView(view)
-            .create()
-
-        view.findViewById<TextView>(R.id.btnCancelDelete).setOnClickListener { dialog.dismiss() }
-        view.findViewById<TextView>(R.id.btnConfirmDelete).setOnClickListener {
-            dialog.dismiss()
-            viewModel.delete(item) { result ->
-                result.onSuccess {
-                    Toast.makeText(this, "History item deleted.", Toast.LENGTH_SHORT).show()
-                }.onFailure {
-                    Toast.makeText(this, it.localizedMessage ?: "Delete failed.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
-        dialog.show()
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        super.onDestroy()
     }
 
     private fun openResultSummary(item: HistoryItem) {

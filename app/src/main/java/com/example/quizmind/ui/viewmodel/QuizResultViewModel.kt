@@ -49,7 +49,8 @@ class QuizResultViewModel @Inject constructor(
 
         _downloadState.value = DownloadState.Downloading
         viewModelScope.launch {
-            val downloadResult = quizRepository.downloadQuizToRoom(result)
+            // Review path often has a summary without questions — fetch package by completionId.
+            val downloadResult = quizRepository.downloadFromResultScreen(result)
             downloadResult.fold(
                 onSuccess = {
                     _isDownloaded.value = true

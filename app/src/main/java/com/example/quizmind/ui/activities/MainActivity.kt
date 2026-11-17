@@ -17,11 +17,10 @@ import com.bumptech.glide.Glide
 import com.example.quizmind.R
 import com.example.quizmind.data.mapper.toQuizResultSummary
 import com.example.quizmind.data.model.HistoryItem
-import com.example.quizmind.data.model.QuizResult
-import com.example.quizmind.data.repository.QuizRepository
 import com.example.quizmind.data.session.QuizSessionStore
 import com.example.quizmind.databinding.ActivityMainBinding
 import com.example.quizmind.ui.adapters.HistoryAdapter
+import com.example.quizmind.ui.history.HistoryItemMenuHelper
 import com.example.quizmind.ui.viewmodel.HomeHistoryUiState
 import com.example.quizmind.ui.viewmodel.HomeViewModel
 import com.facebook.shimmer.ShimmerFrameLayout
@@ -36,13 +35,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var adapter: HistoryAdapter
+    private lateinit var historyMenuHelper: HistoryItemMenuHelper
     private val viewModel: HomeViewModel by viewModels()
 
     @Inject
     lateinit var quizSessionStore: QuizSessionStore
-
-    @Inject
-    lateinit var quizRepository: QuizRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +52,31 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
             insets
         }
+
+        historyMenuHelper = HistoryItemMenuHelper(
+            activity = this,
+            callbacks = object : HistoryItemMenuHelper.Callbacks {
+                override fun onDownload(item: HistoryItem, onDone: (Result<Unit>) -> Unit) {
+                    viewModel.download(item, onDone)
+                }
+
+                override fun onRename(item: HistoryItem, newTitle: String, onDone: (Result<Unit>) -> Unit) {
+                    viewModel.rename(item, newTitle, onDone)
+                }
+
+                override fun onDelete(item: HistoryItem, onDone: (Result<Unit>) -> Unit) {
+                    viewModel.delete(item, onDone)
+                }
+
+                override fun onOpenResult(item: HistoryItem) {
+                    openResultSummary(item)
+                }
+
+                override fun onPlay(item: HistoryItem) {
+                    playDownloadedQuiz(item)
+                }
+            }
+        )
 
         setupUserData()
         setupRecyclerView()
@@ -96,9 +118,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupRecyclerView() {
         adapter = HistoryAdapter(
-            onMenuClick = {
-                startActivity(Intent(this, HistoryActivity::class.java))
-            },
+            onMenuClick = { item -> historyMenuHelper.show(item) },
             onReviewClick = { item -> openResultSummary(item) },
             onPlayClick = { item -> playDownloadedQuiz(item) }
         )
@@ -213,7 +233,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun playDownloadedQuiz(item: HistoryItem) {
         lifecycleScope.launch {
-            val quiz = quizRepository.getPlayableDownloadedQuiz(item.quizId)
+            val quiz = viewModel.prepareReplay(item)
             if (quiz == null) {
                 Toast.makeText(
                     this@MainActivity,
@@ -221,7 +241,6 @@ class MainActivity : AppCompatActivity() {
                     Toast.LENGTH_SHORT
                 ).show()
             } else {
-                quizSessionStore.putQuiz(quiz, QuizResult.SOURCE_DOWNLOADED)
                 startActivity(
                     Intent(this@MainActivity, ActiveQuizActivity::class.java).apply {
                         putExtra(ActiveQuizActivity.EXTRA_QUIZ_ID, quiz.id)

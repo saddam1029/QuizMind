@@ -86,13 +86,15 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
+    <!-- History skeleton (shown only while list is loading) -->
+    <include
+        android:id="@+id/layoutHistorySkeleton"
+        layout="@layout/layout_history_skeleton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:indeterminateTint="@color/app_color"
+        android:layout_marginHorizontal="@dimen/_16sdp"
+        android:layout_marginTop="@dimen/_12sdp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topBar" />

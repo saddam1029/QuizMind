@@ -19,7 +19,7 @@ import javax.inject.Inject
 sealed class HistoryUiState {
     object Loading : HistoryUiState()
     data class Ready(val items: List<HistoryItem>, val offline: Boolean) : HistoryUiState()
-    data class Error(val message: String) : HistoryUiState()
+    data class Error(val message: String, val cachedItems: List<HistoryItem> = emptyList()) : HistoryUiState()
 }
 
 @HiltViewModel
@@ -33,6 +33,7 @@ class HistoryViewModel @Inject constructor(
 
     private val _query = MutableStateFlow("")
     private var observeJob: Job? = null
+    private var hasCompletedInitialLoad = false
 
     init {
         refresh()
@@ -41,19 +42,34 @@ class HistoryViewModel @Inject constructor(
     fun refresh() {
         observeJob?.cancel()
         observeJob = viewModelScope.launch {
-            _uiState.value = HistoryUiState.Loading
-            val offline = !quizRepository.isOnline()
-            if (offline) {
+            val query = _query.value
+            val cached = runCatching { quizRepository.getLocalHistorySnapshot(query) }
+                .getOrDefault(emptyList())
+
+            if (cached.isNotEmpty()) {
+                // Room cache available — show immediately, no skeleton flash.
+                _uiState.value = HistoryUiState.Ready(cached, offline = !quizRepository.isOnline())
+            } else if (!hasCompletedInitialLoad) {
+                _uiState.value = HistoryUiState.Loading
+            }
+
+            if (!quizRepository.isOnline()) {
                 observeLocal()
+                hasCompletedInitialLoad = true
                 return@launch
             }
 
-            val merged = quizRepository.loadMergedHistory(_query.value)
+            val merged = quizRepository.loadMergedHistory(query)
             merged.onSuccess { items ->
                 _uiState.value = HistoryUiState.Ready(items, offline = false)
             }.onFailure { error ->
-                observeLocal(fallbackError = error.localizedMessage)
+                if (cached.isNotEmpty()) {
+                    _uiState.value = HistoryUiState.Ready(cached, offline = true)
+                } else {
+                    observeLocal(fallbackError = error.localizedMessage)
+                }
             }
+            hasCompletedInitialLoad = true
         }
     }
 
@@ -66,12 +82,18 @@ class HistoryViewModel @Inject constructor(
         observeJob?.cancel()
         observeJob = viewModelScope.launch {
             quizRepository.observeLocalHistory(_query.value).collectLatest { items ->
-                _uiState.value = HistoryUiState.Ready(
-                    items = items,
-                    offline = !quizRepository.isOnline()
-                )
-                if (items.isEmpty() && fallbackError != null && quizRepository.isOnline()) {
-                    _uiState.value = HistoryUiState.Error(fallbackError)
+                if (items.isNotEmpty()) {
+                    _uiState.value = HistoryUiState.Ready(
+                        items = items,
+                        offline = !quizRepository.isOnline()
+                    )
+                } else if (fallbackError != null && quizRepository.isOnline()) {
+                    _uiState.value = HistoryUiState.Error(fallbackError, cachedItems = emptyList())
+                } else {
+                    _uiState.value = HistoryUiState.Ready(
+                        items = emptyList(),
+                        offline = !quizRepository.isOnline()
+                    )
                 }
             }
         }
@@ -97,10 +119,6 @@ class HistoryViewModel @Inject constructor(
         viewModelScope.launch {
             if (quizRepository.isQuizDownloaded(item.quizId)) {
                 onDone(Result.failure(IllegalStateException("Quiz already downloaded.")))
-                return@launch
-            }
-            if (!quizRepository.isOnline()) {
-                onDone(Result.failure(IllegalStateException("Internet is required to download this quiz.")))
                 return@launch
             }
             val result = quizRepository.downloadHistoryItem(item.completionId)

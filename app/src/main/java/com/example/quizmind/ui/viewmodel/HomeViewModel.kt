@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.quizmind.data.credits.CreditPolicy
 import com.example.quizmind.data.model.HistoryItem
+import com.example.quizmind.data.model.Quiz
+import com.example.quizmind.data.model.QuizResult
 import com.example.quizmind.data.repository.QuizRepository
+import com.example.quizmind.data.session.QuizSessionStore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,7 +25,8 @@ sealed class HomeHistoryUiState {
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val quizRepository: QuizRepository
+    private val quizRepository: QuizRepository,
+    private val quizSessionStore: QuizSessionStore
 ) : ViewModel() {
 
     val credits: StateFlow<Long> = quizRepository.observeCredits()
@@ -87,5 +91,39 @@ class HomeViewModel @Inject constructor(
     private fun publishReady(items: List<HistoryItem>) {
         _recentHistory.value = items
         _historyUiState.value = HomeHistoryUiState.Ready(items)
+    }
+
+    fun rename(item: HistoryItem, newTitle: String, onDone: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
+            val result = quizRepository.renameHistory(item, newTitle)
+            onDone(result)
+            refreshHistory()
+        }
+    }
+
+    fun delete(item: HistoryItem, onDone: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
+            val result = quizRepository.deleteHistory(item)
+            onDone(result)
+            refreshHistory()
+        }
+    }
+
+    fun download(item: HistoryItem, onDone: (Result<Unit>) -> Unit) {
+        viewModelScope.launch {
+            if (quizRepository.isQuizDownloaded(item.quizId)) {
+                onDone(Result.failure(IllegalStateException("Quiz already downloaded.")))
+                return@launch
+            }
+            val result = quizRepository.downloadHistoryItem(item.completionId)
+            onDone(result)
+            refreshHistory()
+        }
+    }
+
+    suspend fun prepareReplay(item: HistoryItem): Quiz? {
+        val quiz = quizRepository.getPlayableDownloadedQuiz(item.quizId) ?: return null
+        quizSessionStore.putQuiz(quiz, QuizResult.SOURCE_DOWNLOADED)
+        return quiz
     }
 }
